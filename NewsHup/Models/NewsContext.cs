@@ -7,6 +7,7 @@ namespace TestMVC.Models
     {
         DbSet<User> Users { set; get; }
         DbSet<Article> Articles { set; get; }
+        DbSet<Comment> Comments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=NewsDB;Integrated Security=True;Trust Server Certificate=True");
