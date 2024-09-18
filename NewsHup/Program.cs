@@ -15,6 +15,7 @@ namespace NewsHup
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
+                
             }
             app.UseStaticFiles();
 
