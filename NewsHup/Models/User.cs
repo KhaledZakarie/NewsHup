@@ -16,5 +16,6 @@ namespace NewsHup.Models
         public string Role { get; set; }
 
         public List<Article> Articles{ get; set; } = new List<Article>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
