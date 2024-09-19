@@ -11,31 +11,10 @@
 <body>
     <header>
 
-        <!--
-
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NewsHup</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        -->
+    
 
         <!-- Nav Bar -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-dark shadow-lg ">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">News Hub</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,21 +26,21 @@
                             <a class="nav-link active text-decoration-none" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">General</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Business">Business</a>
+                            <a class="nav-link" asp-area="Business" asp-controller="Home" asp-action="Index">Business</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Entertainment">Entertainment</a>
+                            <a class="nav-link" asp-area="Entertainment" asp-controller="Home" asp-action="Index">Entertainment</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Health">Health</a>
+                            <a class="nav-link" asp-area="Health" asp-controller="Home" asp-action="Index">Health</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Science">Science</a>
+                            <a class="nav-link" asp-area="Science" asp-controller="Home" asp-action="Index">Science</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Sports">Sports</a>
+                            <a class="nav-link" asp-area="Sports" asp-controller="Home" asp-action="Index">Sports</a>
                         </li><li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Technology">Technology</a>
+                            <a class="nav-link" asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mx-start">
@@ -76,8 +55,8 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container ">
+        <main role="main" class="py-3">
             @RenderBody()
         </main>
     </div>
