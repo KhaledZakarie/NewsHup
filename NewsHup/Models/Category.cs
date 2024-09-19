@@ -8,5 +8,6 @@ namespace NewsHup.Models
         [Key]
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public  List<Article>  Articles { get; set; }   = new List<Article>();
     }
 }

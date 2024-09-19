@@ -6,7 +6,8 @@ namespace NewsHup.Models
 {
     public class Comment
     {
-        public int CommentId { get; set; }
+        
+        public int Id { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
