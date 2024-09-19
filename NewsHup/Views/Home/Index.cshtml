@@ -1,8 +1,31 @@
-﻿@{
+﻿@model List<Article>
+@{
     ViewData["Title"] = "Home Page";
 }
+<section class="container">
+    <div class="text-center my-4">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <h1>News Website</h1>
+        <p class="w-50 mx-auto">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore possimus necessitatibus error pariatur iure similique veniam hic earum temporibus delectus.</p>
+    </div>
+
+    <div class="row">
+
+        @foreach(Article article in Model)
+        {
+            <div class="col-md-3">
+
+                <div class="inner">
+                    <div class="card">
+                        <img src="@article.ImageUrl" class="card-img-top w-100" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">@article.Title</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</section>

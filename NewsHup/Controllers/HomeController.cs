@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using NewsHup.Models;
 using System.Diagnostics;
+using TestMVC.Models;
 
 namespace NewsHup.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        public NewsContext context = new NewsContext();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -15,7 +17,8 @@ namespace NewsHup.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var artical = context.Articles.ToList();
+            return View(artical);
         }
 
         public IActionResult Privacy()
