@@ -45,10 +45,19 @@
                     </ul>
                     <ul class="navbar-nav mx-start">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="./pages/logIn.html">Log in</a>
+                            <a class="nav-link active" asp-area="Log in" asp-controller="Login" asp-action="Index">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link bg-black text-white rounded-4" href="./pages/regester.html">Sign up</a>
+                            <a class="nav-link bg-black text-white rounded-4" asp-area="Sign up" asp-controller="Register" asp-action="Register">Sign up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Article" asp-action="Index">Article</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white " asp-area="" asp-controller="Register" asp-action="Index">Add Article</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link  text-white " asp-area="" asp-controller="Register" asp-action="Index">My Article</a>
                         </li>
                     </ul>
                 </div>
