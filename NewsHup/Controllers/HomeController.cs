@@ -35,51 +35,7 @@ namespace NewsHup.Controllers
 
         }
 
-        /*
-        public IActionResult Business()
-        {
-            var catId = context.Categories.FirstOrDefault(c => c.CategoryName == "Business")?.CategoryId;
-            var artical = context.Articles.Where(a => a.CatId == catId).ToList();
-            return View("index", artical);
-        }
-         public IActionResult Entertainment()
-        {
-            var catId= context.Categories.FirstOrDefault(c=>c.CategoryName== "Entertainment")?.CategoryId;
-            var artical = context.Articles.Where(a=>a.CatId==catId).ToList();
-            return View("index",artical);
-        }
-          public IActionResult Health()
-        {
-            var catId = context.Categories.FirstOrDefault(c => c.CategoryName == "Health")?.CategoryId;
-            var artical = context.Articles.Where(a => a.CatId == catId).ToList();
-            return View("index", artical);
-        }
-         public IActionResult Science()
-        {
-
-            var catId = context.Categories.FirstOrDefault(c => c.CategoryName == "Science")?.CategoryId;
-            var artical = context.Articles.Where(a => a.CatId == catId).ToList();
-            return View("index", artical);
-        } 
-        public IActionResult Sports()
-        {
-            var catId = context.Categories.FirstOrDefault(c => c.CategoryName == "Sports")?.CategoryId;
-            var artical = context.Articles.Where(a => a.CatId == catId).ToList();
-            return View("index", artical);
-        }
-        public IActionResult Technology()
-        {
-            var catId = context.Categories.FirstOrDefault(c => c.CategoryName == "Technology")?.CategoryId;
-            var artical = context.Articles.Where(a => a.CatId == catId).ToList();
-            return View("index", artical);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        */
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
