@@ -1,7 +1,38 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    Layout = "_MainLayout";
 }
+@model User
 
-<h1>Index</h1>
+<section>
+            <div class="container">
+                <div class="d-flex flex-column justify-content-center align-items-center gap-3 shadow mx-auto py-2 rounded-5">
+                <h2 class="h3 me-auto mx-3">Sign in to NEWS</h2>
+                    <button class="btn bg-white border rounded-pill p-3">Sign in with Google</button>
+                    <span class="text-black-50">-- or sing in with email --</span>
+
+                    <!-- input form -->
+                    <form method="post" class="w-75">
+
+                        <div class="form-floating mb-3">
+                            <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
+                            <label asp-for="Email">Email</label>
+                        </div>
+
+                        <div class="form-floating">
+                            <input asp-for="Password" type="password" class="form-control shadow-none rounded-4" placeholder="Password">
+                            <label asp-for="Password">Password</label>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark rounded-pill w-25 mt-3">Sing in</button>
+
+                    </form>
+
+                    <a href="">Forgot Password?</a>
+                    <span>Don't have an account? <a asp-action="Register" asp-controller="User">Sign in</a></span>
+
+                </div>
+
+            </div>
+</section>
 

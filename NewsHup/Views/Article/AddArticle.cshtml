@@ -2,30 +2,30 @@
     ViewData["Title"] = "AddArticle";
     Layout = "_MainLayout";
 }
+@model Article
 <section class="container d-flex flex-column justify-content-center w-75">
     <h1>Add Article:</h1>
-    <form action="" class="shadow p-3 rounded-3">
+    <form method="post" class="shadow p-3 rounded-5">
+
         <div class="form-floating mb-3 ">
-            <input type="text" class="form-control shadow-none rounded-4" id="Title" placeholder="name@example.com">
-            <label for="Title">Article Title</label>
+            <input class="form-control shadow-none rounded-4" asp-for="Title" placeholder="Title">
+            <label asp-for="Title">Article Title</label>
         </div>
 
         <div class="form-floating mb-3 ">
-            <textarea type="text" class="form-control shadow-none rounded-4" id="Content" placeholder="name@example.com"></textarea>
-            <label for="Content">Content</label>
+            <textarea class="form-control shadow-none rounded-4" asp-for="Content" placeholder="Content"></textarea>
+            <label asp-for="Content">Content</label>
         </div>
 
-        <div class="input-group mb-3">
-            <button class="btn btn-outline-secondary dropdown-toggle w-25" type="button" data-bs-toggle="dropdown" aria-expanded="false">Category</button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item">Action</a></li>
-                <li><a class="dropdown-item">Another action</a></li>
-            </ul>
-        </div>
+        <select class="form-control shadow-none">
+            <option value="Action">Action</option>
+            <option value="ActionAction">ActionAction</option>
+            <option value="ActionActionAction">ActionActionAction</option>
+        </select>
 
         <div class="form mb-3 ">
-            <label for="ArticleImg" class="mb-2">Article Img: </label>
-            <input type="file" class="form-control shadow-none rounded-4" id="ArticleImg" placeholder="name@example.com">
+            <label asp-for="ImageUrl" class="my-2">Article Img: </label>
+            <input class="form-control shadow-none rounded-4" asp-for="ImageUrl" type="file" placeholder="ImageUrl">
         </div>
 
         <button type="submit" class="btn btn-outline-primary m-3 ms-auto d-block w-25 shadow">Submit</button>

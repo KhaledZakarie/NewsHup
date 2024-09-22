@@ -8,5 +8,13 @@ namespace NewsHup.Controllers
         {
             return View();
         }
+        public IActionResult AddArticle()
+        {
+            return View();
+        }
+        public IActionResult MyArticle()
+        {
+            return View();
+        }
     }
 }
