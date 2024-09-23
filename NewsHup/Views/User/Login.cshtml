@@ -1,44 +1,69 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
-    Layout = "_MainLayout";
 }
 @model User
+@section Styles{
+    <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
+}
 
-<section>
-            <div class="container">
-                <div class="d-flex flex-column justify-content-center align-items-center gap-3 shadow mx-auto py-2 rounded-5">
-                <h2 class="h3 me-auto mx-3">Sign in to NEWS</h2>
-                    <button class="btn bg-white border rounded-pill p-3">Sign in with Google</button>
-                    <span class="text-black-50">-- or sing in with email --</span>
+<main class="login rounded-5">
+    <section class="p-5  rounded-5 vh-100 mt-5">
+        <div class="row  h-100 p-4 rounded-5 bg-white">
+            <!-- content left -->
+            <div class="col-lg-5 h-100 ">
+                <div class="inner bg-white rounded-5 p-2 d-flex flex-column justify-content-around h-100">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="/assets/logo.png" width="50px" alt="logo">
+                        <h2 class="">News</h2>
+                    </div>
 
-                    <!-- input form -->
+                    <div class="text-center">
+                        <h3>Wellcom</h3>
+                        <span>Not registred yet? Sign up <a asp-controller="User" asp-action="Register">Sign up</a></span>
+                    </div>
+
                     <form method="post" class="w-75">
 
                         <div class="form-floating mb-3">
-                            <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
+                            <input class="form-control shadow-none border-0 border-bottom rounded-0" asp-for="Email" placeholder="Email">
                             <label asp-for="Email">Email</label>
-                    <span class="text-danger" asp-validation-for="Email"></span>
+                            <span class="text-danger" asp-validation-for="Email"></span>
 
                         </div>
 
                         <div class="form-floating">
-                            <input asp-for="Password" type="password" class="form-control shadow-none rounded-4" placeholder="Password">
+                            <input asp-for="Password" type="password" class="form-control shadow-none border-0 border-bottom rounded-0" placeholder="Password">
                             <label asp-for="Password">Password</label>
-                    <span class="text-danger" asp-validation-for="Password"></span>
+                            <span class="text-danger" asp-validation-for="Password"></span>
 
                         </div>
-                        <button type="submit" class="btn btn-outline-dark rounded-pill w-25 mt-3">Sing in</button>
+                        <button type="submit" class="btn btn-form rounded-5 mx-auto d-block w-50 my-3">Sing in</button>
 
                     </form>
+                    <span class="small">Forgotten your password or you login datails? Get help signing in</span>
+                </div>
+            </div>
+            <!-- content right -->
+            <div class="carousel-box col-lg-7 rounded-5">
 
-                    <a href="">Forgot Password?</a>
-                    <span>Don't have an account? <a asp-action="Register" asp-controller="User">Sign in</a></span>
+                <div class="inner">
+
+                    <div class="owl-carousel">
+                        <div> <img src="/assets/image1.png" class="w-100" alt="Alternate Text" /> </div>
+                        <div>  <img src="/assets/image2.png" class="w-100" alt="Alternate Text" /> </div>
+                        <div>  <img src="/assets/image3.png" class="w-100" alt="Alternate Text" /> </div>
+                    </div>
 
                 </div>
 
+
             </div>
-</section>
+
+        </div>
+    </section>
+</main>
 
 <div asp-validation-summary="ModelOnly">
 </div>

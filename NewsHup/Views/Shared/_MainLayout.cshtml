@@ -14,14 +14,14 @@
     
 
         <!-- Nav Bar -->
-        <nav class="navbar navbar-expand-lg bg-dark shadow-lg ">
+        <nav class="navbar navbar-expand-lg shadow-lg fixed-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">News Hub</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/assets/logo.png" class="me-2" width="40px" alt="logo">Hot News</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto text-black">
+                    <ul class="navbar-nav main-ul mx-auto">
                         <li class="nav-item">
                             <a class="nav-link active text-decoration-none" aria-current="" asp-area="" asp-controller="Home" asp-action="Index">General</a>
                         </li>
@@ -39,35 +39,25 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Sports" asp-controller="Home" asp-action="Index">Sports</a>
-                        </li><li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mx-start">
                         <li class="nav-item">
-                            <a class="nav-link active"asp-controller="User" asp-action="Login">Log in</a>
+                            <a class="nav-link" asp-controller="User" asp-action="Login">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link bg-black text-white rounded-4"  asp-controller="User" asp-action="Register">Sign up</a>
+                            <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="Register">Sign up</a>
                         </li>
-                        <!--
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Article" asp-action="Index">Article</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white " asp-area="" asp-controller="Register" asp-action="Index">Add Article</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  text-white " asp-area="" asp-controller="Register" asp-action="Index">My Article</a>
-                        </li>
-                        -->
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container ">
-        <main role="main" class="py-3">
+        <main role="main" class="py-3 my-5">
             @RenderBody()
         </main>
     </div>

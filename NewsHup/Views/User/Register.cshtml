@@ -1,54 +1,84 @@
 ﻿
 @{
     ViewData["Title"] = "Register";
-    Layout = "_MainLayout";
+
 }
 
 
 @model User
+@section Styles {
+    <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
+}
 
-<section>
-    <div class="container">
-        <div class="d-flex flex-column justify-content-center align-items-center gap-3 shadow mx-auto py-2 rounded-5">
-        <h2 class="h3">Register to NEWS</h2>
-            <!-- input form -->
+<main class="login rounded-5">
+    <section class="p-5  rounded-5 vh-100 mt-5">
+        <div class="row  h-100 p-4 rounded-5 bg-white">
+            <!-- content left -->
+            <div class="carousel-box col-md-7 rounded-5">
 
+                <div class="inner">
 
-            <form method="post" class="w-75 d-flex flex-column gap-3 ">
-
-                <div class="form-floating">
-                    <input class="form-control shadow-none rounded-4" asp-for="Name" placeholder="Name">
-                    <label asp-for="Name">Name</label>
-                    <span class="text-danger" asp-validation-for="Name"></span>
-
-                </div>
-
-
-                <div class="form-floating ">
-                    <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
-                    <label asp-for="Email">Email</label>
-                    <span class="text-danger" asp-validation-for="Email"></span>
+                    <div class="owl-carousel">
+                        <div> <img src="/assets/image1.png" class="w-100" alt="Alternate Text" /> </div>
+                        <div>  <img src="/assets/image2.png" class="w-100" alt="Alternate Text" /> </div>
+                        <div>  <img src="/assets/image3.png" class="w-100" alt="Alternate Text" /> </div>
+                    </div>
 
                 </div>
 
 
-                <div class="form-floating">
-                    <input asp-for="Password" class="form-control shadow-none rounded-4" placeholder="Password" value="@Model?.Password">
-                    <label asp-for="Password">Password</label>
-                    <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            <!-- content right -->
+            <div class="col-md-5 h-100 ">
+                <div class="inner bg-white rounded-5 p-2 d-flex flex-column justify-content-around h-100">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="/assets/logo.png" width="50px" alt="logo">
+                        <h2 class="">News</h2>
+                    </div>
 
+                    <div class="text-center">
+                        <h3>Wellcom</h3>
+                        <span>Not registred yet? Sign up <a asp-controller="User" asp-action="Login">Sign in</a></span>
+                    </div>
+
+                    <!--  -->
+                    <form method="post" class="w-75">
+
+                        <div class="form-floating">
+                            <input class="form-control shadow-none border-0 border-bottom rounded-0" asp-for="Name" placeholder="Name">
+                            <label asp-for="Name">Name</label>
+                            <span class="text-danger" asp-validation-for="Name"></span>
+
+                        </div>
+
+
+                        <div class="form-floating ">
+                            <input class="form-control shadow-none border-0 border-bottom rounded-0" asp-for="Email" placeholder="Email">
+                            <label asp-for="Email">Email</label>
+                            <span class="text-danger" asp-validation-for="Email"></span>
+
+                        </div>
+
+
+                        <div class="form-floating">
+                            <input asp-for="Password" class="form-control shadow-none border-0 border-bottom rounded-0" placeholder="Password" value="@Model?.Password">
+                            <label asp-for="Password">Password</label>
+                            <span class="text-danger" asp-validation-for="Password"></span>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-form rounded-5 mx-auto d-block w-50 my-3">Sing Up</button>
+
+                    </form>
+                    <!--  -->
+                    <span class="small">Forgotten your password or you login datails? Get help signing in</span>
                 </div>
-
-                <button type="submit" class="btn btn-outline-dark rounded-pill w-25 mt-3">Sing Up</button>
-
-            </form>
-
-            <span>I have an account? <a asp-action="Index" asp-asp-controller="User">Sign up</a></span>
+            </div>
 
         </div>
-
-    </div>
-</section>
+    </section>
+</main>
 <div asp-validation-summary="ModelOnly">  
 </div>
 
