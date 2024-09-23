@@ -117,4 +117,18 @@ body {
         color: #fff;
     }
 /*  navbar */
+@keyframes page-animate {
+    0% {
+        opacity :0;
+        transform : translateX(-200%)
 
+    }
+    100% {
+        opacity: 100%;
+        transform: translateX(0)
+    }
+}
+
+.page {
+    animation: page-animate 3s;
+}
