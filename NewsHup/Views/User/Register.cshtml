@@ -3,6 +3,8 @@
     ViewData["Title"] = "Register";
     Layout = "_MainLayout";
 }
+
+
 @model User
 
 <section>
@@ -10,21 +12,31 @@
         <div class="d-flex flex-column justify-content-center align-items-center gap-3 shadow mx-auto py-2 rounded-5">
         <h2 class="h3">Register to NEWS</h2>
             <!-- input form -->
-            <form method="post" class="w-75">
 
-                <div class="form-floating mb-3">
-                    <input class="form-control shadow-none rounded-4" asp-for="Name" placeholder="Name">
-                    <label asp-for="Name">Name</label>
-                </div>
 
-                <div class="form-floating mb-3">
-                    <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
-                    <label asp-for="Email">Email</label>
-                </div>
+            <form method="post" class="w-75 d-flex flex-column gap-3 ">
 
                 <div class="form-floating">
-                    <input asp-for="Password" type="password" class="form-control shadow-none rounded-4" placeholder="Password">
+                    <input class="form-control shadow-none rounded-4" asp-for="Name" placeholder="Name">
+                    <label asp-for="Name">Name</label>
+                    <span class="text-danger" asp-validation-for="Name"></span>
+
+                </div>
+
+
+                <div class="form-floating ">
+                    <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
+                    <label asp-for="Email">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+
+                </div>
+
+
+                <div class="form-floating">
+                    <input asp-for="Password" class="form-control shadow-none rounded-4" placeholder="Password" value="@Model?.Password">
                     <label asp-for="Password">Password</label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+
                 </div>
 
                 <button type="submit" class="btn btn-outline-dark rounded-pill w-25 mt-3">Sing Up</button>
@@ -37,4 +49,14 @@
 
     </div>
 </section>
+<div asp-validation-summary="ModelOnly">  
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
 

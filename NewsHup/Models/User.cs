@@ -10,10 +10,12 @@ namespace NewsHup.Models
         [StringLength(20, MinimumLength = 3)]
         public string Name { get; set; }
         [EmailAddress]
+        [UniqueEmail]
         public string Email { get; set; }
 
         //Minimum eight characters, at least one letter and one number
-        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$")]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$",ErrorMessage = "Minimum eight characters, at least one letter and one number")]
         public string Password { get; set; }
 
         public Role Role { get; set; }

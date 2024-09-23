@@ -18,11 +18,15 @@
                         <div class="form-floating mb-3">
                             <input class="form-control shadow-none rounded-4" asp-for="Email" placeholder="Email">
                             <label asp-for="Email">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+
                         </div>
 
                         <div class="form-floating">
                             <input asp-for="Password" type="password" class="form-control shadow-none rounded-4" placeholder="Password">
                             <label asp-for="Password">Password</label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+
                         </div>
                         <button type="submit" class="btn btn-outline-dark rounded-pill w-25 mt-3">Sing in</button>
 
@@ -35,4 +39,14 @@
 
             </div>
 </section>
+
+<div asp-validation-summary="ModelOnly">
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
 
