@@ -81,7 +81,14 @@ namespace NewsHup.Controllers
 
             else
             {
-                
+               var userFromDB =  context.Users.FirstOrDefault(u=>  u.Email == user.Email && u.Password == user.Password );
+                if (userFromDB ==null )
+                {
+                    ModelState.AddModelError("Password", "Wrong Password !");
+                    return View(user);
+
+                }
+
 
                 return RedirectToAction("Index", "Home");
             }
