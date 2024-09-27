@@ -1,7 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿
 $(document).ready(function () {
     $(".owl-carousel").owlCarousel();
 });
@@ -12,10 +9,10 @@ owl.owlCarousel({
     touchDrag: true,
     autoplay: true,
     autoplayHoverPause: true,
-    autoplayTimeout: 1500,
+    autoplayTimeout: 1900,
     pullDrag: false,
     dots: false,
-    navSpeed: 700,
+    navSpeed: 1000,
     navText: ['', ''],
     items: 1,
     nav: true,
@@ -27,12 +24,4 @@ $('.play').on('click', function () {
 $('.stop').on('click', function () {
     owl.trigger('stop.owl.autoplay')
 })
-$(document).ready(function () {
 
-    const navbarLinks = $('.navbar .main-ul a');
-
-    navbarLinks.on('click', function () {
-        navbarLinks.removeClass('active');
-        $(this).addClass('active');
-    });
-});

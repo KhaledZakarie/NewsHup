@@ -132,3 +132,56 @@ body {
 .page {
     animation: page-animate 3s;
 }
+.article-body {
+    background-color: #6c757d8c;
+}
+/*** Footer Start ***/
+.footer {
+    background: #015464;
+}
+
+.footer .footer-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer .footer-item a {
+    line-height: 35px;
+    color: white;
+    transition: 0.5s;
+}
+
+.footer .footer-item p {
+    line-height: 35px;
+}
+a{
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.footer .footer-item a:hover {
+    color: var(--main-color);
+    background-color:cadetblue;
+    border-radius:30%;
+}
+.footer .footer-item .soshial a {
+    color: var(--main-color);
+   transition: 0.5s;
+}.footer .footer-item .soshial a:hover {
+    color: black;
+    background-color:cadetblue;
+}
+
+.footer .footer-item .footer-btn a,
+.footer .footer-item .footer-btn a i {
+    transition: 0.5s;
+}
+
+.footer .footer-item .footer-btn a:hover {
+    background: var(--main-color);
+}
+
+.footer .footer-item .footer-btn a:hover i {
+    color: var(--main-color);
+}
+/*** Footer End ***/

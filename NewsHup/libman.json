@@ -9,6 +9,10 @@
     {
       "library": "OwlCarousel2@2.3.4",
       "destination": "wwwroot/lib/OwlCarousel2/"
+    },
+    {
+      "library": "font-awesome@6.6.0",
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }

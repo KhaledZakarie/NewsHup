@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NewsHup</title>
+    <title>  NewsHot - @ViewData["Title"] </title>
+    @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsHup.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="m-0 d-flex flex-column justify-content-between">
     <header>
-
-    
 
         <!-- Nav Bar -->
         <nav class="navbar navbar-expand-lg shadow-lg fixed-top">
@@ -23,25 +23,32 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav main-ul mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link active text-decoration-none" aria-current="" asp-area="" asp-controller="Home" asp-action="Index">General</a>
+                            <a class="nav-link text-decoration-none @(Context.Request.Path == "/" && string.IsNullOrEmpty(Context.Request.Query["area"]) ? "active" : "")"
+                            aria-current="" asp-area="" asp-controller="Home" asp-action="Index">General</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Business" asp-controller="Home" asp-action="Index">Business</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Business" ? "active" : "")"
+                            asp-area="Business" asp-controller="Home" asp-action="Index">Business</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Entertainment" asp-controller="Home" asp-action="Index">Entertainment</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Entertainment" ? "active" : "")" 
+                            asp-area="Entertainment" asp-controller="Home" asp-action="Index">Entertainment</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Health" asp-controller="Home" asp-action="Index">Health</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Health" ? "active" : "")"
+                            asp-area="Health" asp-controller="Home" asp-action="Index">Health</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Science" asp-controller="Home" asp-action="Index">Science</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Science" ? "active" : "")"
+                               asp-area="Science" asp-controller="Home" asp-action="Index">Science</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Sports" asp-controller="Home" asp-action="Index">Sports</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Sports" ? "active" : "")"
+                            asp-area="Sports" asp-controller="Home" asp-action="Index">Sports</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
+                            <a class="nav-link @(Context.Request.Query["area"] == "Technology" ? "active" : "")"
+                            asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mx-start">
@@ -56,7 +63,8 @@
             </div>
         </nav>
     </header>
-    <div class="container ">
+
+    <div class="container min-vh-100">
         <main role="main" class="py-3 my-5" />
             @RenderBody()
         </main>
@@ -70,7 +78,92 @@
         </footer>
 
 -->
+    <!-- footer start -->
+    <div class="container-fluid footer py-1 wow fadeIn" data-wow-delay="0.2s">
+            <div class="container py-5 border-start-0 border-end-0" style="border: 1px solid; border-color: rgb(255, 255, 255, 0.08);">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-6 col-xl-4">
+                            <a asp-controller="Home" asp-action="Index" class="p-0">
+                            <h4 class="text-white"><img src="/assets/logo.png" class="me-2" width="40px" alt="logo"> News Hot</h4>
+                                <!-- <img src="img/logo.png" alt="Logo"> -->
+                            </a>
+                        <div class="footer-item">
+                            <p class="mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
+                            <div class="d-flex">
+                                <a  class="d-flex rounded align-items-center py-2 px-3 me-2">
+                                    <i class="fas fa-apple-alt text-white"></i>
+                                    <div class="ms-3">
+                                       
+                                        <h6 class="text-white">App Store</h6>
+                                    </div>
+                                </a>
+                                <a  class="bg-dark d-flex rounded align-items-center py-2 px-3 ms-2">
+                                    <i class="fas fa-play "></i>
+                                    <div class="ms-3">
+                                   
+                                        <h6 class="text-white">Google Play</h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-2">
+                        <div class="footer-item">
+                            <h4 class="text-white mb-4">Quick Links</h4>
+                        <a asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> General </a>
+                        <a asp-area="Business" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Business </a>
+                        <a asp-area="Entertainment" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Entertainment</a>
+                        <a asp-area="Health" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Health</a>
+                        <a asp-area="Science" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Science</a>
+                        <a asp-area="Sports" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Sports</a>
+                        <a asp-area="Technology" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Technology</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="footer-item">
+                            <h4 class="text-white mb-4">Support</h4>
+                            <a ><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
+                            <a ><i class="fas fa-angle-right me-2"></i> Terms & Conditions</a>
+                            <a ><i class="fas fa-angle-right me-2"></i> Disclaimer</a>
+                            <a ><i class="fas fa-angle-right me-2"></i> Support</a>
+                            <a ><i class="fas fa-angle-right me-2"></i> FAQ</a>
+                            <a 
+                                ><i class="fas fa-angle-right me-2"></i> Help</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="footer-item">
+                            <h4 class="text-white mb-4">Contact Info</h4>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt  me-3"></i>
+                                <p class="text-white mb-0">123 Street New York.USA</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-envelope  me-3"></i>
+                                <p class="text-white mb-0">info@example.com</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-phone-alt  me-3"></i>
+                                <p class="text-white mb-0">(+012) 3456 7890</p>
+                            </div>
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="fab fa-firefox-browser  me-3"></i>
+                                <p class="text-white mb-0">Yoursite@ex.com</p>
+                            </div>
+                            <div class="d-flex soshial gap-2">
+                                <a class="btn   btn-sm-square rounded-circle px-3" ><i class="fab fa-facebook-f "></i></a>
+                                <a class="btn  btn-sm-square rounded-circle px-3"><i class="fab fa-twitter "></i></a>
+                                <a class="btn  btn-sm-square rounded-circle px-3"><i class="fab fa-instagram "></i></a>
+                                <a class="btn  btn-sm-square rounded-circle px-3"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- footer End -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/owlcarousel2/owl.carousel.min.js"></script> <!-- file js Owl Carousel -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

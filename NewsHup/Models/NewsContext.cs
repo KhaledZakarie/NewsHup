@@ -13,7 +13,7 @@ namespace TestMVC.Models
         {
             optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=NewsDB;Integrated Security=True;Trust Server Certificate=True");
         }
-        //
+        //  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

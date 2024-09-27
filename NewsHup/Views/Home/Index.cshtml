@@ -3,10 +3,30 @@
     ViewData["Title"] = "Home Page";
     Layout = "_MainLayout";
 }
+@section Styles {
+    <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
+}
+<section class="my-3 pt-3">
+    <div class="owl-carousel carousel3">
+      
 
-
+        @foreach (Article article in Model)
+        {
+            <div class="">
+                <div class="card h-100 position-relative">
+                    <img src="@article.ImageUrl" class="card-img-top w-100" height="400px" alt="...">
+                    <div class="overflow-hidden card-body article-body position-absolute bottom-0 start-0 end-0 p-4  text-white">
+                        <p class="card-text "><span class="bg-danger p-5">Breaking news</span> @article.Title</p>
+                    </div>
+                </div>
+            </div>
+        }
+    
+    </div>
+</section>
 <section class="container pt-3 page">
-   
+    
     <div class="row  g-4">
 
         @foreach(Article article in Model)
