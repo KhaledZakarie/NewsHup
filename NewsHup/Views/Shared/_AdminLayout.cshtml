@@ -31,7 +31,8 @@
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="~/assets/css/kaiadmin.min.css" />
-    <link rel="stylesheet" href="~/assets/css/fonts.min.css" />
+@*    <link rel="stylesheet" href="~/assets/css/fonts.min.css" />
+ *@ 
     <link rel="stylesheet" href="/assets/css/fonts.min.css" />
 
 
@@ -147,6 +148,30 @@
         <div class="main-panel">
             <!-- Header/Navbar -->
             <div class="main-header">
+                <div class="main-header-logo">
+                    <!-- Logo Header -->
+                    <div class="logo-header" data-background-color="dark">
+                        <a href="NewsDB.html" class="logo">
+                            <img src="assets/img/kaiadmin/logo_light.png"
+                                 alt="navbar brand"
+                                 class="navbar-brand  w-100"
+                                 style="height: auto;" />
+                        </a>
+                        <div class="nav-toggle">
+                            <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                            </button>
+                            <button class="btn btn-toggle sidenav-toggler">
+                                <i class="gg-menu-left"></i>
+                            </button>
+                        </div>
+                        <button class="topbar-toggler more">
+                            <i class="gg-more-vertical-alt"></i>
+                        </button>
+                    </div>
+                    <!-- End Logo Header -->
+                </div>
+                <!-- Navbar Header -->
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
                         <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
@@ -202,7 +227,7 @@
                                                 <a class="col-6 col-md-4 p-0" href="#">
                                                     <div class="quick-actions-item">
                                                         <div class="avatar-item bg-danger rounded-circle">
-                                                            <i class="far fa-calendar-alt"></i>
+                                                            <i class="fas fa-user text-white"></i>
                                                         </div>
                                                         <span class="text">User MNG</span>
                                                     </div>
@@ -306,6 +331,7 @@
     <script src="~/assets/js/core/popper.min.js"></script>
     <script src="~/assets/js/core/bootstrap.min.js"></script>
     <script src="~/assets/js/kaiadmin.min.js"></script>
+
 
     @RenderSection("Scripts", required: false) <!-- Allows additional scripts from individual pages -->
 </body>
