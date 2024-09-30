@@ -34,8 +34,13 @@ namespace NewsHup.Controllers
             return View(artical);
 
         }
+        // New Dashboard action
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
 
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
