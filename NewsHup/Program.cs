@@ -11,18 +11,6 @@ namespace NewsHup
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-<<<<<<< HEAD
-            builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-=======
-            // // Add services to the container.
-            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-            //U have to run the  following command: Install-Package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
-
-
->>>>>>> 7fef682d9d78f2f3c19597a9b2f50e0953b1ce2b
-
             var app = builder.Build();
 
             // Disable Browser Link for now
