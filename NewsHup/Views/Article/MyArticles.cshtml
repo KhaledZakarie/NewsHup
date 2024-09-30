@@ -1,0 +1,46 @@
+﻿@model ArticleWithUserViewModel
+
+@{
+    ViewData["Title"] = "MyArticles";
+    Layout = "_MainLayout";
+}
+
+<section class="container">
+    <h2>My Article:</h2>
+
+    <!-- header -->
+    <div class="d-flex align-items-center gap-3 justify-content-center">
+        <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
+        <div>
+            <h2 class="h4 m-0">@Model.UserName</h2>
+        </div>
+    </div>
+
+    <!-- body -->
+    <div class="shadow rounded-3 p-2 my-3">
+        <!-- loop -->
+        @foreach(Article article in Model.Articles)
+        {
+            <div class="d-flex align-items-center justify-content-between border-bottom pb-1 m-2">
+                <div class="d-flex align-items-center gap-4">
+                    <img src="@article.ImageUrl" width="100px" height="100px" class="rounded-4 shadow" />
+                    <div class="">
+                        <h3 class="h5">@article.Title</h3>
+                        <span class="text-black-50 ">
+                            @article.PublishDate.ToString("dd/MM/yyyy")</span>
+                    </div>
+
+                </div>
+                <div class="">
+                    <button class="btn btn-outline-info">Edit</button>
+                    <button class="btn btn-outline-danger">Delete</button>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+</section>
+
+

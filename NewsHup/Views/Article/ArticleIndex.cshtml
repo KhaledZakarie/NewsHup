@@ -1,0 +1,16 @@
+﻿@model List<Article>
+
+<div style="display:flex;">
+    @foreach(Article article in Model)
+    {
+    
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="/upload/@article.ImageUrl" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@article.Title</h5>
+                <p class="card-text">@article.Content</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    }
+</div>

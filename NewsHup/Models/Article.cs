@@ -9,21 +9,22 @@ namespace NewsHup.Models
 
         public string ImageUrl {  get; set; }
 
-        [StringLength(50)]
+        [MinLength(3)]
         public string Title { get; set; }
+        [MinLength(20)]
         public string Content { get; set; }
 
         public DateTime PublishDate { get; set; } = DateTime.Now;
 
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
 
-        public List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<Comment>? Comments { get; set; } = new List<Comment>();
         [ForeignKey("Category")]
 
         public int CatId { get; set; }
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }
