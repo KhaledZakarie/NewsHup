@@ -19,6 +19,12 @@ namespace NewsHup.Controllers
             return View();
         }
 
-        // You can add more admin-related actions here in the future
+
+        // Fetch Users from the database and pass them to the view
+        public IActionResult Users()
+        {
+            var users = _context.Users.ToList(); // Fetch all users from the DB
+            return View(users);  // Pass the list of users to the view
+        }
     }
 }

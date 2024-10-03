@@ -16,11 +16,7 @@ namespace TestMVC.Models
         public DbSet<Article> Articles { set; get; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=NewsDB;Integrated Security=True;Trust Server Certificate=True");
-        //}
-        //  
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
