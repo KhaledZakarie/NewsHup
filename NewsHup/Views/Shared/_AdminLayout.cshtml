@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@ViewData["Title"] - NewsHub Admin Dashboard</title>
+    <!-- Load jQuery FIRST -->
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="~/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
 
@@ -327,10 +329,13 @@
      </div>
     <!-- JS Files -->
     <script src="~/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <script src="~/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script> 
     <script src="~/assets/js/core/popper.min.js"></script>
     <script src="~/assets/js/core/bootstrap.min.js"></script>
     <script src="~/assets/js/kaiadmin.min.js"></script>
+   
+
 
 
     @RenderSection("Scripts", required: false) <!-- Allows additional scripts from individual pages -->

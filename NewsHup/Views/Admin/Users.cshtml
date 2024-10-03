@@ -23,7 +23,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title">Add User</h4>
+                <h4 class="card-title">Our User</h4>
                 <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
                     <i class="fa fa-plus"></i> Add User
                 </button>
@@ -42,26 +42,26 @@
                         </div>
                         <div class="modal-body">
                             <p class="small">Create a new User using this form, make sure you fill them all</p>
-                            <form id="rowForm">
+                            <form id="rowForm" method="post">
+                                @Html.AntiForgeryToken()
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group form-group-default">
                                             <label>Name</label>
-                                            <input id="addName" type="text" class="form-control" placeholder="Enter name" />
+                                            <input id="addName" name="Name" type="text" class="form-control" placeholder="Enter name" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6 pe-0">
                                         <div class="form-group form-group-default">
                                             <label>Email</label>
-                                            <input id="addEmail" type="email" class="form-control" placeholder="Enter email" />
+                                            <input id="addEmail" name="Email" type="email" class="form-control" placeholder="Enter email" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Password</label>
                                             <div class="input-group">
-                                                <input id="addPassword" type="password" class="form-control" placeholder="Enter password" />
-                                                <span class="input-group-text" onclick="togglePassword()">
+                                                <input id="addPassword" name="Password" type="password" class="form-control" placeholder="Enter password" required />                                                <span class="input-group-text" onclick="togglePassword()">
                                                     <i class="fa fa-eye"></i>
                                                 </span>
                                             </div>
@@ -70,7 +70,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Role</label>
-                                            <input id="addRole" type="text" class="form-control" placeholder="Enter role" />
+                                            <input id="addRole" name="Role" type="text" class="form-control" placeholder="Enter role" required />
                                         </div>
                                     </div>
                                 </div>
@@ -119,31 +119,74 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript to handle row addition and password visibility toggle -->
 <script>
+    // Function to toggle password visibility
+    function togglePassword() {
+        var passwordField = document.getElementById('addPassword');
+        var icon = passwordField.nextElementSibling.querySelector('i');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    // jQuery to handle adding new row and submitting form via AJAX
     $(document).ready(function () {
-        $('#addRowButton').on('click', function () {
-            var name = $('#addName').val();
-            var email = $('#addEmail').val();
-            var password = $('#addPassword').val();
-            var role = $('#addRole').val();
+        $('#addRowButton').on('click', function (e) {
+            e.preventDefault();  // Prevent the default form submission
 
-            if (name && email && password && role) {
-                var newRow = `
-                        <tr>
-                            <td>${name}</td>
-                            <td>${email}</td>
-                            <td>*******</td>
-                            <td>${role}</td>
-                            <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
-                        </tr>`;
-                $('#rowTableBody').append(newRow);
 
-                $('#rowForm')[0].reset();
-                $('#addRowModal').modal('hide');
-            }
+            // Debugging alert to check if the button is clicked
+           // alert('Add button clicked!');
+
+            // Collect form data
+            var formData = {
+                Name: $('#addName').val(),
+                Email: $('#addEmail').val(),
+                Password: $('#addPassword').val(),
+                Role: $('#addRole').val()
+            };
+
+            // Send form data via AJAX to the AddUser action in AdminController
+            $.ajax({
+                url: '@Url.Action("AddUser", "Admin")',  // The URL to send the data to
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        // If the server responds with success, append the new user to the table
+                        var newRow = `
+                                <tr>
+                                    <td>${formData.Name}</td>
+                                    <td>${formData.Email}</td>
+                                    <td>*******</td>  <!-- Password is masked -->
+                                    <td>${formData.Role}</td>
+                                    <td>
+                                        <button class="btn btn-primary">Edit</button>
+                                        <button class="btn btn-danger">Delete</button>
+                                    </td>
+                                </tr>`;
+                        $('#add-row tbody').append(newRow);
+
+                        // Reset the form and close the modal
+                        $('#rowForm')[0].reset();
+                        $('#addRowModal').modal('hide');
+                    } else {
+                        // Handle error response from the server
+                        alert(response.message);  // Display error message
+                    }
+                },
+                error: function () {
+                    alert('Error occurred while adding user.');  // Handle error if AJAX fails
+                }
+            });
         });
     });
 </script>
