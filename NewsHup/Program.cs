@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using NewsHup.Repository;
+using TestMVC.Models;
 
 namespace NewsHup
 {
@@ -15,17 +17,26 @@ namespace NewsHup
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+
+            // Register NewsContext for dependency injection
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            // Register NewsContext for dependency injection with retry on failure
+            builder.Services.AddDbContext<NewsContext>(options =>
+                options.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    // Enable retry on transient errors
+                    sqlOptions.EnableRetryOnFailure();
+                })
+            );
+
+
+
+
+
             var app = builder.Build();
 
-            // Disable Browser Link for now
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            //}
-            //else
-            //{
-            //    builder.Services.AddControllersWithViews();
-            //}
+            
 
 
 
@@ -41,11 +52,11 @@ namespace NewsHup
 
             app.UseAuthorization();
 
-            // Add the admin route
+            // Admin-specific route
             app.MapControllerRoute(
                 name: "admin",
-                pattern: "admin",
-                defaults: new { controller = "Home", action = "Dashboard" });
+                pattern: "admin/{action=Dashboard}/{id?}",
+                defaults: new { controller = "Admin", action = "Dashboard" });
 
             // Existing default route
 

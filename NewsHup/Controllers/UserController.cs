@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NewsHup.Models;
 using TestMVC.Models;
 
@@ -7,7 +8,15 @@ namespace NewsHup.Controllers
     public class UserController : Controller
     {
 
-        private NewsContext context = new NewsContext();
+        // private NewsContext context = new NewsContext();
+
+        private readonly NewsContext _context;
+
+        // Constructor to inject NewsContext via DI
+        public UserController(NewsContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
             return View();
@@ -42,8 +51,8 @@ namespace NewsHup.Controllers
             {
                 try
                 {
-                    context.Users.Add(user);
-                    context.SaveChanges();
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +90,7 @@ namespace NewsHup.Controllers
 
             else
             {
-               var userFromDB =  context.Users.FirstOrDefault(u=>  u.Email == user.Email && u.Password == user.Password );
+               var userFromDB =  _context.Users.FirstOrDefault(u=>  u.Email == user.Email && u.Password == user.Password );
                 if (userFromDB ==null )
                 {
                     ModelState.AddModelError("Password", "Wrong Password !");

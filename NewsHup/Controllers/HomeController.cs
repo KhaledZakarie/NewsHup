@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NewsHup.Models;
 using System.Diagnostics;
 using TestMVC.Models;
@@ -8,25 +9,34 @@ namespace NewsHup.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public NewsContext context = new NewsContext();
-        
+        //  public NewsContext context = new NewsContext();
+        private readonly NewsContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        // Use Dependency Injection to inject NewsContext
+        public HomeController(ILogger<HomeController> logger, NewsContext context)
         {
             _logger = logger;
+            _context = context;
         }
+
+
+
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
         public IActionResult Index(string area="")
         {
             List<Article> artical;
             if (string.IsNullOrEmpty(area)) {
-                artical = context.Articles.ToList();
+                artical = _context.Articles.ToList();
                 
             }
             else
             {
-                var catId = context.Categories.FirstOrDefault(c => c.CategoryName == area)?.CategoryId;
-                 artical = context.Articles.Where(a => a.CatId == catId).ToList();
+                var catId = _context.Categories.FirstOrDefault(c => c.CategoryName == area)?.CategoryId;
+                 artical = _context.Articles.Where(a => a.CatId == catId).ToList();
 
             }
 
@@ -34,13 +44,9 @@ namespace NewsHup.Controllers
             return View(artical);
 
         }
-        // New Dashboard action
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
 
 
+        // Action method for error handling
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -9,8 +9,15 @@ namespace NewsHup.Models
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            NewsContext context = new NewsContext();
-             User userFromRes =  validationContext.ObjectInstance as User;
+            //NewsContext context = new NewsContext();
+
+            // Resolve NewsContext from DI container using ValidationContext
+            var context = validationContext.GetService(typeof(NewsContext)) as NewsContext;
+
+
+
+
+            User userFromRes =  validationContext.ObjectInstance as User;
             var user = context.Users.FirstOrDefault(u=>u.Email == value.ToString());
 
             if (user != null)

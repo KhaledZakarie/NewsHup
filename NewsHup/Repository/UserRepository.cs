@@ -5,18 +5,19 @@ namespace NewsHup.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private NewsContext newsContext;
+        //private NewsContext newsContext;
+        private readonly NewsContext _newsContext;
 
-        public UserRepository()
+        // Use Dependency Injection to inject NewsContext
+        public UserRepository(NewsContext newsContext)
         {
-            newsContext = new NewsContext();
+            _newsContext = newsContext;
         }
-
 
 
         public User GetUserBy(Func<User, bool> GetBy)
         {
-            User user = newsContext.Users.SingleOrDefault(GetBy);
+            User user = _newsContext.Users.SingleOrDefault(GetBy);
             return user;
         }
     }
