@@ -36,7 +36,7 @@
                     <div class="modal-content">
                         <div class="modal-header border-0">
                             <h5 class="modal-title"><span class="fw-mediumbold"> New</span> <span class="fw-light"> User </span></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -70,15 +70,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Role</label>
-                                            <input id="addRole" name="Role" type="text" class="form-control" placeholder="Enter role" required />
+                                            <select id="addRole" name="Role" class="form-control" required>
+                                                <option value="" disabled selected>Select a role</option>
+                                                <option value="0">Reader</option>
+                                                <option value="1">Writer</option>
+                                                <option value="3">Admin</option>
+                                            </select>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer border-0">
                             <button type="button" id="addRowButton" class="btn btn-primary">Add</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -145,6 +151,7 @@
 
             // Debugging alert to check if the button is clicked
            // alert('Add button clicked!');
+           // alert("AJAX request initiated");  // Debugging alert to see if this fires
 
             // Collect form data
             var formData = {
@@ -160,6 +167,7 @@
                 type: 'POST',
                 data: formData,
                 success: function (response) {
+                  //  alert("AJAX success");  // Debugging alert
                     if (response.success) {
                         // If the server responds with success, append the new user to the table
                         var newRow = `
@@ -179,9 +187,10 @@
                         $('#rowForm')[0].reset();
                         $('#addRowModal').modal('hide');
                     } else {
+                        alert("Invalid data:\n" + response.errors.join("\n"));
                         // Handle error response from the server
-                        alert(response.message);  // Display error message
-                    }
+@*                         alert(response.message);  // Display error message
+ *@                    }
                 },
                 error: function () {
                     alert('Error occurred while adding user.');  // Handle error if AJAX fails

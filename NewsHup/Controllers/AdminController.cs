@@ -39,8 +39,13 @@ namespace NewsHup.Controllers
 
                 return Json(new { success = true, message = "User added successfully!" });
             }
+
+            // Collect all validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+            // Return the errors in the response
             // If the data is invalid, return an error response
-            return Json(new { success = false, message = "Invalid data!" });
+            return Json(new { success = false, message = "Invalid data!", errors });
         }
     }
 }
