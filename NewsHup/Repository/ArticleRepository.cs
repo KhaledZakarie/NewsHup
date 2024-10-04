@@ -17,11 +17,21 @@ namespace NewsHup.Repository
             newsContext.Add(article);
             SaveToDb();
         }
+        public void Delete(Article article)
+        {
+            newsContext.Remove(article);
+            SaveToDb();
+        }
 
         public List<Article> GetAll()
         {
             List<Article> articles = newsContext.Articles.ToList();
             return articles;
+        }
+        public Article GetArticleBy(Func<Article, bool> GetBy)
+        {
+            Article article = newsContext.Articles.FirstOrDefault(GetBy);
+            return article;
         }
 
         public List<Article> GetArticlesBy(Func<Article, bool> GetBy)

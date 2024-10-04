@@ -12,8 +12,8 @@ namespace NewsHup.ViewModels
 
         public int CatId { get; set; }
         public int UserId { get; set; }
-        [Required]
-        public IFormFile FormFile { get; set; }
+        
+        public IFormFile? FormFile { get; set; }
 
         public List<Category> categories { get; set; } = new List<Category>();
 
