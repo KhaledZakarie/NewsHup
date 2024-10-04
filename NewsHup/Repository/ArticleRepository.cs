@@ -22,7 +22,7 @@ namespace NewsHup.Repository
         }
         public void Delete(Article article)
         {
-            newsContext.Remove(article);
+            _newsContext.Remove(article);
             SaveToDb();
         }
 
@@ -33,7 +33,7 @@ namespace NewsHup.Repository
         }
         public Article GetArticleBy(Func<Article, bool> GetBy)
         {
-            Article article = newsContext.Articles.FirstOrDefault(GetBy);
+            Article article = _newsContext.Articles.FirstOrDefault(GetBy);
             return article;
         }
 

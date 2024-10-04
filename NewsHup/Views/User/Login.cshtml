@@ -24,7 +24,9 @@
                         <span>Not registred yet? Sign up <a asp-controller="User" asp-action="Register">Sign up</a></span>
                     </div>
 
-                    <form method="post" class="w-75">
+                    <form asp-action="Login" asp-controller="User" method="post" class="w-75">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-floating mb-3">
                             <input class="form-control shadow-none border-0 border-bottom rounded-0" asp-for="Email" placeholder="Email">
@@ -65,7 +67,6 @@
     </section>
 </main>
 
-<div asp-validation-summary="ModelOnly">
 </div>
 
 @section Scripts {
