@@ -7,15 +7,23 @@ namespace TestMVC.Models
     {
 
         // Constructor that accepts DbContextOptions
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=NewsDB;Integrated Security=True;Trust Server Certificate=True");
+        }
+
         public NewsContext(DbContextOptions<NewsContext> options) : base(options)
         {
         }
+
 
 
         public DbSet<User> Users { set; get; }
         public DbSet<Article> Articles { set; get; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+
        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
