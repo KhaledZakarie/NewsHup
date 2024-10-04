@@ -1,42 +1,50 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using TestMVC.Models;
 
 namespace NewsHup.Models
 {
     internal class UniqueEmailAttribute : ValidationAttribute
     {
+
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            // Skip validation if no email is provided
-            if (string.IsNullOrEmpty(value?.ToString()))
-            {
-                return new ValidationResult("Email is required.");
-            }
+            //NewsContext context = new NewsContext();
 
+            // Resolve NewsContext from DI container using ValidationContext
             var context = validationContext.GetService(typeof(NewsContext)) as NewsContext;
 
-            if (context == null)
-            {
-                return new ValidationResult("Unable to access database context.");
-            }
 
-            var userFromRes = validationContext.ObjectInstance as User;
 
-            // Skip email uniqueness validation if this is a login request (name is usually null during login)
-            if (userFromRes?.Name == null)
-            {
-                return ValidationResult.Success;
-            }
 
-            // Check for email uniqueness in the context of registration
+            User userFromRes = validationContext.ObjectInstance as User;
+
+            // var user = context.Users.FirstOrDefault(u=>u.Email == value.ToString());
+
+            // Find if there are any other users with the same email (exclude the current user)
             var user = context.Users.FirstOrDefault(u => u.Email == value.ToString() && u.Id != userFromRes.Id);
+
 
             if (user != null)
             {
-                return new ValidationResult("Email already exists.");
+                if (userFromRes.Name == null)
+                {
+                    return ValidationResult.Success;
+                }
+                return new ValidationResult("Email already exists");
+            }
+            else
+            {
+                if (userFromRes.Name == null)
+                {
+                    return new ValidationResult("Email already not exists");
+                }
+                return ValidationResult.Success;
             }
 
-            return ValidationResult.Success;
+
+
+
         }
     }
 }

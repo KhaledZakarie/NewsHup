@@ -1,9 +1,8 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 @model User
-@section Styles{
+@section Styles {
     <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
 }
@@ -24,9 +23,7 @@
                         <span>Not registred yet? Sign up <a asp-controller="User" asp-action="Register">Sign up</a></span>
                     </div>
 
-                    <form asp-action="Login" asp-controller="User" method="post" class="w-75">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form method="post" class="w-75">
 
                         <div class="form-floating mb-3">
                             <input class="form-control shadow-none border-0 border-bottom rounded-0" asp-for="Email" placeholder="Email">
@@ -67,6 +64,7 @@
     </section>
 </main>
 
+<div asp-validation-summary="ModelOnly">
 </div>
 
 @section Scripts {
@@ -74,5 +72,3 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
-
-
