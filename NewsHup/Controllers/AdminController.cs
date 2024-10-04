@@ -47,5 +47,22 @@ namespace NewsHup.Controllers
             // If the data is invalid, return an error response
             return Json(new { success = false, message = "Invalid data!", errors });
         }
+
+
+        [HttpPost]
+        public IActionResult DeleteUser(int id)
+        {
+            // Find the user by ID
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user != null)
+            {
+                // Remove the user from the database
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "User deleted successfully!" });
+            }
+            return Json(new { success = false, message = "User not found!" });
+        }
+
     }
 }

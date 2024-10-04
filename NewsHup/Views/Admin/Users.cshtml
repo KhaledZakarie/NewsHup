@@ -70,7 +70,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Role</label>
-                                            <select id="addRole" name="Role" class="form-control" required>
+                                            <select id="addRole" name="Role" class="form-control" required oninvalid="this.setCustomValidity('Please choose the role of the user')" oninput="setCustomValidity('')">
                                                 <option value="" disabled selected>Select a role</option>
                                                 <option value="0">Reader</option>
                                                 <option value="1">Writer</option>
@@ -105,7 +105,7 @@
                     <tbody>
                         @foreach (var user in Model)
                         {
-                            <tr>
+                            <tr id="user-row-@user.Id">
                                 <td>@user.Name</td>
                                 <td>@user.Email</td>
                                 <td>*******</td> <!-- Mask the password -->
@@ -113,21 +113,68 @@
                                 <td>
                                     <div class="form-button-action">
                                         <button type="button" class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
+                                        <button class="btn btn-link btn-danger" onclick="deleteUser(@user.Id)">
+                                            <i class="fa fa-times"></i>
+                                        </button>
                                     </div>
-
                                 </td>
                             </tr>
                         }
                     </tbody>
+
                 </table>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteButton" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Notification</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- JavaScript to handle row addition and password visibility toggle -->
 <script>
+    var userIdToDelete = null;  // Variable to store the ID of the user to delete
+
     // Function to toggle password visibility
     function togglePassword() {
         var passwordField = document.getElementById('addPassword');
@@ -143,15 +190,68 @@
         }
     }
 
+    // Function to trigger the confirmation modal
+    function deleteUser(userId) {
+        // Store the user ID in a variable for later use
+        userIdToDelete = userId;
+
+        // Show the confirmation modal
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    // When the user confirms deletion in the modal
+    $('#confirmDeleteButton').on('click', function () {
+        if (userIdToDelete !== null) {
+            $.ajax({
+                url: '@Url.Action("DeleteUser", "Admin")',  // Action URL
+                type: 'POST',  // HTTP method
+                data: { id: userIdToDelete },  // Data to send (user ID)
+                success: function (response) {
+                    if (response.success) {
+                        // Set the message in the modal
+                        $('#modalMessage').text(response.message);
+
+                        // Show the success modal
+                        $('#successModal').modal('show');
+
+                        // Remove the user row from the table
+                        $('#user-row-' + userIdToDelete).fadeOut(500, function () {
+                            $(this).remove();  // After fade-out animation, remove the row
+                        });
+                    } else {
+                        // Set the error message in the modal
+                        $('#modalMessage').text("Error: " + response.message);
+                        $('#successModal').modal('show');
+                    }
+
+                    // Close the confirmation modal
+                    $('#confirmDeleteModal').modal('hide');
+                },
+                error: function () {
+                    // Set a generic error message in the modal
+                    $('#modalMessage').text("An error occurred while deleting the user.");
+                    $('#successModal').modal('show');
+
+                    // Close the confirmation modal
+                    $('#confirmDeleteModal').modal('hide');
+                }
+            });
+        }
+    });
+
     // jQuery to handle adding new row and submitting form via AJAX
     $(document).ready(function () {
         $('#addRowButton').on('click', function (e) {
             e.preventDefault();  // Prevent the default form submission
 
+            // Validate if the role is selected
+            var role = $('#addRole').val();
+            if (!role) {
+                // Trigger the browser's built-in validation with the custom message
+                $('#addRole')[0].reportValidity();
+                return; // Stop submission if no role is selected
+            }
 
-            // Debugging alert to check if the button is clicked
-           // alert('Add button clicked!');
-           // alert("AJAX request initiated");  // Debugging alert to see if this fires
 
             // Collect form data
             var formData = {
@@ -161,42 +261,67 @@
                 Role: $('#addRole').val()
             };
 
+
+            // Map role values to text labels
+            var roleText = '';
+            switch (formData.Role) {
+                case '0':
+                    roleText = 'Reader';
+                    break;
+                case '1':
+                    roleText = 'Writer';
+                    break;
+                case '3':
+                    roleText = 'Admin';
+                    break;
+                default:
+                    roleText = 'Unknown Role';
+            }
+
+
             // Send form data via AJAX to the AddUser action in AdminController
             $.ajax({
                 url: '@Url.Action("AddUser", "Admin")',  // The URL to send the data to
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                  //  alert("AJAX success");  // Debugging alert
                     if (response.success) {
                         // If the server responds with success, append the new user to the table
                         var newRow = `
-                                <tr>
-                                    <td>${formData.Name}</td>
-                                    <td>${formData.Email}</td>
-                                    <td>*******</td>  <!-- Password is masked -->
-                                    <td>${formData.Role}</td>
-                                    <td>
-                                        <button class="btn btn-primary">Edit</button>
-                                        <button class="btn btn-danger">Delete</button>
-                                    </td>
-                                </tr>`;
+                                    <tr id="user-row-${response.userId}">
+                                        <td>${formData.Name}</td>
+                                        <td>${formData.Email}</td>
+                                        <td>*******</td>  <!-- Password is masked -->
+                                        <td>${roleText}</td> <!-- Display role as text -->
+                                        <td>
+                                            <div class="form-button-action">
+                                                <button type="button" class="btn btn-link btn-primary btn-lg">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-link btn-danger" onclick="deleteUser(${response.userId})">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>`;
+
+                        // Append the new row to the table
                         $('#add-row tbody').append(newRow);
 
                         // Reset the form and close the modal
                         $('#rowForm')[0].reset();
                         $('#addRowModal').modal('hide');
                     } else {
-                        alert("Invalid data:\n" + response.errors.join("\n"));
-                        // Handle error response from the server
-@*                         alert(response.message);  // Display error message
- *@                    }
+                        $('#modalMessage').text("Invalid data:\n" + response.errors.join("\n"));
+                        $('#successModal').modal('show');
+                    }
                 },
                 error: function () {
-                    alert('Error occurred while adding user.');  // Handle error if AJAX fails
+                    $('#modalMessage').text('Error occurred while adding user.');
+                    $('#successModal').modal('show');
                 }
             });
         });
     });
-</script>
 
+</script>
