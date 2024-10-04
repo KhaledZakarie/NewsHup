@@ -49,6 +49,8 @@ namespace NewsHup.Controllers
         }
 
 
+
+        // Delete user
         [HttpPost]
         public IActionResult DeleteUser(int id)
         {
@@ -63,6 +65,53 @@ namespace NewsHup.Controllers
             }
             return Json(new { success = false, message = "User not found!" });
         }
+
+
+        // Action to fetch user details for editing
+        public IActionResult GetUser(int id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" });
+            }
+            return Json(user);  // Return the user object as JSON
+        }
+
+        // Action to edit user
+        [HttpPost]
+        public IActionResult EditUser(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+                if (existingUser != null)
+                {
+                    // Only update the username, email, and role, and leave password unchanged if blank
+                    existingUser.Name = user.Name;
+                    existingUser.Email = user.Email;
+                    existingUser.Role = user.Role;
+
+                    // Only update password if it's not blank
+                    if (!string.IsNullOrEmpty(user.Password))
+                    {
+                        existingUser.Password = user.Password;  // Or hash it if you're doing so
+                    }
+
+                    _context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = "User not found" });
+            }
+
+            return Json(new { success = false, message = "Invalid data" });
+        }
+
+
+
+
 
     }
 }

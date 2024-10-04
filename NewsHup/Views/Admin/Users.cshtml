@@ -112,7 +112,11 @@
                                 <td>@user.Role</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <button type="button" class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
+                                        <!-- Edit button that calls the editUser function and passes the user ID -->
+                                        <button type="button" class="btn btn-link btn-primary btn-lg" onclick="editUser(@user.Id)">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <!-- Delete button that calls the deleteUser function and passes the user ID -->
                                         <button class="btn btn-link btn-danger" onclick="deleteUser(@user.Id)">
                                             <i class="fa fa-times"></i>
                                         </button>
@@ -128,7 +132,7 @@
     </div>
 </div>
 
-<!-- Confirmation Modal -->
+<!-- Confirmation Modal for delete user -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -150,7 +154,7 @@
 </div>
 
 
-<!-- Success Modal -->
+<!-- Success Modal after deletion -->
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -169,6 +173,57 @@
         </div>
     </div>
 </div>
+
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="editUserId" name="Id" />
+                    <div class="form-group form-group-default">
+                        <label>Name</label>
+                        <input id="editName" name="Name" type="text" class="form-control" required />
+                    </div>
+                    <div class="form-group form-group-default">
+                        <label>Email</label>
+                        <input id="editEmail" name="Email" type="email" class="form-control" required />
+                    </div>
+                    <div class="form-group form-group-default">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <input id="editPassword" name="Password" type="password" class="form-control" placeholder="Enter new password (leave blank to keep current)" />
+                            <span class="input-group-text" onclick="toggleEditPassword()">
+                                <i class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-default">
+                        <label>Role</label>
+                        <select id="editRole" name="Role" class="form-control" required>
+                            <option value="0">Reader</option>
+                            <option value="1">Writer</option>
+                            <option value="3">Admin</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-primary" id="saveEditUser">Save</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- JavaScript to handle row addition and password visibility toggle -->
@@ -239,6 +294,101 @@
         }
     });
 
+
+    function editUser(userId) {
+        // Make an AJAX call to get the user details
+        $.ajax({
+            url: '@Url.Action("GetUser", "Admin")',  // Create a GetUser action in AdminController
+            type: 'GET',
+            data: { id: userId },
+            success: function (user) {
+                // Log the returned user data to the console for debugging
+                console.log("User data returned from server:", user);
+
+                // Populate the modal fields with user data
+                $('#editUserId').val(user.id);   // Correct the property to 'id'
+                $('#editName').val(user.name);   // Correct the property to 'name'
+                $('#editEmail').val(user.email); // Correct the property to 'email'
+                $('#editRole').val(user.role);   // Correct the property to 'role'
+
+                // Keep the password field empty for security reasons
+                $('#editPassword').val('');  // We don't show the password in UI for security reasons
+
+                // Show the edit modal
+                $('#editUserModal').modal('show');
+            },
+            error: function () {
+                alert('Error fetching user details.');
+            }
+        });
+    }
+
+
+
+
+
+    function toggleEditPassword() {
+        var passwordField = document.getElementById('editPassword');
+        var icon = passwordField.nextElementSibling.querySelector('i');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    // Handle form submission and save the edited user via AJAX
+    $('#saveEditUser').on('click', function () {
+        // Collect form data
+        var formData = {
+            Id: $('#editUserId').val(),
+            Name: $('#editName').val(),
+            Email: $('#editEmail').val(),
+            Password: $('#editPassword').val(),  // Password can be blank
+            Role: $('#editRole').val()
+        };
+
+        // Send the updated user data to the server
+        $.ajax({
+            url: '@Url.Action("EditUser", "Admin")',  // The URL for the EditUser action
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    // Update the table row with the new user data
+                    var row = $('#user-row-' + formData.Id);
+                    row.find('td:nth-child(1)').text(formData.Name);  // Update Name
+                    row.find('td:nth-child(2)').text(formData.Email);  // Update Email
+
+                    // Map the role to a readable text format
+                    var roleText = '';
+                    switch (formData.Role) {
+                        case '0': roleText = 'Reader'; break;
+                        case '1': roleText = 'Writer'; break;
+                        case '3': roleText = 'Admin'; break;
+                        default: roleText = 'Unknown';
+                    }
+
+                    // Update Role in the table
+                    row.find('td:nth-child(4)').text(roleText);
+
+                    // Close the modal
+                    $('#editUserModal').modal('hide');
+                } else {
+                    alert('Error updating user: ' + response.message);
+                }
+            },
+            error: function () {
+                alert('Error saving user.');
+            }
+        });
+    });
+
+
     // jQuery to handle adding new row and submitting form via AJAX
     $(document).ready(function () {
         $('#addRowButton').on('click', function (e) {
@@ -288,22 +438,23 @@
                     if (response.success) {
                         // If the server responds with success, append the new user to the table
                         var newRow = `
-                                    <tr id="user-row-${response.userId}">
-                                        <td>${formData.Name}</td>
-                                        <td>${formData.Email}</td>
-                                        <td>*******</td>  <!-- Password is masked -->
-                                        <td>${roleText}</td> <!-- Display role as text -->
-                                        <td>
-                                            <div class="form-button-action">
-                                                <button type="button" class="btn btn-link btn-primary btn-lg">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-link btn-danger" onclick="deleteUser(${response.userId})">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>`;
+                                        <tr id="user-row-${response.userId}">
+                                <td>${formData.Name}</td>
+                                <td>${formData.Email}</td>
+                                <td>*******</td>  <!-- Password is masked -->
+                                <td>${roleText}</td> <!-- Display role as text -->
+                                <td>
+                                    <div class="form-button-action">
+                                         <button type="button" class="btn btn-link btn-primary btn-lg" onclick="editUser(${response.userId})">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+
+                                        <button class="btn btn-link btn-danger" onclick="deleteUser(${response.userId})">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>`;
 
                         // Append the new row to the table
                         $('#add-row tbody').append(newRow);

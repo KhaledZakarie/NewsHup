@@ -18,7 +18,12 @@ namespace NewsHup.Models
 
 
             User userFromRes =  validationContext.ObjectInstance as User;
-            var user = context.Users.FirstOrDefault(u=>u.Email == value.ToString());
+
+            // var user = context.Users.FirstOrDefault(u=>u.Email == value.ToString());
+
+            // Find if there are any other users with the same email (exclude the current user)
+            var user = context.Users.FirstOrDefault(u => u.Email == value.ToString() && u.Id != userFromRes.Id);
+
 
             if (user != null)
             {
