@@ -76,32 +76,27 @@ namespace NewsHup.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Login(User user)
         {
-
-            
-            if (ModelState.ErrorCount > 1)
+            // Check if the model state is valid (e.g., all required fields are provided and valid)
+            if (!ModelState.IsValid)
             {
-
-
-                return View(user);
-
-
-
+                return View(user);  // If the model state is invalid, return the view with the validation messages
             }
 
-            else
+            // Check if the user exists in the database with the provided email and password
+            var userFromDB = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+
+            // If the user is not found (email and password do not match)
+            if (userFromDB == null)
             {
-               var userFromDB =  _context.Users.FirstOrDefault(u=>  u.Email == user.Email && u.Password == user.Password );
-                if (userFromDB ==null )
-                {
-                    ModelState.AddModelError("Password", "Wrong Password !");
-                    return View(user);
-
-                }
-
-
-                return RedirectToAction("Index", "Home");
+                // Add an error to the ModelState to display on the form
+                ModelState.AddModelError("Password", "Invalid email or password.");
+                return View(user);  // Re-render the view with the error message
             }
+
+            // If login is successful, redirect to the home page (or wherever you want to go)
+            return RedirectToAction("Index", "Home");
         }
+
 
     }
 }

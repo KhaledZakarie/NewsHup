@@ -7,40 +7,35 @@ namespace NewsHup.Models
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            // Ensure email is not null or empty
+            // Skip validation if no email is provided
             if (string.IsNullOrEmpty(value?.ToString()))
             {
                 return new ValidationResult("Email is required.");
             }
 
-            // Resolve NewsContext from DI container using ValidationContext
             var context = validationContext.GetService(typeof(NewsContext)) as NewsContext;
 
-            // Check if the context is null
             if (context == null)
             {
                 return new ValidationResult("Unable to access database context.");
             }
 
-            // Get the current user object from validationContext
             var userFromRes = validationContext.ObjectInstance as User;
 
-            // Ensure the user object is not null
-            if (userFromRes == null)
+            // Skip email uniqueness validation if this is a login request (name is usually null during login)
+            if (userFromRes?.Name == null)
             {
-                return new ValidationResult("User object is invalid.");
+                return ValidationResult.Success;
             }
 
-            // Find if there are any other users with the same email (excluding the current user)
+            // Check for email uniqueness in the context of registration
             var user = context.Users.FirstOrDefault(u => u.Email == value.ToString() && u.Id != userFromRes.Id);
 
-            // If email is already used by another user
             if (user != null)
             {
                 return new ValidationResult("Email already exists.");
             }
 
-            // If no issues are found
             return ValidationResult.Success;
         }
     }
