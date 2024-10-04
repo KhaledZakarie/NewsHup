@@ -186,6 +186,12 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <!-- Error message container -->
+                <div id="editErrorMessages" class="alert alert-danger" style="display:none;">
+                    <!-- Error messages will be injected here -->
+                </div>
+
                 <form id="editUserForm" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="editUserId" name="Id" />
@@ -200,12 +206,14 @@
                     <div class="form-group form-group-default">
                         <label>Password</label>
                         <div class="input-group">
-                            <input id="editPassword" name="Password" type="password" class="form-control" placeholder="Enter new password (leave blank to keep current)" />
+                            <!-- Temporarily change to 'type="text"' -->
+                            <input id="editPassword" name="Password" type="Password" class="form-control" placeholder="Enter password" />
                             <span class="input-group-text" onclick="toggleEditPassword()">
                                 <i class="fa fa-eye"></i>
                             </span>
                         </div>
                     </div>
+
                     <div class="form-group form-group-default">
                         <label>Role</label>
                         <select id="editRole" name="Role" class="form-control" required>
@@ -294,8 +302,13 @@
         }
     });
 
-
+    // Function to open the edit modal and fill in user data
     function editUser(userId) {
+
+        // Clear any previous validation error messages
+        $('#editErrorMessages').empty().hide(); // Hide and clear the error messages
+
+
         // Make an AJAX call to get the user details
         $.ajax({
             url: '@Url.Action("GetUser", "Admin")',  // Create a GetUser action in AdminController
@@ -303,7 +316,7 @@
             data: { id: userId },
             success: function (user) {
                 // Log the returned user data to the console for debugging
-                console.log("User data returned from server:", user);
+               // console.log("User data returned from server:", user);
 
                 // Populate the modal fields with user data
                 $('#editUserId').val(user.id);   // Correct the property to 'id'
@@ -311,8 +324,11 @@
                 $('#editEmail').val(user.email); // Correct the property to 'email'
                 $('#editRole').val(user.role);   // Correct the property to 'role'
 
-                // Keep the password field empty for security reasons
-                $('#editPassword').val('');  // We don't show the password in UI for security reasons
+                // Show the actual password in the UI 
+                $('#editPassword').val(user.password);  // Show the actual password
+
+               
+
 
                 // Show the edit modal
                 $('#editUserModal').modal('show');
@@ -323,8 +339,26 @@
         });
     }
 
+    // Function to reset the form when the modal is closed
+    // Clear form data and errors when the modal is hidden
+    $('#editUserModal').on('hidden.bs.modal', function () {
+        // Clear all the input fields
+        $('#editUserForm')[0].reset(); // Reset the form fields
+
+        // Clear validation errors
+        $('#editErrorMessages').empty().hide(); // Hide and clear the error messages
+    });
 
 
+    // Function to clear form validation errors
+    function clearValidationErrors() {
+        // Clear validation messages from the form
+        $('#editUserForm').find('.field-validation-error').text('');
+
+        // Reset the validation state of each form element
+        $('#editUserForm').find('.is-invalid').removeClass('is-invalid');  // Bootstrap validation class
+        $('#editUserForm').find('.is-valid').removeClass('is-valid');      // Bootstrap validation class
+    }
 
 
     function toggleEditPassword() {
@@ -344,11 +378,12 @@
     // Handle form submission and save the edited user via AJAX
     $('#saveEditUser').on('click', function () {
         // Collect form data
+        var password = $('#editPassword').val() === '**********' ? '' : $('#editPassword').val(); // If password is masked, treat it as unchanged
         var formData = {
             Id: $('#editUserId').val(),
             Name: $('#editName').val(),
             Email: $('#editEmail').val(),
-            Password: $('#editPassword').val(),  // Password can be blank
+            Password: password,  // Password will be empty if not changed
             Role: $('#editRole').val()
         };
 
@@ -379,7 +414,8 @@
                     // Close the modal
                     $('#editUserModal').modal('hide');
                 } else {
-                    alert('Error updating user: ' + response.message);
+                    // Show validation errors
+                    displayValidationErrors(response.errors);
                 }
             },
             error: function () {
@@ -387,6 +423,20 @@
             }
         });
     });
+
+    // Function to display validation errors
+    function displayValidationErrors(errors) {
+        // Clear previous validation errors
+        $('#editErrorMessages').empty();
+
+        // Display each error
+        errors.forEach(function (error) {
+            $('#editErrorMessages').append('<p>' + error + '</p>');
+        });
+
+        // Show the error message div
+        $('#editErrorMessages').show();
+    }
 
 
     // jQuery to handle adding new row and submitting form via AJAX

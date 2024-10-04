@@ -87,27 +87,36 @@ namespace NewsHup.Controllers
                 var existingUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
                 if (existingUser != null)
                 {
-                    // Only update the username, email, and role, and leave password unchanged if blank
+                    // Update name, email, and role
                     existingUser.Name = user.Name;
                     existingUser.Email = user.Email;
                     existingUser.Role = user.Role;
 
-                    // Only update password if it's not blank
+                    // Only update the password if a new one is provided
                     if (!string.IsNullOrEmpty(user.Password))
                     {
-                        existingUser.Password = user.Password;  // Or hash it if you're doing so
+                        existingUser.Password = user.Password;  // Hash the password if necessary
                     }
 
                     _context.SaveChanges();
-
                     return Json(new { success = true });
                 }
 
                 return Json(new { success = false, message = "User not found" });
             }
 
-            return Json(new { success = false, message = "Invalid data" });
+            // Collect the detailed validation errors from ModelState
+            var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+
+            return Json(new { success = false, message = "Invalid data", errors });
         }
+
+
+
+
+
 
 
 
