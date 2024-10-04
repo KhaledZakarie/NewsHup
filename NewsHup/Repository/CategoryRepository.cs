@@ -5,15 +5,18 @@ namespace NewsHup.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private NewsContext newsContext;
-        public CategoryRepository()
+        //  private NewsContext newsContext;
+
+        private readonly NewsContext _newsContext;
+        // Use Dependency Injection to inject NewsContext
+        public CategoryRepository(NewsContext newsContext)
         {
-            newsContext = new NewsContext();
+            _newsContext = newsContext;
         }
 
         public List<Category> GetAll()
         {
-            List<Category> categories = newsContext.Categories.ToList();
+            List<Category> categories = _newsContext.Categories.ToList();
             return categories;
         }
     }

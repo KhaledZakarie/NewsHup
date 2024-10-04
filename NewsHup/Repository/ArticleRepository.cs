@@ -5,16 +5,19 @@ namespace NewsHup.Repository
 {
     public class ArticleRepository : IArticleRepository
     {
-        private NewsContext newsContext;
+        //private NewsContext newsContext;
 
-        public ArticleRepository()
+        private readonly NewsContext _newsContext;
+
+        // Use Dependency Injection to inject NewsContext
+        public ArticleRepository(NewsContext newsContext)
         {
-            newsContext = new NewsContext();
+            _newsContext = newsContext;
         }
 
         public void AddArticle(Article article)
         {
-            newsContext.Add(article);
+            _newsContext.Add(article);
             SaveToDb();
         }
         public void Delete(Article article)
@@ -25,7 +28,7 @@ namespace NewsHup.Repository
 
         public List<Article> GetAll()
         {
-            List<Article> articles = newsContext.Articles.ToList();
+            List<Article> articles = _newsContext.Articles.ToList();
             return articles;
         }
         public Article GetArticleBy(Func<Article, bool> GetBy)
@@ -36,13 +39,13 @@ namespace NewsHup.Repository
 
         public List<Article> GetArticlesBy(Func<Article, bool> GetBy)
         {
-            List<Article> articles = newsContext.Articles.Where(GetBy).ToList();
+            List<Article> articles = _newsContext.Articles.Where(GetBy).ToList();
             return articles;
         }
 
         public void SaveToDb()
         {
-            newsContext.SaveChanges();
+            _newsContext.SaveChanges();
         }
     }
 }

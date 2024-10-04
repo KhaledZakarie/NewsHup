@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@ViewData["Title"] - NewsHub Admin Dashboard</title>
+    <!-- Load jQuery FIRST -->
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="~/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
 
@@ -50,7 +52,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="NewsDB.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.png"
+                src="/assets/img/kaiadmin/logo_light.png"
                 alt="navbar brand"
                 class="navbar-brand  w-100"
                 style="height: auto;"
@@ -131,7 +133,7 @@
                 <div class="collapse" id="sidebarLayouts">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="usermng.html">
+                        <a href="/admin/users">
                         <span class="sub-item">User Management</span>
                       </a>
                     </li>
@@ -152,7 +154,7 @@
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="NewsDB.html" class="logo">
-                            <img src="assets/img/kaiadmin/logo_light.png"
+                            <img src="/assets/img/kaiadmin/logo_light.png"
                                  alt="navbar brand"
                                  class="navbar-brand  w-100"
                                  style="height: auto;" />
@@ -261,7 +263,7 @@
                                    href="#"
                                    aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="assets/img/profile.jpg"
+                                        <img src="/assets/img/profile.jpg"
                                              alt="..."
                                              class="avatar-img rounded-circle" />
                                     </div>
@@ -275,7 +277,7 @@
                                     <li>
                                         <div class="user-box">
                                             <div class="avatar-lg">
-                                                <img src="assets/img/profile.jpg"
+                                                <img src="/assets/img/profile.jpg"
                                                      alt="image profile"
                                                      class="avatar-img rounded" />
                                             </div>
@@ -327,10 +329,13 @@
      </div>
     <!-- JS Files -->
     <script src="~/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <script src="~/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script> 
     <script src="~/assets/js/core/popper.min.js"></script>
     <script src="~/assets/js/core/bootstrap.min.js"></script>
     <script src="~/assets/js/kaiadmin.min.js"></script>
+   
+
 
 
     @RenderSection("Scripts", required: false) <!-- Allows additional scripts from individual pages -->
