@@ -1,0 +1,73 @@
+﻿@model ArticleWithCommentViewModel
+
+@{
+    ViewData["Title"] = "ArticleDetils";
+    Layout = "_MainLayout";
+}
+
+<section class="container my-5 w-75 mx-auto border rounded-2 p-2">
+    <!-- header -->
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div class="d-flex align-items-center gap-3">
+            <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
+            <div>
+                <h2 class="h4 m-0">@Model.AuthorName</h2>
+                <span class="small text-black-50 ">@Model.PublishDate</span>
+            </div>
+        </div>
+        <div class="">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-action="Edit" asp-controller="Article" asp-route-id="@Model.ArticleId">Edit <i class="fa-regular fa-pen-to-square"></i></a></li>
+                    <li><a class="dropdown-item" asp-action="Delete" asp-controller="Article" asp-route-id="@Model.ArticleId">Delete <i class="fa-solid fa-trash"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- body -->
+    <div class="border-top mt-2">
+        <h3 class="h4">@Model.Title</h3>
+        <h3 class="h4">@Model.CategoryName</h3>
+        <img src="/upload/@Model.ImageUrl" alt="" class="w-60">
+        <p class="">@Model.Content</p>
+    </div>
+
+    <div class="shadow rounded-3 p-2 my-3">
+        
+        <a class="btn btn-outline-primary" asp-action="AddComment" asp-controller="Comment" asp-route-userId="@Model.AuthorId" asp-route-articleId="@Model.ArticleId">Add Comment</a>
+        @if(Model.Comments.Count() > 0)
+        {
+            <h3>Comments</h3>     @*remove articel id and git it from session*@        
+        }
+        <!-- loop -->
+        @foreach (Comment Comment in Model.Comments)
+        {
+            <div class="d-flex align-items-center justify-content-between border-bottom pb-1 m-2">
+                <div class="d-flex align-items-center gap-4">
+                    <a asp-action="MyArticles" asp-route-userId="@Comment.ArticleId">
+                        <img src="/assets/download.jpeg" width="100px" height="100px" class="rounded-4 shadow" />
+                    </a>
+                    <div class="">
+                        <a asp-action="MyArticles" asp-route-userId="@Comment.ArticleId">
+                            <h3 class="h5">@Comment.User.Name</h3>
+                        </a>
+                        <h2>@Comment.CommentText</h2>
+                        <span class="text-black-50 ">
+                            @Comment.CommentDate.ToString("dd/MM/yyyy")
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+
+</section>
+
+

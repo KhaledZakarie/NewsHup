@@ -11,13 +11,15 @@ namespace NewsHup.Controllers
         IArticleRepository articleRepository;
         ICategoryRepository categoryRepository;
         IUserRepository userRepository;
+        ICommentRepository commentRepository;
         IHostingEnvironment hosting;
-        public ArticleController(IArticleRepository _articleRepository, ICategoryRepository _categoryRepository,IUserRepository _userRepository , IHostingEnvironment _hosting)
+        public ArticleController(IArticleRepository _articleRepository, ICategoryRepository _categoryRepository,IUserRepository _userRepository, ICommentRepository _commentRepository , IHostingEnvironment _hosting)
         {
             articleRepository = _articleRepository;
             categoryRepository = _categoryRepository;
             userRepository = _userRepository;
             hosting = _hosting;
+            commentRepository = _commentRepository;
         }
 
 
@@ -49,7 +51,7 @@ namespace NewsHup.Controllers
                     Article article = new Article();
                     //Upload Img
                     
-                    if(newArticle.FormFile != null)///it upload image
+                    if(newArticle.FormFile != null)///img uploaded
                     {
                         string FileName = newArticle.FormFile.FileName;
                         string uploadFolder = Path.Combine(hosting.WebRootPath, "upload");
@@ -59,14 +61,19 @@ namespace NewsHup.Controllers
                     }
                     else //put defualt img if not upload img
                     {
-                        article.ImageUrl = "https://cdn.vectorstock.com/i/1000x1000/50/49/colorful-newspaper-article-design-vector-10795049.webp";
+                        article.ImageUrl = "DefualtNews.jpg";
                     }
 
                     
                     article.Title = newArticle.Title;
                     article.Content = newArticle.Content;
                     article.CatId = newArticle.CatId;
-                    
+
+                    //if userId =0 // mean not select user --> put him/her in general
+                    if(newArticle.CatId == 0)
+                    {
+                        article.CatId = 1;
+                    }
                     
                     /*temp*/article.UserId = 1;
                     //article.UserId = newArticle.UserId;
@@ -84,7 +91,29 @@ namespace NewsHup.Controllers
             newArticle.categories = categoryRepository.GetAll();
             return View(newArticle);
         }
+        
 
+        public IActionResult ArticleDetils(int id)
+         {
+            Article article = articleRepository.GetArticleBy(a => a.Id == id);
+            User author = userRepository.GetUserBy(u => u.Id == article.UserId);
+            Category category = categoryRepository.GetCategoryBy(c =>c.CategoryId == article.CatId);
+            List<Comment> comments = commentRepository.GetCommentsBy(c => c.ArticleId == article.Id);
+
+            ArticleWithCommentViewModel articleWithComment = new ArticleWithCommentViewModel();
+            articleWithComment.ArticleId = article.Id;
+            articleWithComment.Title = article.Title;
+            articleWithComment.Content = article.Content;
+            articleWithComment.ImageUrl = article.ImageUrl;
+            articleWithComment.CategoryName = category.CategoryName;
+            articleWithComment.PublishDate = article.PublishDate;
+            articleWithComment.AuthorName = author.Name;
+            articleWithComment.AuthorId = author.Id;
+
+            articleWithComment.Comments = comments;
+
+            return View(articleWithComment);
+        }
         public IActionResult Delete(int id)
         {
             try
@@ -123,11 +152,38 @@ namespace NewsHup.Controllers
         }
         public IActionResult Edit(int id)
         {
+
             Article article = articleRepository.GetArticleBy(a => a.Id == id);
             ViewData["Categories"] = categoryRepository.GetAll();
             return View(article);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Article editedArticle)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //if userId =0 // mean not select user --> put him/her in general
+                    if (editedArticle.CatId == 0)
+                    {
+                        editedArticle.CatId = 1;
+                    }
+                    articleRepository.Edit(editedArticle);
 
-        
+                    return RedirectToAction("ArticleIndex");
+                }
+                catch (Exception ex)
+                {
+                    ViewData["Categories"] = categoryRepository.GetAll();
+                    return View(editedArticle);
+                }
+
+            }
+            ViewData["Categories"] = categoryRepository.GetAll();
+            return View(editedArticle);
+        }
+
     }
 }

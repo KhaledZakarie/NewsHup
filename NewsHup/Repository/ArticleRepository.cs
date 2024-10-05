@@ -20,6 +20,12 @@ namespace NewsHup.Repository
             _newsContext.Add(article);
             SaveToDb();
         }
+
+        public void Edit(Article article)
+        {
+            _newsContext.Update(article);
+            SaveToDb();
+        }
         public void Delete(Article article)
         {
             _newsContext.Remove(article);

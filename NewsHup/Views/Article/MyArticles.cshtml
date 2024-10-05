@@ -24,9 +24,13 @@
         {
             <div class="d-flex align-items-center justify-content-between border-bottom pb-1 m-2">
                 <div class="d-flex align-items-center gap-4">
-                    <img src="@article.ImageUrl" width="100px" height="100px" class="rounded-4 shadow" />
+                    <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                        <img src="/upload/@article.ImageUrl" width="100px" height="100px" class="rounded-4 shadow" />
+                    </a>
                     <div class="">
-                        <h3 class="h5">@article.Title</h3>
+                        <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                            <h3 class="h5">@article.Title</h3>
+                        </a>
                         <span class="text-black-50 ">
                             @article.PublishDate.ToString("dd/MM/yyyy")</span>
                     </div>
@@ -34,13 +38,12 @@
                 </div>
                 <div class="">
                     <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-danger">Delete</a>
-                    <button class="btn btn-outline-info">Edit</button>
-                    <button class="btn btn-outline-danger">Delete</button>
+                    <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-info">Edit</a>
                 </div>
             </div>
         }
-
     </div>
+
 
 
 </section>
