@@ -30,8 +30,31 @@ namespace NewsHup.Controllers
             ViewBag.TotalArticles = totalArticles;
             ViewBag.TotalUsers = totalUsers;
 
+            // Fetch article statistics for each month over multiple years
+            // Grouping articles by month and year, counting them
+            var articleStatistics = await _context.Articles
+                .GroupBy(a => new { a.PublishDate.Month, a.PublishDate.Year })  // Group by month and year
+                .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month) // Order by year first, then by month
+                .Select(g => new
+                {
+                    Month = g.Key.Month,
+                    Year = g.Key.Year,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            // Create arrays for the labels (e.g., "Jan 2023", "Feb 2024", etc.) and data (e.g., article counts)
+            var labels = articleStatistics.Select(a => $"{new DateTime(a.Year, a.Month, 1):MMM yyyy}").ToArray();
+            var data = articleStatistics.Select(a => a.Count).ToArray();
+
+            // Pass the article statistics to the view using ViewBag
+            ViewBag.ArticleStatisticsLabels = labels;
+            ViewBag.ArticleStatisticsData = data;
+
             return View();
         }
+
+
 
 
         //*****************************************************************************//
