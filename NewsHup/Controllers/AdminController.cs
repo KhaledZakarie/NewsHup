@@ -18,10 +18,23 @@ namespace NewsHup.Controllers
         }
 
         // Dashboard action
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
+            // Fetch total counts for categories, articles, and users
+            var totalCategories = await _context.Categories.CountAsync();
+            var totalArticles = await _context.Articles.CountAsync();
+            var totalUsers = await _context.Users.CountAsync();
+
+            // Pass the counts to the view using ViewBag
+            ViewBag.TotalCategories = totalCategories;
+            ViewBag.TotalArticles = totalArticles;
+            ViewBag.TotalUsers = totalUsers;
+
             return View();
         }
+
+
+        //*****************************************************************************//
 
         // Fetch Users from the database and pass them to the view
         public async Task<IActionResult> Users()
