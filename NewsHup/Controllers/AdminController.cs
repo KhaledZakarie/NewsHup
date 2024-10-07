@@ -223,5 +223,127 @@ namespace NewsHup.Controllers
         }
 
 
+        //**********************************************************************************//
+        // GET: Articles Management
+        public async Task<IActionResult> AdminArticles()
+        {
+            var articles = await _context.Articles
+                                         .Include(a => a.Category)
+                                         .Include(a => a.User)  // Include user data
+                                         .ToListAsync();
+
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Users = await _context.Users.ToListAsync();
+
+            return View("AdminArticles", articles); // Return the view explicitly with articles
+        }
+
+        // POST: Add Article
+        [HttpPost]
+        public async Task<IActionResult> AddArticle(Article article)
+        {
+            if (ModelState.IsValid)
+            {
+                // Set default values for ImageUrl and PublishDate if not provided
+                article.PublishDate = article.PublishDate == default(DateTime) ? DateTime.Now : article.PublishDate;
+                article.ImageUrl = string.IsNullOrEmpty(article.ImageUrl) ? "/upload/DefaultImage.jpg" : article.ImageUrl;
+
+                try
+                {
+                    _context.Articles.Add(article);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, articleId = article.Id });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error adding article: " + ex.Message });
+                }
+            }
+
+            // Return validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return Json(new { success = false, message = "Invalid data.", errors = errors });
+        }
+
+        // POST: Edit Article
+        [HttpPost]
+        public async Task<IActionResult> EditArticle(Article article)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingArticle = await _context.Articles.FindAsync(article.Id);
+                    if (existingArticle == null)
+                    {
+                        return Json(new { success = false, message = "Article not found" });
+                    }
+
+                    // Update the existing article
+                    existingArticle.Title = article.Title;
+                    existingArticle.Content = article.Content;
+                    existingArticle.CatId = article.CatId;
+                    existingArticle.ImageUrl = !string.IsNullOrEmpty(article.ImageUrl) ? article.ImageUrl : existingArticle.ImageUrl;
+
+                    _context.Articles.Update(existingArticle);
+                    await _context.SaveChangesAsync();
+
+                    return Json(new { success = true });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error editing article: " + ex.Message });
+                }
+            }
+
+            // Return validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return Json(new { success = false, message = "Invalid data.", errors = errors });
+        }
+
+        // GET: Get Article by ID
+        public async Task<IActionResult> GetArticle(int id)
+        {
+            try
+            {
+                var article = await _context.Articles.Include(a => a.Category).Include(a => a.User).FirstOrDefaultAsync(a => a.Id == id);
+                if (article == null)
+                {
+                    return Json(new { success = false, message = "Article not found" });
+                }
+
+                return Json(new { success = true, article });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error fetching article: " + ex.Message });
+            }
+        }
+
+        // POST: Delete Article
+        [HttpPost]
+        public async Task<IActionResult> DeleteArticle(int id)
+        {
+            try
+            {
+                var article = await _context.Articles.FindAsync(id);
+                if (article == null)
+                {
+                    return Json(new { success = false, message = "Article not found" });
+                }
+
+                _context.Articles.Remove(article);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting article: " + ex.Message });
+            }
+        }
+
+
+
     }
 }
