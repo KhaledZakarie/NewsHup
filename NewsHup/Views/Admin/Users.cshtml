@@ -55,13 +55,16 @@
                                         <div class="form-group form-group-default">
                                             <label>Email</label>
                                             <input id="addEmail" name="Email" type="email" class="form-control" placeholder="Enter email" required />
+                                            <!-- Error message for email validation -->
+                                            <small id="emailError" class="text-danger" style="display:none;">Email already exists.</small>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Password</label>
                                             <div class="input-group">
-                                                <input id="addPassword" name="Password" type="password" class="form-control" placeholder="Enter password" required />                                                <span class="input-group-text" onclick="togglePassword()">
+                                                <input id="addPassword" name="Password" type="password" class="form-control" placeholder="Enter password" required />
+                                                <span class="input-group-text" onclick="togglePassword()">
                                                     <i class="fa fa-eye"></i>
                                                 </span>
                                             </div>
@@ -70,7 +73,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Role</label>
-                                            <select id="addRole" name="Role" class="form-control" required oninvalid="this.setCustomValidity('Please choose the role of the user')" oninput="setCustomValidity('')">
+                                            <select id="addRole" name="Role" class="form-control" required>
                                                 <option value="" disabled selected>Select a role</option>
                                                 <option value="0">Reader</option>
                                                 <option value="1">Writer</option>
@@ -78,7 +81,6 @@
                                             </select>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -234,11 +236,10 @@
 
 
 
-<!-- JavaScript to handle row addition and password visibility toggle -->
 <script>
     var userIdToDelete = null;  // Variable to store the ID of the user to delete
 
-    // Function to toggle password visibility
+    // Function to toggle password visibility for adding user
     function togglePassword() {
         var passwordField = document.getElementById('addPassword');
         var icon = passwordField.nextElementSibling.querySelector('i');
@@ -252,6 +253,121 @@
             icon.classList.add('fa-eye');
         }
     }
+
+    // Client-side validation for checking if email is unique
+    $('#addEmail').on('input', function () {
+        var email = $(this).val();
+        checkEmailUnique(email);
+    });
+
+    function checkEmailUnique(email) {
+        $.ajax({
+            url: '@Url.Action("CheckEmailUnique", "Admin")',  // Backend URL to check email uniqueness
+            type: 'POST',
+            data: { email: email },
+            success: function (response) {
+                if (!response.isUnique) {
+                    $('#emailError').show();  // Show error if email is not unique
+                    $('#addRowButton').prop('disabled', true);  // Disable the submit button
+                } else {
+                    $('#emailError').hide();  // Hide error if email is unique
+                    $('#addRowButton').prop('disabled', false);  // Enable the submit button
+                }
+            },
+            error: function () {
+                console.log('Error occurred during email validation.');
+            }
+        });
+    }
+
+
+    // Handle form submission only when email is unique and other fields are valid
+    $('#addRowButton').on('click', function (e) {
+        e.preventDefault();
+
+        // Get the form element
+        var form = $('#rowForm')[0];
+
+        // Validate the form using HTML5 built-in validation
+        if (!form.checkValidity()) {
+            form.reportValidity();  // Show the browser's validation messages
+            return;  // Stop the submission if validation fails
+        }
+
+        // Validate if the email is unique
+        if ($('#emailError').is(':visible')) {
+            return false;  // Prevent submission if email is not unique
+        }
+
+        // Collect form data
+        var formData = {
+            Name: $('#addName').val(),
+            Email: $('#addEmail').val(),
+            Password: $('#addPassword').val(),
+            Role: $('#addRole').val()
+        };
+
+        // Map role values to text labels
+        var roleText = '';
+        switch (formData.Role) {
+            case '0':
+                roleText = 'Reader';
+                break;
+            case '1':
+                roleText = 'Writer';
+                break;
+            case '3':
+                roleText = 'Admin';
+                break;
+            default:
+                roleText = 'Unknown Role';
+        }
+
+        // Send form data via AJAX to the AddUser action in AdminController
+        $.ajax({
+            url: '@Url.Action("AddUser", "Admin")',  // The URL to send the data to
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    // If the server responds with success, append the new user to the table
+                    var newRow = `
+                            <tr id="user-row-${response.userId}">
+                                <td>${formData.Name}</td>
+                                <td>${formData.Email}</td>
+                                <td>*******</td>  <!-- Password is masked -->
+                                <td>${roleText}</td> <!-- Display role as text -->
+                                <td>
+                                    <div class="form-button-action">
+                                        <button type="button" class="btn btn-link btn-primary btn-lg" onclick="editUser(${response.userId})">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-link btn-danger" onclick="deleteUser(${response.userId})">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>`;
+
+                    // Append the new row to the table
+                    $('#add-row tbody').append(newRow);
+
+                    // Reset the form and close the modal
+                    $('#rowForm')[0].reset();
+                    $('#addRowModal').modal('hide');
+                } else {
+                    $('#modalMessage').text("Invalid data:\n" + response.errors.join("\n"));
+                    $('#successModal').modal('show');
+                }
+            },
+            error: function () {
+                $('#modalMessage').text('Error occurred while adding user.');
+                $('#successModal').modal('show');
+            }
+        });
+    });
+
+
 
     // Function to trigger the confirmation modal
     function deleteUser(userId) {
@@ -308,27 +424,18 @@
         // Clear any previous validation error messages
         $('#editErrorMessages').empty().hide(); // Hide and clear the error messages
 
-
         // Make an AJAX call to get the user details
         $.ajax({
             url: '@Url.Action("GetUser", "Admin")',  // Create a GetUser action in AdminController
             type: 'GET',
             data: { id: userId },
             success: function (user) {
-                // Log the returned user data to the console for debugging
-               // console.log("User data returned from server:", user);
-
                 // Populate the modal fields with user data
-                $('#editUserId').val(user.id);   // Correct the property to 'id'
-                $('#editName').val(user.name);   // Correct the property to 'name'
-                $('#editEmail').val(user.email); // Correct the property to 'email'
-                $('#editRole').val(user.role);   // Correct the property to 'role'
-
-                // Show the actual password in the UI 
+                $('#editUserId').val(user.id);
+                $('#editName').val(user.name);
+                $('#editEmail').val(user.email);
+                $('#editRole').val(user.role);
                 $('#editPassword').val(user.password);  // Show the actual password
-
-               
-
 
                 // Show the edit modal
                 $('#editUserModal').modal('show');
@@ -340,66 +447,32 @@
     }
 
     // Function to reset the form when the modal is closed
-    // Clear form data and errors when the modal is hidden
     $('#editUserModal').on('hidden.bs.modal', function () {
-        // Clear all the input fields
-        $('#editUserForm')[0].reset(); // Reset the form fields
-
-        // Clear validation errors
-        $('#editErrorMessages').empty().hide(); // Hide and clear the error messages
+        $('#editUserForm')[0].reset();  // Reset the form fields
+        $('#editErrorMessages').empty().hide();  // Hide and clear the error messages
     });
-
-
-    // Function to clear form validation errors
-    function clearValidationErrors() {
-        // Clear validation messages from the form
-        $('#editUserForm').find('.field-validation-error').text('');
-
-        // Reset the validation state of each form element
-        $('#editUserForm').find('.is-invalid').removeClass('is-invalid');  // Bootstrap validation class
-        $('#editUserForm').find('.is-valid').removeClass('is-valid');      // Bootstrap validation class
-    }
-
-
-    function toggleEditPassword() {
-        var passwordField = document.getElementById('editPassword');
-        var icon = passwordField.nextElementSibling.querySelector('i');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
 
     // Handle form submission and save the edited user via AJAX
     $('#saveEditUser').on('click', function () {
-        // Collect form data
-        var password = $('#editPassword').val() === '**********' ? '' : $('#editPassword').val(); // If password is masked, treat it as unchanged
+        var password = $('#editPassword').val() === '**********' ? '' : $('#editPassword').val(); // Treat masked password as unchanged
         var formData = {
             Id: $('#editUserId').val(),
             Name: $('#editName').val(),
             Email: $('#editEmail').val(),
-            Password: password,  // Password will be empty if not changed
+            Password: password,
             Role: $('#editRole').val()
         };
 
-        // Send the updated user data to the server
         $.ajax({
-            url: '@Url.Action("EditUser", "Admin")',  // The URL for the EditUser action
+            url: '@Url.Action("EditUser", "Admin")',
             type: 'POST',
             data: formData,
             success: function (response) {
                 if (response.success) {
-                    // Update the table row with the new user data
                     var row = $('#user-row-' + formData.Id);
                     row.find('td:nth-child(1)').text(formData.Name);  // Update Name
                     row.find('td:nth-child(2)').text(formData.Email);  // Update Email
 
-                    // Map the role to a readable text format
                     var roleText = '';
                     switch (formData.Role) {
                         case '0': roleText = 'Reader'; break;
@@ -408,13 +481,9 @@
                         default: roleText = 'Unknown';
                     }
 
-                    // Update Role in the table
-                    row.find('td:nth-child(4)').text(roleText);
-
-                    // Close the modal
-                    $('#editUserModal').modal('hide');
+                    row.find('td:nth-child(4)').text(roleText);  // Update Role
+                    $('#editUserModal').modal('hide');  // Close modal
                 } else {
-                    // Show validation errors
                     displayValidationErrors(response.errors);
                 }
             },
@@ -426,103 +495,10 @@
 
     // Function to display validation errors
     function displayValidationErrors(errors) {
-        // Clear previous validation errors
         $('#editErrorMessages').empty();
-
-        // Display each error
         errors.forEach(function (error) {
             $('#editErrorMessages').append('<p>' + error + '</p>');
         });
-
-        // Show the error message div
         $('#editErrorMessages').show();
     }
-
-
-    // jQuery to handle adding new row and submitting form via AJAX
-    $(document).ready(function () {
-        $('#addRowButton').on('click', function (e) {
-            e.preventDefault();  // Prevent the default form submission
-
-            // Validate if the role is selected
-            var role = $('#addRole').val();
-            if (!role) {
-                // Trigger the browser's built-in validation with the custom message
-                $('#addRole')[0].reportValidity();
-                return; // Stop submission if no role is selected
-            }
-
-
-            // Collect form data
-            var formData = {
-                Name: $('#addName').val(),
-                Email: $('#addEmail').val(),
-                Password: $('#addPassword').val(),
-                Role: $('#addRole').val()
-            };
-
-
-            // Map role values to text labels
-            var roleText = '';
-            switch (formData.Role) {
-                case '0':
-                    roleText = 'Reader';
-                    break;
-                case '1':
-                    roleText = 'Writer';
-                    break;
-                case '3':
-                    roleText = 'Admin';
-                    break;
-                default:
-                    roleText = 'Unknown Role';
-            }
-
-
-            // Send form data via AJAX to the AddUser action in AdminController
-            $.ajax({
-                url: '@Url.Action("AddUser", "Admin")',  // The URL to send the data to
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        // If the server responds with success, append the new user to the table
-                        var newRow = `
-                                        <tr id="user-row-${response.userId}">
-                                <td>${formData.Name}</td>
-                                <td>${formData.Email}</td>
-                                <td>*******</td>  <!-- Password is masked -->
-                                <td>${roleText}</td> <!-- Display role as text -->
-                                <td>
-                                    <div class="form-button-action">
-                                         <button type="button" class="btn btn-link btn-primary btn-lg" onclick="editUser(${response.userId})">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-
-                                        <button class="btn btn-link btn-danger" onclick="deleteUser(${response.userId})">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>`;
-
-                        // Append the new row to the table
-                        $('#add-row tbody').append(newRow);
-
-                        // Reset the form and close the modal
-                        $('#rowForm')[0].reset();
-                        $('#addRowModal').modal('hide');
-                    } else {
-                        $('#modalMessage').text("Invalid data:\n" + response.errors.join("\n"));
-                        $('#successModal').modal('show');
-                    }
-                },
-                error: function () {
-                    $('#modalMessage').text('Error occurred while adding user.');
-                    $('#successModal').modal('show');
-                }
-            });
-        });
-    });
-
 </script>

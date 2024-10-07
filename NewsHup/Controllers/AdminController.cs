@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewsHup.Models;
 using TestMVC.Models;  // Assuming NewsContext is in this namespace
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace NewsHup.Controllers
 {
@@ -14,28 +17,33 @@ namespace NewsHup.Controllers
             _context = context;
         }
 
-        // New Dashboard action
+        // Dashboard action
         public IActionResult Dashboard()
         {
             return View();
         }
 
-
         // Fetch Users from the database and pass them to the view
-        public IActionResult Users()
+        public async Task<IActionResult> Users()
         {
-            var users = _context.Users.ToList(); // Fetch all users from the DB
+            var users = await _context.Users.ToListAsync(); // Fetch all users asynchronously
             return View(users);  // Pass the list of users to the view
         }
-        // This will handle the POST request to add a new user
+
+        // POST request to add a new user
         [HttpPost]
-        public IActionResult AddUser(User user)
+        public async Task<IActionResult> AddUser(User user)
         {
+            if (_context.Users.Any(u => u.Email == user.Email))
+            {
+                return Json(new { success = false, message = "Email already exists." });
+            }
+
             if (ModelState.IsValid)
             {
-                // Add the user to the database
-                _context.Users.Add(user);
-                _context.SaveChanges();
+                // Add the user to the database without password hashing
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
 
                 return Json(new { success = true, message = "User added successfully!" });
             }
@@ -43,84 +51,77 @@ namespace NewsHup.Controllers
             // Collect all validation errors
             var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 
-            // Return the errors in the response
-            // If the data is invalid, return an error response
             return Json(new { success = false, message = "Invalid data!", errors });
         }
 
+        [HttpPost]
+        public JsonResult CheckEmailUnique(string email)
+        {
+            // Check if any user with the provided email exists in the database
+            bool isUnique = !_context.Users.Any(u => u.Email == email);
+
+            // Return the result as JSON
+            return Json(new { isUnique = isUnique });
+        }
 
 
         // Delete user
         [HttpPost]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            // Find the user by ID
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
-            if (user != null)
-            {
-                // Remove the user from the database
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-                return Json(new { success = true, message = "User deleted successfully!" });
-            }
-            return Json(new { success = false, message = "User not found!" });
-        }
-
-
-        // Action to fetch user details for editing
-        public IActionResult GetUser(int id)
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FindAsync(id);  // Use FindAsync for better performance
             if (user == null)
             {
-                return Json(new { success = false, message = "User not found" });
+                return Json(new { success = false, message = "User not found!" }, 404);
             }
-            return Json(user);  // Return the user object as JSON
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, message = "User deleted successfully!" });
         }
 
-        // Action to edit user
+        // Fetch user details for editing
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" }, 404);
+            }
+            return Json(user);
+        }
+
+        // Edit user
         [HttpPost]
-        public IActionResult EditUser(User user)
+        public async Task<IActionResult> EditUser(User user)
         {
             if (ModelState.IsValid)
             {
-                var existingUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
-                if (existingUser != null)
+                var existingUser = await _context.Users.FindAsync(user.Id);
+                if (existingUser == null)
                 {
-                    // Update name, email, and role
-                    existingUser.Name = user.Name;
-                    existingUser.Email = user.Email;
-                    existingUser.Role = user.Role;
-
-                    // Only update the password if a new one is provided
-                    if (!string.IsNullOrEmpty(user.Password))
-                    {
-                        existingUser.Password = user.Password;  // Hash the password if necessary
-                    }
-
-                    _context.SaveChanges();
-                    return Json(new { success = true });
+                    return Json(new { success = false, message = "User not found" }, 404);
                 }
 
-                return Json(new { success = false, message = "User not found" });
+                existingUser.Name = user.Name;
+                existingUser.Email = user.Email;
+                existingUser.Role = user.Role;
+
+                // Only update the password if a new one is provided
+                if (!string.IsNullOrEmpty(user.Password))
+                {
+                    existingUser.Password = user.Password;  // No hashing, direct assignment
+                }
+
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
             }
 
-            // Collect the detailed validation errors from ModelState
-            var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                          .Select(e => e.ErrorMessage)
-                                          .ToList();
 
+
+            // Collect detailed validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             return Json(new { success = false, message = "Invalid data", errors });
         }
-
-
-
-
-
-
-
-
-
-
     }
 }
