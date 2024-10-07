@@ -123,5 +123,105 @@ namespace NewsHup.Controllers
             var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             return Json(new { success = false, message = "Invalid data", errors });
         }
+
+
+
+
+
+//**********************************************************************************//
+
+        // Category Management View
+        public async Task<IActionResult> Categories()
+        {
+            var categories = await _context.Categories.ToListAsync();  // Fetch categories from the database
+            return View(categories);  // Pass categories to the view
+        }
+
+        // POST: Add Category
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(Category category)
+        {
+            // Check if the category name already exists
+            bool categoryExists = _context.Categories.Any(c => c.CategoryName == category.CategoryName);
+
+            if (categoryExists)
+            {
+                return Json(new { success = false, message = "Category name already exists." });
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _context.Categories.AddAsync(category);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, categoryId = category.CategoryId });
+            }
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return Json(new { success = false, errors });
+        }
+
+
+
+        // POST: Delete Category
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return Json(new { success = false, message = "Category not found" });
+            }
+
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, message = "Category deleted successfully" });
+        }
+
+        // Get Category by ID for Editing
+        public async Task<IActionResult> GetCategory(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return Json(new { success = false, message = "Category not found" });
+            }
+
+            // Return only the necessary properties
+            return Json(new { success = true, category = new { category.CategoryId, category.CategoryName } });
+        }
+
+
+
+        // Edit Category
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(Category category)
+        {
+            // Check if the category name already exists (excluding the current category being edited)
+            bool categoryExists = _context.Categories.Any(c => c.CategoryName == category.CategoryName && c.CategoryId != category.CategoryId);
+
+            if (categoryExists)
+            {
+                return Json(new { success = false, message = "Category name already exists." });
+            }
+
+            if (ModelState.IsValid)
+            {
+                var existingCategory = await _context.Categories.FindAsync(category.CategoryId);
+                if (existingCategory == null)
+                {
+                    return Json(new { success = false, message = "Category not found" });
+                }
+
+                existingCategory.CategoryName = category.CategoryName;
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return Json(new { success = false, errors });
+        }
+
+
     }
 }
