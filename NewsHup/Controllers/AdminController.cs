@@ -242,64 +242,71 @@ namespace NewsHup.Controllers
         [HttpPost]
         public async Task<IActionResult> AddArticle(Article article)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Set default values for ImageUrl and PublishDate if not provided
-                article.PublishDate = article.PublishDate == default(DateTime) ? DateTime.Now : article.PublishDate;
-                article.ImageUrl = string.IsNullOrEmpty(article.ImageUrl) ? "/upload/DefaultImage.jpg" : article.ImageUrl;
+                // Return validation errors in JSON format
+                var errors = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
+                );
 
-                try
-                {
-                    _context.Articles.Add(article);
-                    await _context.SaveChangesAsync();
-                    return Json(new { success = true, articleId = article.Id });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = "Error adding article: " + ex.Message });
-                }
+                return Json(new { success = false, errors });
             }
 
-            // Return validation errors
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return Json(new { success = false, message = "Invalid data.", errors = errors });
+            // Assign a default publish date if none is provided
+            if (article.PublishDate == default(DateTime))
+            {
+                article.PublishDate = DateTime.Now;
+            }
+
+            // Handle other default values like ImageUrl
+            if (string.IsNullOrEmpty(article.ImageUrl))
+            {
+                article.ImageUrl = "/upload/DefaultImage.jpg";
+            }
+
+            _context.Articles.Add(article);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, articleId = article.Id });
         }
+
 
         // POST: Edit Article
         [HttpPost]
         public async Task<IActionResult> EditArticle(Article article)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var existingArticle = await _context.Articles.FindAsync(article.Id);
-                    if (existingArticle == null)
-                    {
-                        return Json(new { success = false, message = "Article not found" });
-                    }
+                // Return validation errors in JSON format
+                var errors = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
+                );
 
-                    // Update the existing article
-                    existingArticle.Title = article.Title;
-                    existingArticle.Content = article.Content;
-                    existingArticle.CatId = article.CatId;
-                    existingArticle.ImageUrl = !string.IsNullOrEmpty(article.ImageUrl) ? article.ImageUrl : existingArticle.ImageUrl;
-
-                    _context.Articles.Update(existingArticle);
-                    await _context.SaveChangesAsync();
-
-                    return Json(new { success = true });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = "Error editing article: " + ex.Message });
-                }
+                return Json(new { success = false, errors });
             }
 
-            // Return validation errors
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return Json(new { success = false, message = "Invalid data.", errors = errors });
+            var existingArticle = await _context.Articles.FindAsync(article.Id);
+            if (existingArticle == null)
+            {
+                return Json(new { success = false, message = "Article not found" });
+            }
+
+            // Update the existing article's fields
+            existingArticle.Title = article.Title;
+            existingArticle.Content = article.Content;
+            existingArticle.CatId = article.CatId;
+            if (!string.IsNullOrEmpty(article.ImageUrl))
+            {
+                existingArticle.ImageUrl = article.ImageUrl;
+            }
+
+            _context.Update(existingArticle);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
         }
+
 
         // GET: Get Article by ID
         public async Task<IActionResult> GetArticle(int id)
