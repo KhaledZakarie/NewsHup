@@ -223,13 +223,13 @@
             $.get('@Url.Action("GetArticle", "Admin")', { id: articleId }, function (response) {
                 if (response.success) {
                     // Populate the form with article data
-                    $('#editArticleId').val(response.article.Id);
-                    $('#editArticleTitle').val(response.article.Title);
-                    $('#editArticleContent').val(response.article.Content);
-                    $('#editArticleCategory').val(response.article.CatId);
-                    $('#editArticleUser').val(response.article.UserId);
-                    $('#editArticleImageUrl').val(response.article.ImageUrl);
-                    $('#editArticlePublishDate').val(response.article.PublishDate.split('T')[0]);  // Format date
+                    $('#editArticleId').val(response.article.id);
+                    $('#editArticleTitle').val(response.article.title);
+                    $('#editArticleContent').val(response.article.content);
+                    $('#editArticleCategory').val(response.article.catId);
+                    $('#editArticleUser').val(response.article.userId);
+                    $('#editArticleImageUrl').val(response.article.imageUrl);
+                    $('#editArticlePublishDate').val(response.article.publishDate.split('T')[0]);  // Format date
 
                     $('#saveEditArticleButton').text('Save Changes');  // Change button text to 'Save'
                     $('#editArticleModal').modal('show');  // Show the modal
@@ -240,6 +240,7 @@
                 alert('Error fetching article data.');
             });
         }
+
 
         // Submit Add Article form
         $('#addArticleButton').on('click', function () {
@@ -302,14 +303,15 @@
 
         // Use event delegation for dynamically generated elements (edit and delete buttons)
         $(document).on('click', '.btn-edit', function () {
-            var articleId = $(this).data('id');
+            var articleId = $(this).data('id');  // Get the article ID from data-id attribute
             editArticle(articleId);  // Call the edit function
         });
 
         $(document).on('click', '.btn-delete', function () {
-            var articleId = $(this).data('id');
+            var articleId = $(this).data('id');  // Get the article ID from data-id attribute
             deleteArticle(articleId);  // Call the delete function
         });
+
 
         // Delete Article
         function deleteArticle(articleId) {
@@ -336,12 +338,21 @@
 
         // Reset forms before displaying them
         function resetAddArticleForm() {
-            $('#addArticleForm')[0].reset();  // Reset Add form
+            if ($('#addArticleForm').length) {
+                $('#addArticleForm')[0].reset();  // Reset Add form if it exists
+            } else {
+                console.error('Add Article Form not found');
+            }
         }
 
         function resetEditArticleForm() {
-            $('#editArticleForm')[0].reset();  // Reset Edit form
+            if ($('#editArticleForm').length) {
+                $('#editArticleForm')[0].reset();  // Reset Edit form if it exists
+            } else {
+                console.error('Edit Article Form not found');
+            }
         }
+
     });
 
 

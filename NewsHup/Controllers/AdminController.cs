@@ -306,19 +306,38 @@ namespace NewsHup.Controllers
         {
             try
             {
-                var article = await _context.Articles.Include(a => a.Category).Include(a => a.User).FirstOrDefaultAsync(a => a.Id == id);
+                var article = await _context.Articles
+                                            .Include(a => a.Category)
+                                            .Include(a => a.User)
+                                            .FirstOrDefaultAsync(a => a.Id == id);
+
                 if (article == null)
                 {
                     return Json(new { success = false, message = "Article not found" });
                 }
 
-                return Json(new { success = true, article });
+                // Return structured JSON data
+                return Json(new
+                {
+                    success = true,
+                    article = new
+                    {
+                        Id = article.Id,
+                        Title = article.Title,
+                        Content = article.Content,
+                        CatId = article.CatId,
+                        UserId = article.UserId,
+                        ImageUrl = article.ImageUrl,
+                        PublishDate = article.PublishDate
+                    }
+                });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error fetching article: " + ex.Message });
             }
         }
+
 
         // POST: Delete Article
         [HttpPost]
