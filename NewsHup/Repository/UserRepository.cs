@@ -20,5 +20,15 @@ namespace NewsHup.Repository
             User user = _newsContext.Users.SingleOrDefault(GetBy);
             return user;
         }
+
+        public void Add(User user)
+        {
+            _newsContext.Users.Add(user);
+        }
+
+
+        public void SaveChanges (){
+            _newsContext.SaveChanges();
+        }
     }
 }

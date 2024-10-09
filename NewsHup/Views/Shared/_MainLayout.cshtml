@@ -52,12 +52,21 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav mx-start">
+                       @if(!User.Identity.IsAuthenticated){
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="User" asp-action="Login">Log in</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="Register">Sign up</a>
-                        </li>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="SignOut">Sign Out</a>
+                            </li>
+                                                   
+ }
                     </ul>
                 </div>
             </div>
