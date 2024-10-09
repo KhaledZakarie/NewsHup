@@ -14,9 +14,15 @@
     <header>
 
         <!-- Nav Bar -->
-        <nav class="navbar navbar-expand-lg shadow-lg  fixed-top  m-auto rounded-4 " style="width:90%">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/assets/logo.png" class="me-2" width="40px" alt="logo">Hot News</a>
+        <nav class="navbar navbar-expand-lg shadow-lg fixed-top m-auto rounded-4 " style="width:90%">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/assets/img/kaiadmin/logo_light.png"
+                         alt="navbar brand"
+                         class="navbar-brand"
+                         width="150px"
+                         style="height: auto;" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -56,6 +62,11 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="User" asp-action="Login">Log in</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">Welcome user</a>
+                        </li> 
+
                         <li class="nav-item">
                             <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="Register">Sign up</a>
                             </li>
@@ -97,11 +108,18 @@
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-4">
                             <a asp-controller="Home" asp-action="Index" class="p-0">
-                            <h4 class="text-white"><img src="/assets/logo.png" class="me-2" width="40px" alt="logo"> News Hot</h4>
+                            <h4 class="text-white">
+                            <img src="/assets/img/kaiadmin/logo_light.png"
+                                 alt="navbar brand"
+                                 class="navbar-brand"
+                                 width="150px"
+                                 style="height: auto;" />
+                                </h4>
                                 <!-- <img src="img/logo.png" alt="Logo"> -->
                             </a>
                         <div class="footer-item">
-                            <p class="mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
+                        
+                           
                             <div class="d-flex">
                                 <a  class="d-flex rounded align-items-center py-2 px-3 me-2">
                                     <i class="fas fa-apple-alt text-white"></i>
