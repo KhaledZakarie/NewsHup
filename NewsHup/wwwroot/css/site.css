@@ -41,7 +41,7 @@ body {
 /*  navbar */
 :root {
     --main-color: #FF8C6B;
-    --main-nav: #8371FD;
+    --main-nav: #3F72AF;
 }
 
 .carousel {
@@ -74,7 +74,7 @@ body {
     font-weight:500;
 }
     .navbar-nav:hover, .nav-link:hover, .navbar-brand:hover, .navbar-nav .nav-link.show:hover {
-        color: var(--main-color);
+        color: #8F021D;
     }
 
     .navbar-nav .nav-link.active {
@@ -95,7 +95,7 @@ body {
             content: "";
             width: 0%;
             height: 4px;
-            background: var(--main-color);
+            background: #8F021D;
             position: absolute;
             left: 5%;
             bottom: 0px;
@@ -137,7 +137,7 @@ body {
 }
 /*** Footer Start ***/
 .footer {
-    background: #015464;
+    background: #00224D;
 }
 
 .footer .footer-item {
@@ -160,13 +160,13 @@ a{
 }
 
 .footer .footer-item a:hover {
-    color: var(--main-color);
-    background-color:cadetblue;
-    border-radius:30%;
+    color: #8F021D;
+    background-color: cadetblue;
+    border-radius: 30%;
 }
 .footer .footer-item .soshial a {
-    color: var(--main-color);
-   transition: 0.5s;
+    color: #8F021D;
+    transition: 0.5s;
 }.footer .footer-item .soshial a:hover {
     color: black;
     background-color:cadetblue;
@@ -181,7 +181,7 @@ a{
     background: var(--main-color);
 }
 
-.footer .footer-item .footer-btn a:hover i {
-    color: var(--main-color);
-}
+    .footer .footer-item .footer-btn a:hover i {
+        color: #8F021D;
+    }
 /*** Footer End ***/

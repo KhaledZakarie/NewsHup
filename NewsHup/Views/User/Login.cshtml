@@ -3,10 +3,10 @@
 }
 @model User
 @section Styles {
-    <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
-    <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" />
+ 
 }
-
+@*
 <main class="login rounded-5">
     <section class="p-5  rounded-5 vh-100 mt-5">
         <div class="row  h-100 p-4 rounded-5 bg-white">
@@ -62,12 +62,70 @@
 
         </div>
     </section>
-</main>
+ </main> *@
+ <main>
 
+<div class="container1 mx-auto" id="container1">
+    <div class="form-container sign-up">
+            <form method="post" asp-action="Register">
+            <h1>Create Account</h1>
+           
+            <span>use your email for registeration</span>
+                <div class="w-100">
+                    <input asp-for="Name" placeholder="Name">
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div> 
+                <div class="w-100">
+                    <input asp-for="Email" type="Email" placeholder="Email">
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div> 
+                <div class="w-100">
+                    <input asp-for="Password" type="password" placeholder="Password">
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div class="form-container sign-in">
+            <form method="post" asp-action="Login">
+            <h1>Sign In</h1>
+           
+            <span>use your email password</span>
+                <div class="w-100">
+                    <input asp-for="Email" type="Email" placeholder="Email">
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+                <div class="w-100">
+                    <input asp-for="Password" type="password" placeholder="Password">
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+            <a href="#">Forget Your Password?</a>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle">
+            <div class="toggle-panel toggle-left">
+                <h1>Welcome Back!</h1>
+                <p>Enter your personal details to use all of site features</p>
+                <button class="hidden" id="login">Sign In</button>
+            </div>
+            <div class="toggle-panel toggle-right">
+                <h1>Hello, Friend!</h1>
+                <p>Register with your personal details to use all of site features</p>
+                <button class="hidden" id="register">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ </main>
 <div asp-validation-summary="ModelOnly">
 </div>
 
 @section Scripts {
+    <script src="~/js/login.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

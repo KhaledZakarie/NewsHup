@@ -17,17 +17,17 @@ namespace NewsHup.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
 
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
 
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace NewsHup.Controllers
 
 
 
-                return View(user);
+                return View("Login", user);
 
 
 
@@ -58,7 +58,7 @@ namespace NewsHup.Controllers
                 {
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(user);
+                    return View("Login",user);
 
                 }
 
