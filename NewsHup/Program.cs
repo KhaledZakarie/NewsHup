@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NewsHup.Repository;
 using TestMVC.Models;
@@ -17,6 +18,15 @@ namespace NewsHup
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+
+                options =>
+                {
+                    options.LoginPath = "/User/Login";
+                });
+           
+
 
 
             // Register NewsContext for dependency injection
@@ -50,6 +60,7 @@ namespace NewsHup
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();    
 
             app.UseAuthorization();
 
