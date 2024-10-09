@@ -7,6 +7,8 @@
     <link href="~/lib/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/lib/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet" />
 }
+
+
 <section class="my-3 pt-3">
     <div class="owl-carousel carousel3">
       
@@ -25,25 +27,11 @@
     
     </div>
 </section>
-<section class="container pt-3 page">
-    
-    <div class="row  g-4">
 
-        @foreach(Article article in Model)
-        {
-            <div class="col-md-3">
 
-                <div class="artical  h-100 shadow-lg ">
-                    <div class="card h-100">
-                        <img src="/upload/@article.ImageUrl" class="card-img-top w-100" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">@article.Title</p>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-         }
+<div id="HomeArea">
+    <partial name="_HomePartial" model="Model" />
 
-    </div>
-</section>
+</div>
+

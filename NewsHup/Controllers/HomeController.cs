@@ -45,6 +45,27 @@ namespace NewsHup.Controllers
         }
 
 
+        public IActionResult GetPartial(string area = "")
+        {
+            List<Article> articals;
+            if (string.IsNullOrEmpty(area))
+            {
+                articals = _context.Articles.ToList();
+
+            }
+            else
+            {
+                var catId = _context.Categories.FirstOrDefault(c => c.CategoryName == area)?.CategoryId;
+                articals = _context.Articles.Where(a => a.CatId == catId).ToList();
+
+            }
+
+
+            return PartialView("_HomePartial", articals);
+
+        }
+
+
         // Action method for error handling
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
