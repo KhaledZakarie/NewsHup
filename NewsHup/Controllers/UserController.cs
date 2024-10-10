@@ -87,7 +87,7 @@ namespace NewsHup.Controllers
                 }
 
                // return RedirectToAction("Index", "Home");
-                return RedirectToAction("AuthGo", "User");
+                return RedirectToAction("GoHome", "User");
             }
         }
 

@@ -18,5 +18,14 @@
       "library": "wow@1.1.2",
       "destination": "wwwroot/lib/wow/"
     }
+  ,
+{
+  "provider": "cdnjs",
+  "library": "animate.css@4.1.1",
+  "destination": "wwwroot/lib/animate.css/",
+  "files": [
+    "animate.min.css"
   ]
+}
+]
 }

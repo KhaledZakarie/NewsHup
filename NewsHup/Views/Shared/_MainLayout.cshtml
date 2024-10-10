@@ -7,6 +7,9 @@
     @await RenderSectionAsync("Styles", required: false)
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/animate.css/animate.min.css" />
+   
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsHup.styles.css" asp-append-version="true" />
 </head>
@@ -14,7 +17,7 @@
     <header>
 
         <!-- Nav Bar -->
-        <nav class="navbar navbar-expand-lg shadow-lg fixed-top m-auto rounded-4 " style="width:90%">
+        <nav class="navbar navbar-expand-lg my-2 shadow-lg fixed-top m-auto rounded-4 bg-secondary  border border-2 border-dark bg-opacity-75 text-danger animate__animated animate__zoomIn animate__delay-1s " style="width:90%">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="/assets/img/kaiadmin/logo_light.png"
@@ -199,13 +202,14 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-        $(".nav-link").click(function (event) {
+        $(".main-ul .nav-link").click(function (event) {
             event.preventDefault();
             //console.log(event.target.classList.add("active"))
            var homeArea = event.target.getAttribute("href")
-         
+
+            console.log(homeArea)
             $.ajax({
-               url: "Home/GetPartial"+homeArea,
+               url: "Home/GetPartial".+homeArea,
 
                 success:function(data) {
 
