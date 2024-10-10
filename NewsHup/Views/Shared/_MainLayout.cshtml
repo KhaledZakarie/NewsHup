@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/animate.css/animate.min.css" />
-   
+    <link href="~/lib/aos/aos.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsHup.styles.css" asp-append-version="true" />
@@ -63,24 +63,35 @@
                     <ul class="navbar-nav mx-start">
                        @if(!User.Identity.IsAuthenticated){
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="User" asp-action="Login">Log in</a>
+                                <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="Login">Log in</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link">Welcome user</a>
-                        </li> 
-
-                        <li class="nav-item">
-                            <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="Register">Sign up</a>
-                            </li>
+                       
                         }
                         else
                         {
-                            <li class="nav-item">
+                           @*  <li class="nav-item">
                                 <a class="nav-link a-register text-white rounded-4" asp-controller="User" asp-action="SignOut">Sign Out</a>
-                            </li>
-                                                   
- }
+                            </li> *@
+                            <div class="dropdown">
+                                <a class="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                   
+                                <img src="/assets/img/profile2.jpg" class="rounded-5" width="50px" alt="Profile Picture">
+                                    <span b-1tw6cnpky7="" class="profile-username">
+                                        <span b-1tw6cnpky7="" class="op-7">Hi,</span>
+                                        <span b-1tw6cnpky7="" class="fw-bold">Khaled</span>
+                                    </span>
+                                </a>
+
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sliders-h fa-fw"></i> Account</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="SignOut"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
+                                </ul>
+                            </div>
+
+                            
+                        }
                     </ul>
                 </div>
             </div>
@@ -197,6 +208,7 @@
         </div>
     <!-- footer End -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/aos/aos.js"></script>
     <script src="~/lib/owlcarousel2/owl.carousel.min.js"></script> <!-- file js Owl Carousel -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
