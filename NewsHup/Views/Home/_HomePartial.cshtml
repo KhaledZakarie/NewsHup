@@ -8,38 +8,43 @@
 
 <section class="container pt-3 animate__animated animate__fadeInBottomRight animate__delay-2s ">
 
-    <div class="row  g-4">
+    <div class="row  g-4 h-100">
 
         @foreach (Article article in Model)
         {
-            <div class="col-md-3">
-                <a asp-controller="Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
 
-                    <div class="artical  h-100 shadow-lg ">
-                        <div class="card h-100">
-                            @* <img src="/upload/@article.ImageUrl" class="card-img-top w-100" alt="...">  *@
 
-                            <picture>
+            <div class="col-md-6 h-100 ">
+                
+
+                    <div class="artical shadow-lg card position-relative overflow-hidden"  asp-controller=" Article" asp-action="ArticleDetils" asp-route-id="@article.Id" >
+                        <div class="  ">
+
+
+                            <picture c>
                                 @if(article.ImageUrl.Contains("http")){
-                                    
-                                    <source media="(min-width:465px)" srcset="@article.ImageUrl">
+
+                                    <source  class=" card-img-top h-100 w-100 " srcset="@article.ImageUrl">
                                 }
                                 else
                                 {
-                                <source media="(min-width:465px)" srcset="/upload/@article.ImageUrl">
+                                    <source  class=" card-img-top h-100 w-100 " srcset="/upload/@article.ImageUrl">
                                 }
                                 <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100" alt="...">
 
                             </picture>
 
 
-                            <div class="card-body">
-                                <p class="card-text">@article.Title</p>
-                            </div>
+                            
                         </div>
+
+                        <div class="position-absolute bottom-100 h-100 w-100 bg-white">
+                            <p class="card-text">@article.Title</p>
+                        </div>
+
                     </div>
 
-            </a>
+            
                 </div>
         }
 
