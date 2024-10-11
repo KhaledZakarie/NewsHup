@@ -88,9 +88,8 @@
                                             <i class="fas fa-sliders-h fa-fw"></i> My Article
                                         </a>
                                     </li>
-                                    @if (User.FindFirst("Role").Value == "Reader")
+                                    @if (User.FindFirst("Role").Value == "Admin")
                                     {
-
                                         <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-cog fa-fw"></i> DashBorde</a></li>
                                     }
                                     <li><hr class="dropdown-divider"></li>

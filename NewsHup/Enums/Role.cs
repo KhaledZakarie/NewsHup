@@ -2,6 +2,6 @@
 {
     public enum Role
     {
-        Reader = 0, Writer = 1, Admin=3
+        Reader = 0, Writer = 1, Admin=2
     }
 }
