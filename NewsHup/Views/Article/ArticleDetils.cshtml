@@ -33,7 +33,20 @@
     <div class="border-top mt-2">
         <h3 class="h4">@Model.Title</h3>
         <h3 class="h4">@Model.CategoryName</h3>
-        <img src="/upload/@Model.ImageUrl" alt="" class="w-100" height="400px">
+        <picture>
+            @if (Model.ImageUrl.Contains("http"))
+            {
+
+                <source media="(min-width:465px)" srcset="@Model.ImageUrl">
+            }
+            else
+            {
+                <source media="(min-width:465px)" srcset="/upload/@Model.ImageUrl">
+            }
+            <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100" height="400px" alt="...">
+        
+
+        </picture>
         <p class="">@Model.Content</p>
     </div>
 
