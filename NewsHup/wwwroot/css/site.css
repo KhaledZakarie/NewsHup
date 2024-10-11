@@ -2,6 +2,7 @@ html {
     font-size: 14px;
 }
 
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
@@ -207,3 +208,15 @@ a{
         color: #8F021D;
     }
 /*** Footer End ***/
+.Article-form {
+    background-image: linear-gradient(rgba(136, 5, 29, 0.9), rgba(0, 0, 0, 0.9)), url(/assets/bg_news.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+.footer {
+    background-image: linear-gradient(rgba(145, 152, 158, 0.5), rgba(145, 152, 158, 0.9)), url(/assets/depositphotos.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}

@@ -23,11 +23,11 @@ namespace NewsHup.Controllers
         }
 
 
-        public IActionResult ArticleIndex()
-        {
-            List<Article> articles = articleRepository.GetAll();
-            return View(articles);
-        }
+        //public IActionResult ArticleIndex()
+        //{
+        //    List<Article> articles = articleRepository.GetAll();
+        //    return View(articles);
+        //}
 
 
 
@@ -75,11 +75,11 @@ namespace NewsHup.Controllers
                         article.CatId = 1;
                     }
                     
-                    /*temp*/article.UserId = 1;
+                    /*temp*/article.UserId = int.Parse(User.FindFirst("Id").Value);
                     //article.UserId = newArticle.UserId;
                     articleRepository.AddArticle(article);
 
-                    return RedirectToAction("ArticleIndex");
+                    return RedirectToAction("MyArticles", new { userId = User.FindFirst("Id").Value });
                 }
                 catch(Exception ex)
                 {
@@ -134,7 +134,8 @@ namespace NewsHup.Controllers
 
         public IActionResult MyArticles(int userId)
         {
-            if(userId != 0)
+            ViewData["Categories"] = categoryRepository.GetAll();
+            if (userId != 0)
             {
                 //Get the Data 
                 User user = userRepository.GetUserBy(u => u.Id == userId);
@@ -172,7 +173,7 @@ namespace NewsHup.Controllers
                     }
                     articleRepository.Edit(editedArticle);
 
-                    return RedirectToAction("ArticleIndex");
+                    return RedirectToAction("MyArticles", new { userId = editedArticle.UserId });
                 }
                 catch (Exception ex)
                 {

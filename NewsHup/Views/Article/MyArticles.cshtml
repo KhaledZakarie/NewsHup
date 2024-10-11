@@ -3,17 +3,21 @@
 @{
     ViewData["Title"] = "MyArticles";
     Layout = "_MainLayout";
+    SelectList Categories = new SelectList(ViewBag.Categories, "CategoryId", "CategoryName");
 }
-
-<section class="container">
-    <h2>My Article:</h2>
+<section class="mt-5 animate__animated animate__pulse">
+<div class="container p-5 Article-form text-white">
+    <h2 class="h4">My Article:</h2>
     
 
     <!-- header -->
-    <div class="d-flex align-items-center gap-3 justify-content-center">
-        <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
+    <div class="d-flex align-items-center gap-3 justify-content-between bg-black text-white rounded-2 p-3">
         <div>
-            <h2 class="h4 m-0">@Model.UserName</h2>
+        <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
+            <span class="h4 m-0">@Model.UserName</span>
+        </div>
+        <div>
+            <a asp-action="AddArticle" asp-controller="Article" class="bg-success p-2 rounded-3 text-white"><i class="fa-solid fa-circle-plus"></i> Add Article</a>
         </div>
     </div>
 
@@ -29,23 +33,24 @@
                     </a>
                     <div class="">
                         <a asp-action="ArticleDetils" asp-route-id="@article.Id">
-                            <h3 class="h5">@article.Title</h3>
+                            <h3 class="h5 text-white">@article.Title</h3>
                         </a>
-                        <span class="text-black-50 ">
+                        <span class="text-white-50 ">
                             @article.PublishDate.ToString("dd/MM/yyyy")</span>
                     </div>
 
                 </div>
                 <div class="">
-                    <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-danger">Delete</a>
-                    <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-info">Edit</a>
+                        <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-danger"> Delete <i class="fa-regular fa-trash-can"></i></a>
+                        <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="btn btn-outline-warning">Edit</a>
                 </div>
             </div>
-        }
-    </div>
+        
+   }      
 
-
-
+</div>
+</div>
 </section>
+
 
 

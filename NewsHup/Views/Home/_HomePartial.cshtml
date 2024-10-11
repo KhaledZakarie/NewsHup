@@ -12,21 +12,23 @@
 
         @foreach (Article article in Model)
         {
-            <div class="col-md-3">
+                <div class="col-md-3">
+            <a asp-controller="Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
 
-                <div class="artical  h-100 shadow-lg ">
-                    <div class="card h-100">
-                        @* <img src="/upload/@article.ImageUrl" class="card-img-top w-100" alt="..."> *@
-                        <img src="@article.ImageUrl" class="card-img-top w-100" alt="...">
+                    <div class="artical  h-100 shadow-lg ">
+                        <div class="card h-100">
+                            <img src="/upload/@article.ImageUrl" class="card-img-top w-100" alt="..."> 
+                            @* <img src="@article.ImageUrl" class="card-img-top w-100" alt="..."> *@
 
 
-                        <div class="card-body">
-                            <p class="card-text">@article.Title</p>
+                            <div class="card-body">
+                                <p class="card-text">@article.Title</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+            </a>
+                </div>
         }
 
     </div>

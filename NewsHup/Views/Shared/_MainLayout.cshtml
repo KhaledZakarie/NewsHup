@@ -84,14 +84,15 @@
 
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item"
-                                           asp-controller="Article"
-                                           asp-action="MyArticles"
-                                           asp-route-userId="@User.FindFirst("Id").Value">
-                                            <i class="fas fa-sliders-h fa-fw"></i> Account
+                                        <a class="dropdown-item"asp-controller="Article"asp-action="MyArticles"asp-route-userId="@User.FindFirst("Id").Value">
+                                            <i class="fas fa-sliders-h fa-fw"></i> My Article
                                         </a>
                                     </li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-cog fa-fw"></i> DashBorde</a></li>
+                                    }
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="SignOut"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
                                 </ul>
@@ -124,7 +125,7 @@
 
 -->
     <!-- footer start -->
-    <div class="container-fluid footer py-1 wow fadeIn" data-wow-delay="0.2s">
+    <div class="container-fluid footer py-1" data-wow-delay="0.2s">
             <div class="container py-5 border-start-0 border-end-0" style="border: 1px solid; border-color: rgb(255, 255, 255, 0.08);">
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-4">
