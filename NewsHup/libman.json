@@ -17,15 +17,17 @@
     {
       "library": "wow@1.1.2",
       "destination": "wwwroot/lib/wow/"
+    },
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/lib/animate.css/",
+      "files": [
+        "animate.min.css"
+      ]
+    },
+    {
+      "library": "aos@2.3.4",
+      "destination": "wwwroot/lib/aos/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "animate.css@4.1.1",
-  "destination": "wwwroot/lib/animate.css/",
-  "files": [
-    "animate.min.css"
   ]
-}
-]
 }

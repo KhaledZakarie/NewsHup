@@ -2,6 +2,7 @@ html {
     font-size: 14px;
 }
 
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
@@ -43,6 +44,23 @@ body {
     --main-color: #FF8C6B;
     --main-nav: #3F72AF;
 }
+
+/* Ã⁄· «·ﬁ«∆„…  ŸÂ— Œ«—Ã «·‰«›»«— */
+.dropdown-menu {
+    position: absolute; /* ÌŒ—Ã «·ﬁ«∆„… „‰  œ›ﬁ «·’›Õ… */
+    top: 70px; /* ÌÃ⁄· «·ﬁ«∆„…  »œ√ √”›· ’Ê—… «·»—Ê›«Ì· */
+    left: 0; /* ÌÕ«–Ì «·ﬁ«∆„… ≈·Ï «·Ì”«— */
+    z-index: 1050; /* Ì÷„‰ ŸÂÊ— «·ﬁ«∆„… ›Êﬁ »«ﬁÌ «·⁄‰«’— */
+    min-width: 150px; /*  ÕœÌœ «·⁄—÷ «·√œ‰Ï ··ﬁ«∆„… */
+    transform: translateX(-50%); /* ÌÕ—ﬂ «·ﬁ«∆„… √ﬂÀ— ‰ÕÊ «·Ì”«— */
+}
+
+
+/* «· √ﬂœ „‰ √‰ «·‰«›»«— ·« ÌÕ ÊÌ ⁄·Ï overflow hidden */
+.navbar {
+    overflow: visible !important; /* Ì ÌÕ ··⁄‰«’— «·Œ—ÊÃ „‰ «·‰«›»«— */
+}
+
 
 .carousel {
     width: 100%;
@@ -110,11 +128,12 @@ body {
 }
 
 .a-register {
-    background-color: var(--main-color);
+    border: solid 1px #8F021D;
+    color: #8F021D !important;
 }
     .a-register:hover {
-        background-color: darkblue;
-        color: #fff;
+        background-color: #8F021D;
+        color: #fff !important;
     }
 /*  navbar */
 @keyframes page-animate {
@@ -134,6 +153,10 @@ body {
 }
 .article-body {
     background-color: #6c757d8c;
+}
+.right-sid{
+    height:400px;
+    overflow-y:scroll;
 }
 /*** Footer Start ***/
 .footer {
@@ -185,3 +208,15 @@ a{
         color: #8F021D;
     }
 /*** Footer End ***/
+.Article-form {
+    background-image: linear-gradient(rgba(136, 5, 29, 0.9), rgba(0, 0, 0, 0.9)), url(/assets/bg_news.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+.footer {
+    background-image: linear-gradient(rgba(145, 152, 158, 0.5), rgba(145, 152, 158, 0.9)), url(/assets/depositphotos.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
