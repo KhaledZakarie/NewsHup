@@ -77,7 +77,7 @@
                                    
                                 <img src="/assets/img/profile2.jpg" class="rounded-5" width="50px" alt="Profile Picture">
                                     <span b-1tw6cnpky7="" class="profile-username">
-                                        <span b-1tw6cnpky7="" class="op-7">Hi,</span>
+                                        <span b-1tw6cnpky7="" class="op-7">Hi,@User.FindFirst("Role").Value</span>
                                         <span b-1tw6cnpky7="" class="fw-bold">@User.FindFirst("Name").Value</span>
                                     </span>
                                 </a>
@@ -88,7 +88,7 @@
                                             <i class="fas fa-sliders-h fa-fw"></i> My Article
                                         </a>
                                     </li>
-                                    @if (User.IsInRole("Admin"))
+                                    @if (User.FindFirst("Role").Value == "Reader")
                                     {
 
                                         <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-cog fa-fw"></i> DashBorde</a></li>
