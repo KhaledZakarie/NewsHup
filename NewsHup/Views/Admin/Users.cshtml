@@ -77,7 +77,7 @@
                                                 <option value="" disabled selected>Select a role</option>
                                                 <option value="0">Reader</option>
                                                 <option value="1">Writer</option>
-                                                <option value="3">Admin</option>
+                                                <option value="2">Admin</option>
                                             </select>
                                         </div>
                                     </div>
@@ -221,7 +221,7 @@
                         <select id="editRole" name="Role" class="form-control" required>
                             <option value="0">Reader</option>
                             <option value="1">Writer</option>
-                            <option value="3">Admin</option>
+                            <option value="2">Admin</option>
                         </select>
                     </div>
                 </form>
@@ -316,7 +316,7 @@
             case '1':
                 roleText = 'Writer';
                 break;
-            case '3':
+            case '2':
                 roleText = 'Admin';
                 break;
             default:
@@ -477,7 +477,7 @@
                     switch (formData.Role) {
                         case '0': roleText = 'Reader'; break;
                         case '1': roleText = 'Writer'; break;
-                        case '3': roleText = 'Admin'; break;
+                        case '2': roleText = 'Admin'; break;
                         default: roleText = 'Unknown';
                     }
 
