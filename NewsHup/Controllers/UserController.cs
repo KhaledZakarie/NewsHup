@@ -160,6 +160,10 @@ namespace NewsHup.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult portfolio()
+        {
+            return View();
+        }
 
 
 
