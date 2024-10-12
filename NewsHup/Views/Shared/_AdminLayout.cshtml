@@ -285,20 +285,17 @@
                                                      class="avatar-img rounded" />
                                             </div>
                                             <div class="u-text">
-                                                <h4>Hizrian</h4>
-                                                <p class="text-muted">Hassan@example.com</p>
-                                                <a href="profile.html"
-                                                   class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                <h4>@User.FindFirst("Name").Value</h4> <!-- Dynamic Name -->
+                                                <p class="text-muted">@User.FindFirst("Email").Value</p> <!-- Dynamic Email -->
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">My Profile</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Account Setting</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Logout</a>
+                                        <form id="logoutForm" action="/User/SignOut" method="post">
+                                            <button type="submit" class="btn btn-xs btn-secondary btn-sm">Logout</button>
+                                                @Html.AntiForgeryToken() <!-- Ensure Anti-Forgery Token is added for security -->
+                                        </form>
                                     </li>
                     </div>
                     </ul>
