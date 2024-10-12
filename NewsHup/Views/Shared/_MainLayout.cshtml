@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -75,7 +76,8 @@
                         else
                         {
                             var userName = User.FindFirst("Name")?.Value;
-                            var userRole = User.FindFirst("Role")?.Value;
+@*                             var userRole = User.FindFirst("Role")?.Value;
+ *@                            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
                             var userId = User.FindFirst("Id")?.Value;
 
                             <div class="dropdown">
