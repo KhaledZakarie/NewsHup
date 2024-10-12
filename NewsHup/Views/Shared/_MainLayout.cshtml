@@ -12,13 +12,47 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsHup.styles.css" asp-append-version="true" />
+     <!-- Load jQuery FIRST -->
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="~/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
+
+    <!-- Fonts and icons -->
+    <script src="~/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["~/assets/css/fonts.min.css"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
+    <!-- CSS Files -->
+    @* <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="~/assets/css/plugins.min.css" />
+    @* <link rel="stylesheet" href="~/assets/css/kaiadmin.min.css" /> *@
+    @*    <link rel="stylesheet" href="~/assets/css/fonts.min.css" />
+ *@ 
+    <link rel="stylesheet" href="/assets/css/fonts.min.css" />
+
+
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="~/assets/css/demo.css" />
 </head>
 <body class="m-0 d-flex flex-column justify-content-between">
     <header>
-        <div class="Article-form d-flex justify-content-center align-items-center text-white" style="height:250px;">
-            <h2>Welcome</h2>
-            @* <img src="/assets/bg_news.jpg" width="100%" height="400px" alt="Alternate Text" /> *@
-        </div>
+        
         <!-- Nav Bar -->
         <nav class="navbar navbar-expand-lg my-2 shadow-lg fixed-top m-auto rounded-4 bg-secondary  border border-2 border-dark bg-opacity-75 text-danger animate__animated animate__zoomIn animate__delay-1s " style="width:90%">
             <div class="container-fluid">

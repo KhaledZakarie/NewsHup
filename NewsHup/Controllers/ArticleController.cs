@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NewsHup.Models;
 using NewsHup.Repository;
 using NewsHup.ViewModels;
@@ -135,6 +136,8 @@ namespace NewsHup.Controllers
         public IActionResult MyArticles(int userId)
         {
             ViewData["Categories"] = categoryRepository.GetAll();
+            
+            ViewBag.Users = userRepository.GetAll();
             if (userId != 0)
             {
                 //Get the Data 
