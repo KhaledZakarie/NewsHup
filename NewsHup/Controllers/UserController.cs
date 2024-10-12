@@ -32,7 +32,18 @@ namespace NewsHup.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult Claims()
+        {
+            var claims = User.Claims.Select(c => new
+            {
+                Type = c.Type,
+                Value = c.Value
+            });
 
+            // Return the claims as JSON to make it easy to see in the browser
+            return Json(claims);
+        }
 
         //public IActionResult Register()
         //{
@@ -132,11 +143,25 @@ namespace NewsHup.Controllers
                     return View(user);
                 }
 
+
+
+
                 ClaimsIdentity claimsIdentity = new(CookieAuthenticationDefaults.AuthenticationScheme);
                 claimsIdentity.AddClaim(new Claim("Id", userFromDB.Id.ToString()));
                 claimsIdentity.AddClaim(new Claim("Name", userFromDB.Name.ToString()));
                 claimsIdentity.AddClaim(new Claim("Email", userFromDB.Email.ToString()));
-                claimsIdentity.AddClaim(new Claim("Role", userFromDB.Role.ToString()));
+
+
+
+                var roleName = Enum.GetName(typeof(NewsHup.Enums.Role), userFromDB.Role);
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, roleName));
+
+
+
+
+
+
+
                 ClaimsPrincipal claimsPrincipal = new(claimsIdentity);
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
@@ -159,6 +184,10 @@ namespace NewsHup.Controllers
         public IActionResult GoHome()
         {
             return RedirectToAction("Index", "Home");
+        }
+        public IActionResult portfolio()
+        {
+            return View();
         }
 
 

@@ -1,228 +1,229 @@
 ﻿@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@if (User.IsInRole("Admin"))
+    {
+    <div class="page-header">
+        <h4 class="page-title">Article Management</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="icon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="icon-arrow-right"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Article Management</a>
+            </li>
+        </ul>
+    </div>
 
-<div class="page-header">
-    <h4 class="page-title">Article Management</h4>
-    <ul class="breadcrumbs">
-        <li class="nav-home">
-            <a href="#">
-                <i class="icon-home"></i>
-            </a>
-        </li>
-        <li class="separator">
-            <i class="icon-arrow-right"></i>
-        </li>
-        <li class="nav-item">
-            <a href="#">Article Management</a>
-        </li>
-    </ul>
-</div>
-
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <h4 class="card-title">Articles</h4>
-                <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addArticleModal" onclick="openAddModal()">
-                    <i class="fa fa-plus"></i> Add Article
-                </button>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Articles</h4>
+                    <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addArticleModal" onclick="openAddModal()">
+                        <i class="fa fa-plus"></i> Add Article
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="articleTable" class="display table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Article ID</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Owner</th> 
-                            <th>Publish Date</th>
-                            <th style="width: 10%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var article in Model)
-                        {
-                            <tr id="article-row-@article.Id">
-                                <td>@article.Id</td>
-                                <td>@article.Title</td>
-                                <td>@article.Category?.CategoryName</td>
-                                <td>@article.User?.Name</td> 
-                                <td>@article.PublishDate.ToString("yyyy-MM-dd")</td>
-
-                                <td>
-                                    <div class="form-button-action">
-                                        <button type="button" class="btn btn-link btn-primary btn-lg btn-edit" data-id="@article.Id">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-link btn-danger btn-delete" data-id="@article.Id">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </div>
-                                </td>
-
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="articleTable" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Article ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Owner</th> 
+                                <th>Publish Date</th>
+                                <th style="width: 10%">Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var article in Model)
+                            {
+                                <tr id="article-row-@article.Id">
+                                    <td>@article.Id</td>
+                                    <td>@article.Title</td>
+                                    <td>@article.Category?.CategoryName</td>
+                                    <td>@article.User?.Name</td> 
+                                    <td>@article.PublishDate.ToString("yyyy-MM-dd")</td>
+
+                                    <td>
+                                        <div class="form-button-action">
+                                            <button type="button" class="btn btn-link btn-primary btn-lg btn-edit" data-id="@article.Id">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-link btn-danger btn-delete" data-id="@article.Id">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Add/Edit Article Modal -->
-<!-- Add Article Modal -->
+    <!-- Add/Edit Article Modal -->
+    <!-- Add Article Modal -->
 
-<div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title">Add Article</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addArticleForm">
-                    @Html.AntiForgeryToken()
+    <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Add Article</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addArticleForm">
+                        @Html.AntiForgeryToken()
 
-                    <div class="form-group form-group-default">
-                        <label>Article Title</label>
-                        <input id="addArticleTitle" name="Title" type="text" class="form-control" placeholder="Enter article title" required />
-                        <small class="text-danger" id="titleError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>Article Title</label>
+                            <input id="addArticleTitle" name="Title" type="text" class="form-control" placeholder="Enter article title" required />
+                            <small class="text-danger" id="titleError"></small>
+                        </div>
 
-                    <div class="form-group form-group-default">
-                        <label>Content</label>
-                        <textarea id="addArticleContent" name="Content" class="form-control" placeholder="Enter article content" required></textarea>
-                        <small class="text-danger" id="contentError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>Content</label>
+                            <textarea id="addArticleContent" name="Content" class="form-control" placeholder="Enter article content" required></textarea>
+                            <small class="text-danger" id="contentError"></small>
+                        </div>
 
-                    <div class="form-group form-group-default">
-                        <label>Category</label>
-                        <select id="addArticleCategory" name="CatId" class="form-control" required>
-                            <option value="" disabled selected>Select a category</option>
-                            @foreach (var category in ViewBag.Categories)
-                            {
-                                <option value="@category.CategoryId">@category.CategoryName</option>
-                            }
-                        </select>
-                        <small class="text-danger" id="categoryError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>Category</label>
+                            <select id="addArticleCategory" name="CatId" class="form-control" required>
+                                <option value="" disabled selected>Select a category</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category.CategoryId">@category.CategoryName</option>
+                                }
+                            </select>
+                            <small class="text-danger" id="categoryError"></small>
+                        </div>
 
-                    <div class="form-group form-group-default">
-                        <label>User</label>
-                        <select id="addArticleUser" name="UserId" class="form-control" required>
-                            <option value="" disabled selected>Select a user</option>
-                            @foreach (var user in ViewBag.Users)
-                            {
-                                <option value="@user.Id">@user.Name</option>
-                            }
-                        </select>
-                        <small class="text-danger" id="userError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>User</label>
+                            <select id="addArticleUser" name="UserId" class="form-control" required>
+                                <option value="" disabled selected>Select a user</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@user.Name</option>
+                                }
+                            </select>
+                            <small class="text-danger" id="userError"></small>
+                        </div>
 
-                    <div class="form-group form-group-default">
-                        <label>Image URL</label>
-                        <input id="addArticleImageUrl" name="ImageUrl" type="text" class="form-control" placeholder="Enter image URL" />
-                        <small class="text-danger" id="imageUrlError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>Image URL</label>
+                            <input id="addArticleImageUrl" name="ImageUrl" type="text" class="form-control" placeholder="Enter image URL" />
+                            <small class="text-danger" id="imageUrlError"></small>
+                        </div>
 
-                    <div class="form-group form-group-default">
-                        <label>Publish Date</label>
-                        <input id="addArticlePublishDate" name="PublishDate" type="date" class="form-control" placeholder="Enter publish date" required />
-                        <small class="text-danger" id="publishDateError"></small>
-                    </div>
+                        <div class="form-group form-group-default">
+                            <label>Publish Date</label>
+                            <input id="addArticlePublishDate" name="PublishDate" type="date" class="form-control" placeholder="Enter publish date" required />
+                            <small class="text-danger" id="publishDateError"></small>
+                        </div>
 
-                </form>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-primary" id="addArticleButton">Add</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Edit Article Modal -->
-<div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title">Edit Article</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editArticleForm">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="editArticleId" name="Id" />
-
-                    <div class="form-group form-group-default">
-                        <label>Article Title</label>
-                        <input id="editArticleTitle" name="Title" type="text" class="form-control" required />
-                        <small class="text-danger" id="editTitleError"></small>
-                    </div>
-
-                    <div class="form-group form-group-default">
-                        <label>Content</label>
-                        <textarea id="editArticleContent" name="Content" class="form-control" required></textarea>
-                        <small class="text-danger" id="editContentError"></small>
-                    </div>
-
-                    <div class="form-group form-group-default">
-                        <label>Category</label>
-                        <select id="editArticleCategory" name="CatId" class="form-control" required>
-                            <option value="" disabled>Select a category</option>
-                            @foreach (var category in ViewBag.Categories)
-                            {
-                                <option value="@category.CategoryId">@category.CategoryName</option>
-                            }
-                        </select>
-                        <small class="text-danger" id="editCategoryError"></small>
-                    </div>
-
-                    <div class="form-group form-group-default">
-                        <label>User</label>
-                        <select id="editArticleUser" name="UserId" class="form-control" required>
-                            <option value="" disabled>Select a user</option>
-                            @foreach (var user in ViewBag.Users)
-                            {
-                                <option value="@user.Id">@user.Name</option>
-                            }
-                        </select>
-                        <small class="text-danger" id="editUserError"></small>
-                    </div>
-
-                    <div class="form-group form-group-default">
-                        <label>Image URL</label>
-                        <input id="editArticleImageUrl" name="ImageUrl" type="text" class="form-control" />
-                        <small class="text-danger" id="editImageUrlError"></small>
-                    </div>
-
-                    <div class="form-group form-group-default">
-                        <label>Publish Date</label>
-                        <input id="editArticlePublishDate" name="PublishDate" type="date" class="form-control" required />
-                        <small class="text-danger" id="editPublishDateError"></small>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-primary" id="saveEditArticleButton">Save</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-primary" id="addArticleButton">Add</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <!-- Edit Article Modal -->
+    <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Edit Article</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editArticleForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="editArticleId" name="Id" />
+
+                        <div class="form-group form-group-default">
+                            <label>Article Title</label>
+                            <input id="editArticleTitle" name="Title" type="text" class="form-control" required />
+                            <small class="text-danger" id="editTitleError"></small>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Content</label>
+                            <textarea id="editArticleContent" name="Content" class="form-control" required></textarea>
+                            <small class="text-danger" id="editContentError"></small>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Category</label>
+                            <select id="editArticleCategory" name="CatId" class="form-control" required>
+                                <option value="" disabled>Select a category</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category.CategoryId">@category.CategoryName</option>
+                                }
+                            </select>
+                            <small class="text-danger" id="editCategoryError"></small>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>User</label>
+                            <select id="editArticleUser" name="UserId" class="form-control" required>
+                                <option value="" disabled>Select a user</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@user.Name</option>
+                                }
+                            </select>
+                            <small class="text-danger" id="editUserError"></small>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Image URL</label>
+                            <input id="editArticleImageUrl" name="ImageUrl" type="text" class="form-control" />
+                            <small class="text-danger" id="editImageUrlError"></small>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Publish Date</label>
+                            <input id="editArticlePublishDate" name="PublishDate" type="date" class="form-control" required />
+                            <small class="text-danger" id="editPublishDateError"></small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-primary" id="saveEditArticleButton">Save</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -242,7 +243,7 @@
         </div>
     </div>
 </div>
-
+}
 <!-- Script at the bottom of the page -->
 <script>
     $(document).ready(function () {

@@ -7,5 +7,6 @@ namespace NewsHup.Repository
         public User GetUserBy(Func<User, bool> GetBy);
         public void Add(User user);
         public void SaveChanges();
+        public List<User> GetAll();
     }
 }

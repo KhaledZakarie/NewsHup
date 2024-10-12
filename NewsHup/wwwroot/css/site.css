@@ -37,6 +37,8 @@ html {
 }
 
 body {
+    background-color: #D6274A;
+    background: linear-gradient(to right, #f1395e41, #f73259b9);
     margin-bottom: 60px;
 }
 
