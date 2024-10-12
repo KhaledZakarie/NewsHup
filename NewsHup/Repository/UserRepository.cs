@@ -13,7 +13,11 @@ namespace NewsHup.Repository
         {
             _newsContext = newsContext;
         }
-
+        public List<User> GetAll()
+        {
+            List<User> users = _newsContext.Users.ToList();
+            return users;
+        }
 
         public User GetUserBy(Func<User, bool> GetBy)
         {
