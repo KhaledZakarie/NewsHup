@@ -9,24 +9,24 @@
 }
 
 
-        <div class="owl-carousel carousel3">
+        <div class="owl-carousel carousel3  h-75">
 
 
             @foreach (Article article in Model)
             {
-                <div class="">
-                     <a asp-controller="Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
+                <div class="h-100">
+                     <a class="h-100 d-block" asp-controller="Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
                     <div class="card h-100 position-relative">
                         @* <img src="/upload/@article.ImageUrl" class="card-img-top w-100" height="400px" alt="..."> *@
-                            <picture>
+                            <picture class="h-100">
                                 @if (article.ImageUrl.Contains("http"))
                                 {
 
-                                    <source class="w-100" height="409px" srcset="@article.ImageUrl">
+                                    <source class="d-block w-100 object-fit-cover h-100"  srcset="@article.ImageUrl">
                                 }
                                 else
                                 {
-                                    <source class="w-100" height="409px" srcset="/upload/@article.ImageUrl">
+                            <source class="w-100 d-block  object-fit-cover h-100" srcset="/upload/@article.ImageUrl">
                                 }
                                 <img src="/assets/newspaper_11202485.gif" height="409px" class="card-img-top w-100" alt="...">
 

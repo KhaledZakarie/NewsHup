@@ -24,11 +24,12 @@ nav a, .nav-link {
 
 .artical {
 transition:0.4s;
+cursor :pointer;
 }
 
-.artical:hover{
-    transform: scale(1.15) translateY(5px);
-}
+ .artical:hover {
+        transform: rotateY(120deg) scale(1.1);
+    }
 
 html {
     position: relative;
