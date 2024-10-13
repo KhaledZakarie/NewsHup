@@ -12,6 +12,8 @@
         <div class="d-flex align-items-center gap-3">
             <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
             <div>
+                <h1 class="h4">@Model.Title</h1>
+
                 <h2 class="h4 m-0">@Model.AuthorName</h2>
                 <span class="small text-black-50 ">@Model.PublishDate</span>
             </div>
@@ -31,7 +33,7 @@
 
     <!-- body -->
     <div class="border-top mt-2">
-        <h3 class="h4">@Model.Title</h3>
+        
         <h3 class="h4">@Model.CategoryName</h3>
         <picture>
             @if (Model.ImageUrl.Contains("http"))
@@ -106,3 +108,4 @@
         </div>
     </div>
 </div>
+

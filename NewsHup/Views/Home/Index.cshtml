@@ -18,19 +18,19 @@
                      <a class="h-100 d-block" asp-controller="Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
                     <div class="card h-100 position-relative">
                         @* <img src="/upload/@article.ImageUrl" class="card-img-top w-100" height="400px" alt="..."> *@
-                            <picture class="h-100">
-                                @if (article.ImageUrl.Contains("http"))
-                                {
+                    <picture class="h-100">
+                        @if (article.ImageUrl.Contains("http"))
+                        {
+                            <source class="d-block w-100 object-fit-cover h-100" srcset="@article.ImageUrl">
+                        }
+                        else
+                        {
+                            <source class="w-100 d-block object-fit-cover h-100"
+                                    srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                        }
+                        <img src="/assets/newspaper_11202485.gif" height="409px" class="card-img-top w-100" alt="...">
+                    </picture>
 
-                                    <source class="d-block w-100 object-fit-cover h-100"  srcset="@article.ImageUrl">
-                                }
-                                else
-                                {
-                            <source class="w-100 d-block  object-fit-cover h-100" srcset="/upload/@article.ImageUrl">
-                                }
-                                <img src="/assets/newspaper_11202485.gif" height="409px" class="card-img-top w-100" alt="...">
-
-                            </picture>
                         
                         <div class="overflow-hidden card-body article-body position-absolute bottom-0 start-0 end-0 p-4  text-white">
                             <p class="card-text "><span class="bg-danger p-5">Breaking news</span> @article.Title</p>
