@@ -4,9 +4,12 @@ using TestMVC.Models;  // Assuming NewsContext is in this namespace
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using NewsHup.Enums;
 
 namespace NewsHup.Controllers
 {
+    [Authorize(Roles = nameof(Role.Admin))]
     public class AdminController : Controller
     {
         private readonly NewsContext _context;

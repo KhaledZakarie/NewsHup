@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\_AccessDenied.cshtml" />
     <Content Remove="Views\Shared\_AccessDenied.cshtml" />
   </ItemGroup>
 
@@ -39,7 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Account\_AccessDenied.cshtml" />
     <None Include="Views\Admin\_AccessDenied.cshtml" />
+    <None Include="Views\Shared\_AccessDenied.cshtml" />
   </ItemGroup>
 
 </Project>
