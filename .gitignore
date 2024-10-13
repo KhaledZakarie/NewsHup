@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /NewsHup/appsettings.Development.json
 /NewsHup/appsettings.json
 
+/NewsHup/appsettings.Development.json
+/.gitignore
