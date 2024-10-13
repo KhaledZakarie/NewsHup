@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /NewsHup/appsettings.Development.json
 /NewsHup/appsettings.Development.json
+/NewsHup/appsettings.json
+
