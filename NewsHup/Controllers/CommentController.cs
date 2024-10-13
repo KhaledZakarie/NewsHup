@@ -8,10 +8,12 @@ namespace NewsHup.Controllers
     public class CommentController : Controller
     {
         ICommentRepository commentRepository;
+        IUserRepository userRepository;
 
-        public CommentController(ICommentRepository _commentRepository)
+        public CommentController(ICommentRepository _commentRepository, IUserRepository _userRepository)
         {
             commentRepository = _commentRepository;
+            userRepository = _userRepository;
         }
 
         public IActionResult Index()
@@ -30,21 +32,21 @@ namespace NewsHup.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddComment(CommentWithUserViewModel PostedComment)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     Comment comment = new Comment();
                     comment.CommentText = PostedComment.CommentText;
                     comment.ArticleId = PostedComment.ArticleId;
-                    comment.UserId = PostedComment.CommenterId;
+                    comment.UserId = userRepository.GetLoggerId(HttpContext);
                     commentRepository.Add(comment);
 
-                    return RedirectToAction("ArticleDetils", "Article", new {id = PostedComment.ArticleId});
+                    return RedirectToAction("ArticleDetils", "Article", new { id = PostedComment.ArticleId });
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    return View(PostedComment);      
+                    return View(PostedComment);
                 }
 
             }

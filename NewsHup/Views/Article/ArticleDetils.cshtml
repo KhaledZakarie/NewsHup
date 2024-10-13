@@ -64,11 +64,11 @@
         {
             <div class="d-flex align-items-center justify-content-between border-bottom pb-1 m-2">
                 <div class="d-flex align-items-center gap-4">
-                    <a asp-action="MyArticles" asp-route-userId="@Comment.ArticleId">
+                    <a asp-action="UsersArticles" asp-route-userId="@Comment.UserId">
                         <img src="/assets/download.jpeg" width="100px" height="100px" class="rounded-4 shadow" />
                     </a>
                     <div class="">
-                        <a asp-action="MyArticles" asp-route-userId="@Comment.ArticleId">
+                        <a asp-action="UsersArticles" asp-route-userId="@Comment.UserId">
                             <h3 class="h5">@Comment.User.Name</h3>
                         </a>
                         <h2>@Comment.CommentText</h2>
