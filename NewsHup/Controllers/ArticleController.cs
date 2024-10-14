@@ -26,11 +26,11 @@ namespace NewsHup.Controllers
         }
 
 
-        //public IActionResult ArticleIndex()
-        //{
-        //    List<Article> articles = articleRepository.GetAll();
-        //    return View(articles);
-        //}
+        public IActionResult ArticleIndex()
+        {
+            List<Article> articles = articleRepository.GetAll();
+            return View(articles);
+        }
 
 
 
@@ -93,6 +93,7 @@ namespace NewsHup.Controllers
             }
             newArticle.categories = categoryRepository.GetAll();
             return View(newArticle);
+
         }
 
 
