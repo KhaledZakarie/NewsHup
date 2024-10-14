@@ -8,5 +8,6 @@ namespace NewsHup.Repository
         public void Add(User user);
         public void SaveChanges();
         public List<User> GetAll();
+        public int GetLoggerId(HttpContext Req);
     }
 }

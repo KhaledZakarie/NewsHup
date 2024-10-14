@@ -52,7 +52,7 @@ cursor :pointer;
 
 body {
     background-color: #D6274A;
-    background: linear-gradient(45deg, #FAF9F6 60%, #91989E 80%);
+    background: linear-gradient(to right, #f1395e41, #f73259b9);
     margin-bottom: 60px;
 }
 
@@ -237,3 +237,49 @@ a{
     background-attachment: fixed;
     background-position: center;
 }
+.card-article:hover{
+    opacity:1;
+}.card-article{
+    opacity:.8;
+}
+.img-article {
+    transition: transform 0.5s ease; /* áÊÍÏíÏ ãÏÉ ÊÃËíÑ ÇáÊßÈíÑ */
+}
+
+.card-article:hover .img-article{
+    transform: scale(1.3); /* ÊßÈíÑ ÇáÕæÑÉ ÈäÓÈÉ 20% ÚäÏ ÇáÊãÑíÑ */
+}
+.my-article {
+    position: relative;
+    display: inline-block;
+    font-size: 2em;
+    margin-bottom: 10px; /* ÅÈÚÇÏ ÇáÚäæÇä Úä ÇáÎØæØ */
+}
+
+.pyramid-lines {
+    width: 100%;
+    text-align: center; /* áÊæÓíØ ÇáÎØæØ */
+}
+
+    .pyramid-lines div {
+        height: 2px;
+        background-color: darkred;
+        margin: 5px 0;
+    }
+
+        .pyramid-lines div:nth-child(1) {
+            width: 100px; /* ÇáÎØ ÇáÃæá */
+        }
+
+        .pyramid-lines div:nth-child(2) {
+            width: 70px; /* ÇáÎØ ÇáËÇäí */
+        }
+
+        .pyramid-lines div:nth-child(3) {
+            width: 40px; /* ÇáÎØ ÇáËÇáË */
+        }
+
+    .pyramid-lines div {
+        margin-left: auto;
+        margin-right: auto; /* áÊæÓíØ ÇáÎØæØ */
+    }

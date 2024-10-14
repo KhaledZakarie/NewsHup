@@ -25,9 +25,10 @@
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h4 class="card-title">Articles</h4>
-                    <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addArticleModal" onclick="openAddModal()">
+                    <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addArticleModal" id="addArticleButtonTrigger">
                         <i class="fa fa-plus"></i> Add Article
                     </button>
+
                 </div>
             </div>
 
@@ -128,7 +129,7 @@
 
                         <div class="form-group form-group-default">
                             <label>Image URL</label>
-                            <input id="addArticleImageUrl" name="ImageUrl" type="text" class="form-control" placeholder="Enter image URL" />
+                            <input id="addArticleImageUrl" name="ImageUrl" type="file" class="form-control" placeholder="Enter image URL" />
                             <small class="text-danger" id="imageUrlError"></small>
                         </div>
 
@@ -163,6 +164,7 @@
                     <form id="editArticleForm">
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="editArticleId" name="Id" />
+                        <input type="hidden" id="existingImageUrl" name="existingImageUrl" />
 
                         <div class="form-group form-group-default">
                             <label>Article Title</label>
@@ -202,7 +204,7 @@
 
                         <div class="form-group form-group-default">
                             <label>Image URL</label>
-                            <input id="editArticleImageUrl" name="ImageUrl" type="text" class="form-control" />
+                            <input id="editArticleImageUrl" name="ImageUrl" type="file" class="form-control" />
                             <small class="text-danger" id="editImageUrlError"></small>
                         </div>
 
@@ -246,6 +248,34 @@
 }
 <!-- Script at the bottom of the page -->
 <script>
+
+
+    // Define resetAddArticleForm globally
+    function resetAddArticleForm() {
+        if ($('#addArticleForm').length) {
+            $('#addArticleForm')[0].reset();  // Reset Add form if it exists
+
+            // Clear any validation errors
+            $('#titleError').text('');  // Clear title error
+            $('#contentError').text('');  // Clear content error
+            $('#categoryError').text('');  // Clear category error
+            $('#userError').text('');  // Clear user error
+            $('#imageUrlError').text('');  // Clear image URL error
+            $('#publishDateError').text('');  // Clear publish date error
+        } else {
+            console.error('Add Article Form not found');
+        }
+    }
+
+
+    // Open the modal for adding a new article
+    function openAddModal() {
+        currentArticleId = null;  // Set to add mode
+        resetAddArticleForm();  // Reset the form fields
+        $('#addArticleButton').text('Add Article');  // Change button text to 'Add'
+        $('#addArticleModal').modal('show');  // Show the modal
+    }
+
     $(document).ready(function () {
         var currentArticleId = null;
 
@@ -255,6 +285,11 @@
             $('#deleteArticleId').val(articleId);  // Store the article ID in a hidden input
             $('#deleteArticleModal').modal('show');  // Show the delete confirmation modal
         }
+
+        // Add click handler here
+        $('#addArticleButtonTrigger').on('click', function () {
+            openAddModal();
+        });
 
         // Handle the actual deletion once the user confirms
         $('#confirmDeleteArticleButton').on('click', function () {
@@ -280,13 +315,7 @@
             });
         });
 
-        // Open the modal for adding a new article
-        function openAddModal() {
-            currentArticleId = null;  // Set to add mode
-            resetAddArticleForm();  // Reset the form fields
-            $('#addArticleButton').text('Add Article');  // Change button text to 'Add'
-            $('#addArticleModal').modal('show');  // Show the modal
-        }
+       
 
         // Open the modal for editing an article
         function editArticle(articleId) {
@@ -302,8 +331,13 @@
                     $('#editArticleContent').val(response.article.content);
                     $('#editArticleCategory').val(response.article.catId);
                     $('#editArticleUser').val(response.article.userId);
-                    $('#editArticleImageUrl').val(response.article.imageUrl);
+@*                     $('#editArticleImageUrl').val('');  // Reset file input
+ *@                    
                     $('#editArticlePublishDate').val(response.article.publishDate.split('T')[0]);  // Format date
+
+
+                    // Set the existing image URL in the hidden input
+                    $('#existingImageUrl').val(response.article.imageUrl);
 
                     $('#saveEditArticleButton').text('Save Changes');  // Change button text to 'Save'
                     $('#editArticleModal').modal('show');  // Show the modal
@@ -317,14 +351,18 @@
 
         // Submit Add Article form
         $('#addArticleButton').on('click', function () {
-            var articleData = {
-                Title: $('#addArticleTitle').val(),
-                Content: $('#addArticleContent').val(),
-                CatId: $('#addArticleCategory').val(),
-                UserId: $('#addArticleUser').val(),
-                ImageUrl: $('#addArticleImageUrl').val(),
-                PublishDate: $('#addArticlePublishDate').val()
-            };
+            var formData = new FormData();
+            formData.append('Title', $('#addArticleTitle').val());
+            formData.append('Content', $('#addArticleContent').val());
+            formData.append('CatId', $('#addArticleCategory').val());
+            formData.append('UserId', $('#addArticleUser').val());
+            var file = $('#addArticleImageUrl')[0].files[0];  // Get the file
+
+            if (file) {
+                formData.append('Image', file);  // Append the file only if it exists
+            }
+
+            formData.append('PublishDate', $('#addArticlePublishDate').val());
 
             // Clear previous errors
             clearErrors();
@@ -332,7 +370,9 @@
             $.ajax({
                 url: '@Url.Action("AddArticle", "Admin")',
                 type: 'POST',
-                data: articleData,
+                data: formData,
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Set the content type to false for file upload
                 success: function (response) {
                     if (response.success) {
                         $('#addArticleModal').modal('hide');  // Close the modal
@@ -347,17 +387,30 @@
             });
         });
 
-        // Submit Edit Article form
+
+        // Instead of writing everything in the click handler, you could do:
+        function buildFormData(formData, fileInputId, existingImageUrl) {
+            var file = $(fileInputId)[0].files[0];  // Get the file
+
+            if (file) {
+                formData.append('Image', file);  // Append the file only if it exists
+            } else if (existingImageUrl) {
+                // If no new image is uploaded, send the existing ImageUrl
+                formData.append('ImageUrl', existingImageUrl);  // Use the existing image
+            }
+            return formData;
+        }
+
         $('#saveEditArticleButton').on('click', function () {
-            var articleData = {
-                Id: $('#editArticleId').val(),
-                Title: $('#editArticleTitle').val(),
-                Content: $('#editArticleContent').val(),
-                CatId: $('#editArticleCategory').val(),
-                UserId: $('#editArticleUser').val(),
-                ImageUrl: $('#editArticleImageUrl').val(),
-                PublishDate: $('#editArticlePublishDate').val()
-            };
+            var formData = new FormData();
+            formData.append('Id', $('#editArticleId').val());
+            formData.append('Title', $('#editArticleTitle').val());
+            formData.append('Content', $('#editArticleContent').val());
+            formData.append('CatId', $('#editArticleCategory').val());
+            formData.append('UserId', $('#editArticleUser').val());
+            formData.append('PublishDate', $('#editArticlePublishDate').val());
+
+            formData = buildFormData(formData, '#editArticleImageUrl', $('#existingImageUrl').val());
 
             // Clear previous errors
             clearEditErrors();
@@ -365,11 +418,13 @@
             $.ajax({
                 url: '@Url.Action("EditArticle", "Admin")',
                 type: 'POST',
-                data: articleData,
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     if (response.success) {
-                        $('#editArticleModal').modal('hide');  // Close the modal
-                        location.reload();  // Reload the page to reflect changes
+                        $('#editArticleModal').modal('hide');
+                        location.reload();
                     } else {
                         displayEditErrors(response.errors);
                     }
@@ -379,6 +434,7 @@
                 }
             });
         });
+
 
         // Function to display validation errors for Add
         function displayErrors(errors) {
@@ -458,10 +514,19 @@
         function resetAddArticleForm() {
             if ($('#addArticleForm').length) {
                 $('#addArticleForm')[0].reset();  // Reset Add form if it exists
+
+                // Clear any validation errors
+                $('#titleError').text('');  // Clear title error
+                $('#contentError').text('');  // Clear content error
+                $('#categoryError').text('');  // Clear category error
+                $('#userError').text('');  // Clear user error
+                $('#imageUrlError').text('');  // Clear image URL error
+                $('#publishDateError').text('');  // Clear publish date error
             } else {
                 console.error('Add Article Form not found');
             }
         }
+
 
         function resetEditArticleForm() {
             if ($('#editArticleForm').length) {

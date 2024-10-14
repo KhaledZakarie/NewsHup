@@ -4,9 +4,12 @@ using TestMVC.Models;  // Assuming NewsContext is in this namespace
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using NewsHup.Enums;
 
 namespace NewsHup.Controllers
 {
+    [Authorize(Roles = nameof(Role.Admin))]
     public class AdminController : Controller
     {
         private readonly NewsContext _context;
@@ -276,16 +279,14 @@ namespace NewsHup.Controllers
 
         // POST: Add Article
         [HttpPost]
-        public async Task<IActionResult> AddArticle(Article article)
+        public async Task<IActionResult> AddArticle(Article article, IFormFile Image)
         {
             if (!ModelState.IsValid)
             {
-                // Return validation errors in JSON format
                 var errors = ModelState.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
                 );
-
                 return Json(new { success = false, errors });
             }
 
@@ -295,10 +296,26 @@ namespace NewsHup.Controllers
                 article.PublishDate = DateTime.Now;
             }
 
-            // Handle other default values like ImageUrl
-            if (string.IsNullOrEmpty(article.ImageUrl))
+            // Handle image upload
+            if (Image != null && Image.Length > 0)
             {
-                article.ImageUrl = "/upload/DefaultImage.jpg";
+                // Generate a unique file name
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload");
+                var fileName = Path.GetFileNameWithoutExtension(Image.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(Image.FileName);
+                var fullPath = Path.Combine(imagePath, fileName);
+
+                // Save the file to the server
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await Image.CopyToAsync(stream);
+                }
+
+                // Save the image file name (or path) in the database
+                article.ImageUrl = "/upload/" + fileName;
+            }
+            else
+            {
+                article.ImageUrl = "/upload/DefaultImage.jpg"; // Default image if no image is uploaded
             }
 
             _context.Articles.Add(article);
@@ -307,18 +324,18 @@ namespace NewsHup.Controllers
         }
 
 
+
         // POST: Edit Article
         [HttpPost]
-        public async Task<IActionResult> EditArticle(Article article)
+        [HttpPost]
+        public async Task<IActionResult> EditArticle(Article article, IFormFile Image, string existingImageUrl)
         {
             if (!ModelState.IsValid)
             {
-                // Return validation errors in JSON format
                 var errors = ModelState.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
                 );
-
                 return Json(new { success = false, errors });
             }
 
@@ -328,20 +345,37 @@ namespace NewsHup.Controllers
                 return Json(new { success = false, message = "Article not found" });
             }
 
-            // Update the existing article's fields
+            // If a new image is uploaded, save it; otherwise, keep the existing image URL
+            if (Image != null && Image.Length > 0)
+            {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload");
+                var fileName = Path.GetFileNameWithoutExtension(Image.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(Image.FileName);
+                var fullPath = Path.Combine(imagePath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await Image.CopyToAsync(stream);
+                }
+
+                existingArticle.ImageUrl = "/upload/" + fileName;  // Update with new image URL
+            }
+            else
+            {
+                // Keep the existing image if no new image is uploaded
+                existingArticle.ImageUrl = existingImageUrl;
+            }
+
+            // Update other fields
             existingArticle.Title = article.Title;
             existingArticle.Content = article.Content;
             existingArticle.CatId = article.CatId;
-            if (!string.IsNullOrEmpty(article.ImageUrl))
-            {
-                existingArticle.ImageUrl = article.ImageUrl;
-            }
 
             _context.Update(existingArticle);
             await _context.SaveChangesAsync();
 
             return Json(new { success = true });
         }
+
 
 
         // GET: Get Article by ID

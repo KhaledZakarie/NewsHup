@@ -1,0 +1,56 @@
+﻿ @model ArticleWithUserViewModel
+
+@{
+    ViewData["Title"] = "UsersArticles";
+    Layout = "_MainLayout";
+    SelectList Categories = new SelectList(ViewBag.Categories, "CategoryId", "CategoryName");
+}
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h4 class="card-title">Articles</h4>
+                
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="articleTable" class="display table table-striped table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>Article ID</th>
+                            <th>Imge</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Owner</th>
+                            <th>Publish Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Article article in Model.Articles)
+                        {
+                            <tr id="article-row-@article.Id">
+                                <td>@article.Id</td>
+                                <td>
+                                    <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                                        <img src="/upload/@article.ImageUrl" width="60px" height="60px" class="rounded-4 shadow" />
+                                    </a>
+                                </td>
+                                <td>@article.Title</td>
+                                <td>@article.Category?.CategoryName</td>
+                                <td>@article.User?.Name</td>
+                                <td>@article.PublishDate.ToString("yyyy-MM-dd")</td>
+
+                                
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using NewsHup.Models;
+using System.Security.Claims;
 using TestMVC.Models;
 
 namespace NewsHup.Repository
@@ -31,8 +32,15 @@ namespace NewsHup.Repository
         }
 
 
-        public void SaveChanges (){
+        public void SaveChanges()
+        {
             _newsContext.SaveChanges();
+        }
+
+        public int GetLoggerId(HttpContext Req)
+        {
+            return Convert.ToInt32(Req.User.FindFirstValue("Id"));
+
         }
     }
 }

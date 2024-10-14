@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>  NewsHot - @ViewData["Title"] </title>
+    <title>  News Hub - @ViewData["Title"] </title>
     @await RenderSectionAsync("Styles", required: false)
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -13,43 +13,6 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsHup.styles.css" asp-append-version="true" />
-     <!-- Load jQuery FIRST -->
-    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
-    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="~/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
-
-    <!-- Fonts and icons -->
-    <script src="~/assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-        WebFont.load({
-            google: { families: ["Public Sans:300,400,500,600,700"] },
-            custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["~/assets/css/fonts.min.css"],
-            },
-            active: function () {
-                sessionStorage.fonts = true;
-            },
-        });
-    </script>
-
-    <!-- CSS Files -->
-    @* <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" /> *@
-    <link rel="stylesheet" href="~/assets/css/plugins.min.css" />
-    @* <link rel="stylesheet" href="~/assets/css/kaiadmin.min.css" /> *@
-    @*    <link rel="stylesheet" href="~/assets/css/fonts.min.css" />
- *@ 
-    <link rel="stylesheet" href="/assets/css/fonts.min.css" />
-
-
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="~/assets/css/demo.css" />
 </head>
 <body class="m-0 d-flex flex-column justify-content-between">
     <header>
