@@ -1,165 +1,100 @@
 ﻿@using System.Security.Claims
-@model ArticleWithUserViewModel
+ @model ArticleWithUserViewModel
 @{
-    ViewData["Title"] = "My Articles";
+    ViewData["Title"] = "MyArticles";
     Layout = "_MainLayout";
 }
 
-<section class="content">
-    <div class="d-flex align-items-center gap-3 justify-content-start m-3">
-        <img src="/assets/download.jpeg" width="150px" class="rounded-3 shadow" />
-        <div class="gap-3">
-            <h2 class="h4 m-0">@Model.UserName</h2>
-            <span class="text-muted">@User.FindFirst(ClaimTypes.Role)?.Value <i class="fa-solid fa-certificate text-primary"></i></span>
-            <a class="btn btn-danger d-block mt-2" asp-action="AddArticle" asp-controller="Article">
-                <i class="fa-solid fa-circle-plus"></i> Add Article
-            </a>
-        </div>
-    </div>
+    
 
-    <div class="text-center mb-4">
-        <h2 class="my-article">My Articles</h2>
+    
+    
+<section class="content">
+    
+        <div class="d-flex align-items-center gap-3 justify-content-start m-3">
+            <img src="/assets/download.jpeg" width="150px" class="rounded-3 shadow show" />
+            <div class="gap-5">
+                <h2 class="h4 m-0">@Model.UserName</h2>
+                <span>@User.FindFirst(ClaimTypes.Role)?.Value <i class="fa-solid fa-certificate text-primary"></i></span>
+                <a class="btn btn-primary d-block mt-2" asp-action="AddArticle" asp-controller="Article"><i class="fa-solid fa-circle-plus"></i> Add Article</a>
+            </div>
+        </div>
+        
+           
+           
+           
+       
+    
+    <div class="text-center">
+        <h2 class="my-article">My Article</h2>
         <div class="pyramid-lines">
             <div></div>
             <div></div>
             <div></div>
         </div>
     </div>
-
     <div class="row">
-        @foreach (var article in Model.Articles)
-        {
-            <div class="col-lg-4 col-md-6 pt-4">
-                <div class="card card-article h-100 shadow-lg">
-                    <div class="btn1-blog position-absolute btn btn-danger end-0 m-2">@article.Category.CategoryName</div>
-                    <div class="overflow-hidden">
-                        <a asp-action="ArticleDetails" asp-route-id="@article.Id">
-                            <picture class="h-100">
-                                @if (article.ImageUrl.Contains("http"))
-                                {
-                                    <source class="img-article" srcset="@article.ImageUrl">
-                                }
-                                else
-                                {
-                                    <source class="img-article" srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
-                                }
-                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article" height="200px" alt="Article Image">
-                            </picture>
-                        </a>
-                    </div>
 
-                    <div class="card-body">
+         @foreach(Article article in Model.Articles)
+        {
+            <div class="col-lg-4 col-md-4 pt-4">
+                <div class="card card-article h-100 ">
+                        <div class="btn1-blog position-absolute btn btn-primary end-0 m-2">@article.Category.CategoryName</div>
+                    <div class="overflow-hidden">
+                        <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                            
+                                <picture class="h-100">
+                                    @if (article.ImageUrl.Contains("http"))
+                                    {
+                                    <source class="img-article" srcset="@article.ImageUrl">
+                                    }
+                                    else
+                                    {
+                                    <source class="img-article"
+                                                srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                                    }
+                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article"height="200px" alt="...">
+                                </picture>
+
+                         
+                        </a>
+                        </div>
+                    
+                    <div class="card-body ">
+                        
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="a-blog card-title text-decoration-none d-block icon-link-hover h5">@article.Title</h2>
                             <div class="dropdown">
                                 <a class="" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                <ul class="dropdown-menu">
                                     <li>
-                                        <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
-                                            <img src="~/assets/icon/bin-file_11677485.gif" width="20px" alt="Delete Icon" /> Delete
-                                        </a>
+                                        <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item"><img src="~/assets/icon/bin-file_11677485.gif" width="40px" alt="icon Delete"/>Delete</a>
                                     </li>
                                     <li>
-                                        <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
-                                            <img src="~/assets/icon/edit_11186846.gif" width="20px" alt="Edit Icon" /> Edit
-                                        </a>
+                                        <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item"><img src="~/assets/icon/edit_11186846.gif" width="40px" alt="icon edit" />Edit</a>
                                     </li>
+                                   
                                 </ul>
                             </div>
                         </div>
-                        <p class="card-description text-muted">@article.Content</p>
+
+                        <p class="card-description">@article.Content</p>
                     </div>
-                    <div class="card-footer d-flex justify-content-between align-items-center p-1">
-                        <div class="foot-ph d-flex align-items-center">
-                            <img src="/assets/img/profile2.jpg" alt="User Image" class="rounded-circle" width="30px" />
-                            <span class="a-blog card-title text-decoration-none mx-2 icon-link-hover">@article.User.Name</span>
+                    <div class="card-footer d-flex justify-content-between p-1 ">
+                        <div class="foot-ph">
+                            <img src="imges/testimonial-2.jpg" alt="" class="rounded-circle"><span class="a-blog card-title text-decoration-none mx-2 icon-link-hover">@article.User.Name</span>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <i class="fa-regular fa-clock"></i><span class="mx-2">@article.PublishDate.ToString("dd/MM/yyyy")</span>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="fa-regular fa-clock"></i><span class="mx-2">@article.PublishDate.ToString("dd/MM/yyy")</span>
                         </div>
+
                     </div>
                 </div>
             </div>
+
         }
     </div>
+
 </section>
-
-<style>
-    .card-article:hover {
-        opacity: 1;
-    }
-
-    .card-article {
-        opacity: 0.9;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-        .card-article:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-    .img-article {
-        transition: transform 0.5s ease;
-    }
-
-    .card-article:hover .img-article {
-        transform: scale(1.1);
-    }
-
-    .my-article {
-        font-size: 2.5em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .pyramid-lines {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-        .pyramid-lines div {
-            height: 2px;
-            background-color: darkred;
-            margin: 5px auto;
-        }
-
-            .pyramid-lines div:nth-child(1) {
-                width: 100px;
-            }
-
-            .pyramid-lines div:nth-child(2) {
-                width: 70px;
-            }
-
-            .pyramid-lines div:nth-child(3) {
-                width: 40px;
-            }
-
-    .card-description {
-        min-height: 50px;
-    }
-
-    .text-muted {
-        font-size: 0.9em;
-    }
-
-    .dropdown-menu {
-        background-color: white;
-        border: 1px solid #dee2e6;
-        border-radius: 0.25rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-
-    .dropdown-item {
-        padding: 10px 15px;
-        transition: background-color 0.2s;
-    }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-        }
-</style>
