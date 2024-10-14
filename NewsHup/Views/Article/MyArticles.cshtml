@@ -1,420 +1,165 @@
 ﻿@using System.Security.Claims
- @model ArticleWithUserViewModel
+@model ArticleWithUserViewModel
 @{
-    ViewData["Title"] = "MyArticles";
+    ViewData["Title"] = "My Articles";
     Layout = "_MainLayout";
 }
 
-    
-
-    
-    
 <section class="content">
-    
-        <div class="d-flex align-items-center gap-3 justify-content-start m-3">
-            <img src="/assets/download.jpeg" width="150px" class="rounded-3 shadow show" />
-            <div class="gap-5">
-                <h2 class="h4 m-0">@Model.UserName</h2>
-                <span>@User.FindFirst(ClaimTypes.Role)?.Value <i class="fa-solid fa-certificate text-primary"></i></span>
-                <a class="btn btn-primary d-block mt-2" asp-action="AddArticle" asp-controller="Article"><i class="fa-solid fa-circle-plus"></i> Add Article</a>
-            </div>
+    <div class="d-flex align-items-center gap-3 justify-content-start m-3">
+        <img src="/assets/download.jpeg" width="150px" class="rounded-3 shadow" />
+        <div class="gap-3">
+            <h2 class="h4 m-0">@Model.UserName</h2>
+            <span class="text-muted">@User.FindFirst(ClaimTypes.Role)?.Value <i class="fa-solid fa-certificate text-primary"></i></span>
+            <a class="btn btn-danger d-block mt-2" asp-action="AddArticle" asp-controller="Article">
+                <i class="fa-solid fa-circle-plus"></i> Add Article
+            </a>
         </div>
-        
-           
-           
-           
-       
-    
-    <div class="text-center">
-        <h2 class="my-article">My Article</h2>
+    </div>
+
+    <div class="text-center mb-4">
+        <h2 class="my-article">My Articles</h2>
         <div class="pyramid-lines">
             <div></div>
             <div></div>
             <div></div>
         </div>
     </div>
+
     <div class="row">
-
-         @foreach(Article article in Model.Articles)
+        @foreach (var article in Model.Articles)
         {
-            <div class="col-lg-4 col-md-4 pt-4">
-                <div class="card card-article h-100 ">
-                        <div class="btn1-blog position-absolute btn btn-primary end-0 m-2">@article.Category.CategoryName</div>
+            <div class="col-lg-4 col-md-6 pt-4">
+                <div class="card card-article h-100 shadow-lg">
+                    <div class="btn1-blog position-absolute btn btn-danger end-0 m-2">@article.Category.CategoryName</div>
                     <div class="overflow-hidden">
-                        <a asp-action="ArticleDetils" asp-route-id="@article.Id">
-                            
-                                <picture class="h-100">
-                                    @if (article.ImageUrl.Contains("http"))
-                                    {
+                        <a asp-action="ArticleDetails" asp-route-id="@article.Id">
+                            <picture class="h-100">
+                                @if (article.ImageUrl.Contains("http"))
+                                {
                                     <source class="img-article" srcset="@article.ImageUrl">
-                                    }
-                                    else
-                                    {
-                                    <source class="img-article"
-                                                srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
-                                    }
-                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article"height="200px" alt="...">
-                                </picture>
-
-                         
+                                }
+                                else
+                                {
+                                    <source class="img-article" srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                                }
+                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article" height="200px" alt="Article Image">
+                            </picture>
                         </a>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="a-blog card-title text-decoration-none d-block icon-link-hover h5">@article.Title</h2>
+                            <div class="dropdown">
+                                <a class="" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
+                                            <img src="~/assets/icon/bin-file_11677485.gif" width="20px" alt="Delete Icon" /> Delete
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
+                                            <img src="~/assets/icon/edit_11186846.gif" width="20px" alt="Edit Icon" /> Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Image URL</label>
-                            <input id="addArticleImageUrl" name="ImageUrl" type="file" class="form-control" placeholder="Enter image URL" />
-                            <small class="text-danger" id="imageUrlError"></small>
+                        <p class="card-description text-muted">@article.Content</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center p-1">
+                        <div class="foot-ph d-flex align-items-center">
+                            <img src="/assets/img/profile2.jpg" alt="User Image" class="rounded-circle" width="30px" />
+                            <span class="a-blog card-title text-decoration-none mx-2 icon-link-hover">@article.User.Name</span>
                         </div>
-
-                        <div class="form-group form-group-default d-none">
-                            <label>Publish Date</label>
-                            <input id="addArticlePublishDate" name="PublishDate" type="date" class="form-control" placeholder="Enter publish date" required />
-                            <small class="text-danger" id="publishDateError"></small>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-clock"></i><span class="mx-2">@article.PublishDate.ToString("dd/MM/yyyy")</span>
                         </div>
-
-                    </form>
-                </div>
-                <div class="modal-footer border-0">
-                    <button  class="btn btn-primary" id="addArticleButton">Add</button>
-                    <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
                     </div>
                 </div>
             </div>
-
         }
     </div>
+</section>
 
-                        <div class="form-group form-group-default">
-                            <label>Image URL</label>
-                            <input id="editArticleImageUrl" name="ImageUrl" type="file" class="form-control" />
-                            <small class="text-danger" id="editImageUrlError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default d-none">
-                            <label>Publish Date</label>
-                            <input id="editArticlePublishDate" name="PublishDate" type="date" class="form-control" required />
-                            <small class="text-danger" id="editPublishDateError"></small>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-primary" id="saveEditArticleButton">Save</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteArticleModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this article?</p>
-                    <input type="hidden" id="deleteArticleId" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteArticleButton">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-@* } *@
-<!-- Script at the bottom of the page -->
-<script>
-    // Define resetAddArticleForm globally
-    function resetAddArticleForm() {
-        if ($('#addArticleForm').length) {
-            $('#addArticleForm')[0].reset();  // Reset Add form if it exists
-
-            // Set the current date for PublishDate
-            var today = new Date().toISOString().split('T')[0];
-            $('#addArticlePublishDate').val(today);
-
-            // Clear any validation errors
-            $('#titleError').text('');  // Clear title error
-            $('#contentError').text('');  // Clear content error
-            $('#categoryError').text('');  // Clear category error
-            $('#userError').text('');  // Clear user error
-            $('#imageUrlError').text('');  // Clear image URL error
-            $('#publishDateError').text('');  // Clear publish date error
-        } else {
-            console.error('Add Article Form not found');
-        }
+<style>
+    .card-article:hover {
+        opacity: 1;
     }
 
-    // Open the modal for adding a new article
-    function openAddModal() {
-        currentArticleId = null;  // Set to add mode
-        resetAddArticleForm();  // Reset the form fields
-        $('#addArticleButton').text('Add Article');  // Change button text to 'Add'
-        $('#addArticleModal').modal('show');  // Show the modal
+    .card-article {
+        opacity: 0.9;
+        transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    $(document).ready(function () {
-        var currentArticleId = null;
-
-        // Function to open the delete confirmation modal
-        function deleteArticle(articleId) {
-            currentArticleId = articleId;  // Set the article ID
-            $('#deleteArticleId').val(articleId);  // Store the article ID in a hidden input
-            $('#deleteArticleModal').modal('show');  // Show the delete confirmation modal
+        .card-article:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        // Add click handler here
-        $('#addArticleButtonTrigger').on('click', function () {
-            openAddModal();
-        });
+    .img-article {
+        transition: transform 0.5s ease;
+    }
 
-        // Handle the actual deletion once the user confirms
-        $('#confirmDeleteArticleButton').on('click', function () {
-            var articleId = $('#deleteArticleId').val();
+    .card-article:hover .img-article {
+        transform: scale(1.1);
+    }
 
-            $.ajax({
-                url: '@Url.Action("DeleteArticle", "Admin")',  // Delete URL
-                type: 'POST',
-                data: { id: articleId },
-                success: function (response) {
-                    if (response.success) {
-                        $('#deleteArticleModal').modal('hide');  // Close the modal
-                        $('#article-row-' + articleId).fadeOut(500, function () {
-                            $(this).remove();  // Remove the article row from the table
-                        });
-                    } else {
-                        displayError('Failed to delete article.');
-                    }
-                },
-                error: function () {
-                    displayError('Error occurred while deleting article.');
-                }
-            });
-        });
+    .my-article {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-        // Open the modal for editing an article
-        function editArticle(articleId) {
-            currentArticleId = articleId;  // Set the current article ID
-            resetEditArticleForm();  // Reset the form before populating data
+    .pyramid-lines {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-            // Fetch article data using AJAX and populate the form
-            $.get('@Url.Action("GetArticle", "Admin")', { id: articleId }, function (response) {
-                if (response.success) {
-                    // Populate the form with article data
-                    $('#editArticleId').val(response.article.id);
-                    $('#editArticleTitle').val(response.article.title);
-                    $('#editArticleContent').val(response.article.content);
-                    $('#editArticleCategory').val(response.article.catId);
-                    $('#editArticleUser').val(response.article.userId);
-                    $('#editArticlePublishDate').val(response.article.publishDate.split('T')[0]);  // Format date
-                    $('#existingImageUrl').val(response.article.imageUrl);  // Set existing image URL
-
-                    $('#saveEditArticleButton').text('Save Changes');  // Change button text to 'Save'
-                    $('#editArticleModal').modal('show');  // Show the modal
-                } else {
-                    displayError('Failed to fetch article details.');
-                }
-            }).fail(function () {
-                displayError('Error fetching article data.');
-            });
+        .pyramid-lines div {
+            height: 2px;
+            background-color: darkred;
+            margin: 5px auto;
         }
 
-        // Submit Add Article form
-        $('#addArticleButton').on('click', function () {
-            var formData = new FormData();
-            formData.append('Title', $('#addArticleTitle').val());
-            formData.append('Content', $('#addArticleContent').val());
-            formData.append('CatId', $('#addArticleCategory').val());
-            formData.append('UserId', $('#addArticleUser').val());
-            var file = $('#addArticleImageUrl')[0].files[0];  // Get the file
-
-            if (file) {
-                formData.append('Image', file);  // Append the file only if it exists
+            .pyramid-lines div:nth-child(1) {
+                width: 100px;
             }
 
-            formData.append('PublishDate', $('#addArticlePublishDate').val());
-
-            // Clear previous errors
-            clearErrors();
-
-            $.ajax({
-                url: '@Url.Action("AddArticle", "Admin")',
-                type: 'POST',
-                data: formData,
-                processData: false,  // Prevent jQuery from processing the data
-                contentType: false,  // Set the content type to false for file upload
-                success: function (response) {
-                    if (response.success) {
-                        $('#addArticleModal').modal('hide');  // Close the modal
-                        location.reload();  // Reload the page to reflect changes
-                    } else {
-                        displayErrors(response.errors);
-                    }
-                },
-                error: function () {
-                    displayError('An error occurred while adding the article.');
-                }
-            });
-        });
-
-        // Submit Edit Article form
-        $('#saveEditArticleButton').on('click', function () {
-            var formData = new FormData();
-            formData.append('Id', $('#editArticleId').val());
-            formData.append('Title', $('#editArticleTitle').val());
-            formData.append('Content', $('#editArticleContent').val());
-            formData.append('CatId', $('#editArticleCategory').val());
-            formData.append('UserId', $('#editArticleUser').val());
-            formData.append('PublishDate', $('#editArticlePublishDate').val());
-
-            var file = $('#editArticleImageUrl')[0].files[0];  // Get the file
-            if (file) {
-                formData.append('Image', file);  // Append the file if it exists
-            } else {
-                formData.append('ImageUrl', $('#existingImageUrl').val());  // Use the existing image if no new one
+            .pyramid-lines div:nth-child(2) {
+                width: 70px;
             }
 
-            // Clear previous errors
-            clearEditErrors();
+            .pyramid-lines div:nth-child(3) {
+                width: 40px;
+            }
 
-            $.ajax({
-                url: '@Url.Action("EditArticle", "Admin")',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.success) {
-                        $('#editArticleModal').modal('hide');
-                        location.reload();
-                    } else {
-                        displayEditErrors(response.errors);
-                    }
-                },
-                error: function () {
-                    displayError('An error occurred while updating the article.');
-                }
-            });
-        });
+    .card-description {
+        min-height: 50px;
+    }
 
-        // Function to display validation errors for Add
-        function displayErrors(errors) {
-            if (errors.Title) {
-                $('#titleError').text(errors.Title);
-            }
-            if (errors.Content) {
-                $('#contentError').text(errors.Content);
-            }
-            if (errors.CatId) {
-                $('#categoryError').text(errors.CatId);
-            }
-            if (errors.UserId) {
-                $('#userError').text(errors.UserId);
-            }
-            if (errors.ImageUrl) {
-                $('#imageUrlError').text(errors.ImageUrl);
-            }
-            if (errors.PublishDate) {
-                $('#publishDateError').text(errors.PublishDate);
-            }
+    .text-muted {
+        font-size: 0.9em;
+    }
+
+    .dropdown-menu {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .dropdown-item {
+        padding: 10px 15px;
+        transition: background-color 0.2s;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
         }
-
-        // Function to display validation errors for Edit
-        function displayEditErrors(errors) {
-            if (errors.Title) {
-                $('#editTitleError').text(errors.Title);
-            }
-            if (errors.Content) {
-                $('#editContentError').text(errors.Content);
-            }
-            if (errors.CatId) {
-                $('#editCategoryError').text(errors.CatId);
-            }
-            if (errors.UserId) {
-                $('#editUserError').text(errors.UserId);
-            }
-            if (errors.ImageUrl) {
-                $('#editImageUrlError').text(errors.ImageUrl);
-            }
-            if (errors.PublishDate) {
-                $('#editPublishDateError').text(errors.PublishDate);
-            }
-        }
-
-        // Function to clear errors
-        function clearErrors() {
-            $('#titleError').text('');
-            $('#contentError').text('');
-            $('#categoryError').text('');
-            $('#userError').text('');
-            $('#imageUrlError').text('');
-            $('#publishDateError').text('');
-        }
-
-        function clearEditErrors() {
-            $('#editTitleError').text('');
-            $('#editContentError').text('');
-            $('#editCategoryError').text('');
-            $('#editUserError').text('');
-            $('#editImageUrlError').text('');
-            $('#editPublishDateError').text('');
-        }
-
-        // Use event delegation for dynamically generated elements (edit and delete buttons)
-        $(document).on('click', '.btn-edit', function () {
-            var articleId = $(this).data('id');  // Get the article ID from data-id attribute
-            editArticle(articleId);  // Call the edit function
-        });
-
-        $(document).on('click', '.btn-delete', function () {
-            var articleId = $(this).data('id');  // Get the article ID from data-id attribute
-            deleteArticle(articleId);  // Call the delete function
-        });
-
-        // Reset forms before displaying them
-        function resetAddArticleForm() {
-            if ($('#addArticleForm').length) {
-                $('#addArticleForm')[0].reset();  // Reset Add form if it exists
-
-                // Set the current date for PublishDate
-                var today = new Date().toISOString().split('T')[0];
-                $('#addArticlePublishDate').val(today);
-
-                // Clear any validation errors
-                $('#titleError').text('');  // Clear title error
-                $('#contentError').text('');  // Clear content error
-                $('#categoryError').text('');  // Clear category error
-                $('#userError').text('');  // Clear user error
-                $('#imageUrlError').text('');  // Clear image URL error
-                $('#publishDateError').text('');  // Clear publish date error
-            } else {
-                console.error('Add Article Form not found');
-            }
-        }
-
-        function resetEditArticleForm() {
-            if ($('#editArticleForm').length) {
-                $('#editArticleForm')[0].reset();  // Reset Edit form if it exists
-            } else {
-                console.error('Edit Article Form not found');
-            }
-        }
-    });
-</script>
-
-@section Scripts {
-    <script src="/lib/jquery/dist/jquery.js"></script>
-    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
+</style>
