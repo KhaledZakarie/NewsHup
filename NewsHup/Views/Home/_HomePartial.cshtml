@@ -14,14 +14,14 @@
         {
 
 
-            <div class="col-md-6 h-100 ">
-                
-
-                    <div class="artical shadow-lg card position-relative overflow-hidden"  asp-controller=" Article" asp-action="ArticleDetils" asp-route-id="@article.Id" >
-                        <div class="  ">
+            <div class="col-md-4 h-100 ">
 
 
-                            <picture class="d-block" style="height:400px">
+                <div class="artical shadow-lg card position-relative overflow-hidden" asp-controller=" Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
+                        <div class="p-2">
+
+
+                            <picture class="d-block rounded-2" style="height:400px">
                                 @if(article.ImageUrl.Contains("http")){
 
                                 <source class=" card-img-top h-100 w-100 " srcset="@article.ImageUrl" style="height:400px">
@@ -38,7 +38,7 @@
                             
                         </div>
 
-                        <div class="position-absolute bottom-0 h-100 w-100 bg-white text-center actical-description">
+                        <div class="position-absolute bottom-0 h-100 w-100 bg-white text-center actical-description fw-bold fa-1x overflow-hidden">
                             <p class="card-text">@article.Title</p>
                         </div>
 
