@@ -51,8 +51,8 @@ cursor :pointer;
     }
 
 body {
-    background-color: #D6274A;
-    background: linear-gradient(to right, #f1395e41, #f73259b9);
+    
+    background: linear-gradient(45deg, #fff, #908992);
     margin-bottom: 60px;
 }
 

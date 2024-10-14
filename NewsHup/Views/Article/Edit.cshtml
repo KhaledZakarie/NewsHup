@@ -1,51 +1,76 @@
-﻿@model Article
+﻿@using System.Security.Claims
+@model Article
 
 @{
     ViewData["Title"] = "EditArticle";
     Layout = "_MainLayout";
     SelectList Categories = new SelectList(ViewBag.Categories, "CategoryId", "CategoryName");
 }
-<section class="Article-form mt-5 p-5 rounded-3 text-white animate__animated animate__pulse">
+<section class="rounded-3">
+    <div class="container d-flex flex-column flex-lg-row justify-content-between w-75 mx-auto">
+        <div class="user-info-container d-flex flex-md-column align-items-center gap-4 justify-content-start p-3 border-bottom rounded-3 mb-4" style="background-color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(140, 3, 30, 0.2); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 320px;">
+            <img src="/assets/download.jpeg" width="120px" class="rounded-circle shadow-sm border" alt="User Image" />
 
-<div class="container d-flex flex-column justify-content-center w-75">
-    <form method="post" class="shadow p-3" >
-    <h2 class="h3">Edit Article:</h2>
-
-        @* hidden field *@
-        <input asp-for="UserId" hidden />
-        <input asp-for="ImageUrl" hidden />
-
-
-        <div class=" mb-3 ">
-            <label asp-for="Title">Article Title</label>
-            <input class="form-control shadow-none rounded-2" asp-for="Title" placeholder="Title">
-            <span class="text-danger" asp-validation-for="Title"></span>
-        </div>
-
-        <div class=" mb-3 ">
-            <label asp-for="Content">Content</label>
-            <textarea class="form-control shadow-none rounded-2" asp-for="Content" placeholder="Content"></textarea>
-            <span class="text-danger" asp-validation-for="Content"></span>
-        </div>
-
-            <div class="mb-3">
-                <label asp-for="CatId">Categories</label>
-                <select class="form-control shadow-none rounded-2" asp-for="CatId" asp-items="Categories">
-                    <option value="0">--Select Category--</option>
-                </select>
-                <span class="text-danger" asp-validation-for="CatId"></span>
+            <div class="user-details">
+                <h2 class="h5 mb-1" style="color: #8C031E;">@User.FindFirst("Name")?.Value</h2>
+                <span class="text-muted d-flex align-items-center gap-2" style="color: #6c757d;">
+                    @User.FindFirst(ClaimTypes.Role)?.Value
+                    <i class="fa-solid fa-certificate text-primary"></i>
+                </span>
+                <div class="mt-3">
+                    <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2" asp-action="MyArticles" asp-controller="Article">
+                        <i class="fa-solid fa-list"></i> My Articles
+                    </a>
+                </div>
             </div>
+        </div>
 
-        <button type="submit" class="btn btn-outline-primary m-3 ms-auto d-block w-25 shadow">Save</button>
+        <div class="form-container w-100">
+           
 
-    </form>
-</div>
+                <form method="post" class="shadow p-3 p-4 rounded bg-white border form-animate">
+                <h2 class="h4 mb-4 text-center" style="color: #8C031E;">Edit Article</h2>
+                    @* hidden field *@
+                    <input asp-for="UserId" hidden />
+                    <input asp-for="ImageUrl" hidden />
+
+
+                
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-semibold">Edit Title</label>
+                    <input class="form-control shadow-none rounded-2" asp-for="Title" placeholder="Edit the title">
+                    <span class="text-danger" asp-validation-for="Title"></span>
+                </div>
+
+                   
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label fw-semibold">Content</label>
+                    <textarea class="form-control shadow-none rounded-2" asp-for="Content" placeholder="Edit the content"></textarea>
+                    <span class="text-danger" asp-validation-for="Content"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CatId" class="form-label fw-semibold">Categories</label>
+                    <select class="form-control shadow-none rounded-2" asp-for="CatId" asp-items="Categories">
+                        <option value="0">--Select Category--</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="CatId"></span>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-save shadow-sm px-5">Save Changes <i class="fa-regular fa-floppy-disk"></i></button>
+                </div>
+
+                </form>
+        </div>
+    </div>
 </section>
 
 @section Scripts {
+    
     <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
 }
 
 
