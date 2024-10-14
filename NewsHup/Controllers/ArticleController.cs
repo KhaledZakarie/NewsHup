@@ -96,6 +96,48 @@ namespace NewsHup.Controllers
         }
 
 
+
+        [HttpPost]
+        public IActionResult AddArticlePopUp(Article article, IFormFile? Image)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    err => err.Key,
+                    err => err.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
+                );
+                return Json(new { success = false, errors });
+            }
+
+            
+
+            if (Image != null)
+            {
+                // Generate a unique file name
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload");
+                var fileName = Path.GetFileNameWithoutExtension(Image.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(Image.FileName);
+                var fullPath = Path.Combine(imagePath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    Image.CopyTo(stream);
+                }
+
+                article.ImageUrl = "/upload/" + fileName;
+            }
+            else
+            {
+                article.ImageUrl = "/upload/DefualtNews.jpg"; // Default image 
+            }
+
+            articleRepository.AddArticle(article);
+            
+            
+            return Json(new { success = true, articleId = article.Id });
+        }
+
+
+
         public IActionResult ArticleDetils(int id)
         {
             Article article = articleRepository.GetArticleBy(a => a.Id == id);
