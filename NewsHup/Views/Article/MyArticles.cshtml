@@ -138,11 +138,11 @@
                             <small class="text-danger" id="imageUrlError"></small>
                         </div>
 
-                        <div class="form-group form-group-default d-none">
+                       @*  <div class="form-group form-group-default d-none">
                             <label>Publish Date</label>
                             <input id="addArticlePublishDate" name="PublishDate" type="date" class="form-control" placeholder="Enter publish date" required />
                             <small class="text-danger" id="publishDateError"></small>
-                        </div>
+                        </div> *@
 
                     </form>
                 </div>
@@ -255,9 +255,9 @@
         if ($('#addArticleForm').length) {
             $('#addArticleForm')[0].reset();  // Reset Add form if it exists
 
-            // Set the current date for PublishDate
-            var today = new Date().toISOString().split('T')[0];
-            $('#addArticlePublishDate').val(today);
+            // // Set the current date for PublishDate
+            // var today = new Date().toISOString().split('T')[0];
+            // $('#addArticlePublishDate').val(today);
 
             // Clear any validation errors
             $('#titleError').text('');  // Clear title error
@@ -265,7 +265,7 @@
             $('#categoryError').text('');  // Clear category error
             $('#userError').text('');  // Clear user error
             $('#imageUrlError').text('');  // Clear image URL error
-            $('#publishDateError').text('');  // Clear publish date error
+            // $('#publishDateError').text('');  // Clear publish date error
         } else {
             console.error('Add Article Form not found');
         }
@@ -357,19 +357,27 @@
             if (file) {
                 formData.append('Image', file);  // Append the file only if it exists
             }
+            
 
-            formData.append('PublishDate', $('#addArticlePublishDate').val());
+            // formData.append('PublishDate', $('#addArticlePublishDate').val());
 
             // Clear previous errors
             clearErrors();
 
+            // To log the formData contents
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+
+
             $.ajax({
-                url: '@Url.Action("AddArticle", "Admin")',
+                url: '@Url.Action("AddArticlePopUp", "Article")',
                 type: 'POST',
                 data: formData,
                 processData: false,  // Prevent jQuery from processing the data
                 contentType: false,  // Set the content type to false for file upload
                 success: function (response) {
+                    console.log("Succcc");
                     if (response.success) {
                         $('#addArticleModal').modal('hide');  // Close the modal
                         location.reload();  // Reload the page to reflect changes
