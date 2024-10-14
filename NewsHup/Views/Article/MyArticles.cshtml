@@ -1,135 +1,63 @@
-﻿ @model ArticleWithUserViewModel
- 
+﻿@using System.Security.Claims
+ @model ArticleWithUserViewModel
 @{
     ViewData["Title"] = "MyArticles";
     Layout = "_MainLayout";
-    SelectList Categories = new SelectList(ViewBag.Categories, "CategoryId", "CategoryName");
 }
 
+    
 
-
-@* @if (User.IsInRole("Admin"))
-{ *@
-
-
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h4 class="card-title">Articles</h4>
-                    <a class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addArticleModal" id="addArticleButtonTrigger">
-                        <i class="fa fa-plus"></i> Add Article
-                    </a>
-
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="articleTable" class="display table table-striped table-hover text-center">
-                        <thead>
-                            <tr>
-                                <th>Article ID</th>
-                                <th>Imge</th>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Publish Date</th>
-                                <th style="width: 10%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var article in Model.Articles)
-                            {
-                                <tr id="article-row-@article.Id">
-                                    <td>@article.Id</td>
-                                    <td>
-                                    <picture>
-                                        @if (article.ImageUrl.Contains("http"))
-                                        {
-
-                                            <source media="(min-width:465px)" srcset="@article.ImageUrl">
-                                        }
-                                        else
-                                        {
-                                            <source media="(min-width:465px)" srcset="@article.ImageUrl">
-                                        }
-                                        <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100" height="100px" alt="...">
-
-
-                                    </picture>
-                                    </td>
-                                    <td>@article.Title</td>
-                                    <td>@article.Category?.CategoryName</td>
-                                    <td>@article.PublishDate.ToString("yyyy-MM-dd")</td>
-
-                                    <td>
-                                        <div class="form-button-action d-flex justify-content-center align-items-center">
-                                            <a  class="btn btn-link btn-lg btn-edit" data-id="@article.Id">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-link btn-delete" data-id="@article.Id">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+    
+    
+<section class="content">
+    
+        <div class="d-flex align-items-center gap-3 justify-content-start m-3">
+            <img src="/assets/download.jpeg" width="150px" class="rounded-3 shadow show" />
+            <div class="gap-5">
+                <h2 class="h4 m-0">@Model.UserName</h2>
+                <span>@User.FindFirst(ClaimTypes.Role)?.Value <i class="fa-solid fa-certificate text-primary"></i></span>
+                <a class="btn btn-primary d-block mt-2" asp-action="AddArticle" asp-controller="Article"><i class="fa-solid fa-circle-plus"></i> Add Article</a>
             </div>
         </div>
+        
+           
+           
+           
+       
+    
+    <div class="text-center">
+        <h2 class="my-article">My Article</h2>
+        <div class="pyramid-lines">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
+    <div class="row">
 
-    <!-- Add/Edit Article Modal -->
-    <!-- Add Article Modal -->
+         @foreach(Article article in Model.Articles)
+        {
+            <div class="col-lg-4 col-md-4 pt-4">
+                <div class="card card-article h-100 ">
+                        <div class="btn1-blog position-absolute btn btn-primary end-0 m-2">@article.Category.CategoryName</div>
+                    <div class="overflow-hidden">
+                        <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                            
+                                <picture class="h-100">
+                                    @if (article.ImageUrl.Contains("http"))
+                                    {
+                                    <source class="img-article" srcset="@article.ImageUrl">
+                                    }
+                                    else
+                                    {
+                                    <source class="img-article"
+                                                srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                                    }
+                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article"height="200px" alt="...">
+                                </picture>
 
-    <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Add Article</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="addArticleForm">
-                        @Html.AntiForgeryToken()
-
-                        <div class="form-group form-group-default">
-                            <label>Article Title</label>
-                            <input id="addArticleTitle" asp-for="Title" class="form-control" placeholder="Enter article title" required />
-                             <small class="text-danger" id="titleError"></small> 
-                            <span class="text-danger" asp-validation-for="Title"></span>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Content</label>
-                            <textarea id="addArticleContent" name="Content" class="form-control" placeholder="Enter article content" required></textarea>
-                            <small class="text-danger" id="contentError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Category</label>
-                            <select id="addArticleCategory" name="CatId" class="form-control" required>
-                                <option value="" disabled selected>Select a category</option>
-                                @foreach (var category in ViewBag.Categories)
-                                {
-                                    <option value="@category.CategoryId">@category.CategoryName</option>
-                                }
-                            </select>
-                            <small class="text-danger" id="categoryError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default d-none">
-                            <label>User</label>
-                            <select id="addArticleUser" name="UserId" class="form-control" required>
-                            <option value="@User.FindFirst("Id").Value">@User.FindFirst("Name").Value</option>
-                               
-                            </select>
-                            <small class="text-danger" id="userError"></small>
+                         
+                        </a>
                         </div>
 
                         <div class="form-group form-group-default">
@@ -138,11 +66,11 @@
                             <small class="text-danger" id="imageUrlError"></small>
                         </div>
 
-                       @*  <div class="form-group form-group-default d-none">
+                        <div class="form-group form-group-default d-none">
                             <label>Publish Date</label>
                             <input id="addArticlePublishDate" name="PublishDate" type="date" class="form-control" placeholder="Enter publish date" required />
                             <small class="text-danger" id="publishDateError"></small>
-                        </div> *@
+                        </div>
 
                     </form>
                 </div>
@@ -154,55 +82,12 @@
         </div>
     </div>
 
-
-    <!-- Edit Article Modal -->
-    <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Edit Article</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span>&times;</span>
-                    </button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="editArticleForm">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" id="editArticleId" name="Id" />
-                        <input type="hidden" id="existingImageUrl" name="existingImageUrl" />
+            </div>
 
-                        <div class="form-group form-group-default">
-                            <label>Article Title</label>
-                            <input id="editArticleTitle" name="Title" type="text" class="form-control" required />
-                            <small class="text-danger" id="editTitleError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Content</label>
-                            <textarea id="editArticleContent" name="Content" class="form-control" required></textarea>
-                            <small class="text-danger" id="editContentError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Category</label>
-                            <select id="editArticleCategory" name="CatId" class="form-control" required>
-                            <option value="@User.FindFirst("Id").Value">@User.FindFirst("Name").Value</option>
-                              
-                            </select>
-                            <small class="text-danger" id="editCategoryError"></small>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>User</label>
-                            <select id="editArticleUser" name="UserId" class="form-control" required>
-                                <option value="" disabled>Select a user</option>
-                                @foreach (var user in ViewBag.Users)
-                                {
-                                    <option value="@user.Id">@user.Name</option>
-                                }
-                            </select>
-                            <small class="text-danger" id="editUserError"></small>
-                        </div>
+        }
+    </div>
 
                         <div class="form-group form-group-default">
                             <label>Image URL</label>
@@ -255,9 +140,9 @@
         if ($('#addArticleForm').length) {
             $('#addArticleForm')[0].reset();  // Reset Add form if it exists
 
-            // // Set the current date for PublishDate
-            // var today = new Date().toISOString().split('T')[0];
-            // $('#addArticlePublishDate').val(today);
+            // Set the current date for PublishDate
+            var today = new Date().toISOString().split('T')[0];
+            $('#addArticlePublishDate').val(today);
 
             // Clear any validation errors
             $('#titleError').text('');  // Clear title error
@@ -265,7 +150,7 @@
             $('#categoryError').text('');  // Clear category error
             $('#userError').text('');  // Clear user error
             $('#imageUrlError').text('');  // Clear image URL error
-            // $('#publishDateError').text('');  // Clear publish date error
+            $('#publishDateError').text('');  // Clear publish date error
         } else {
             console.error('Add Article Form not found');
         }
@@ -357,27 +242,19 @@
             if (file) {
                 formData.append('Image', file);  // Append the file only if it exists
             }
-            
 
-            // formData.append('PublishDate', $('#addArticlePublishDate').val());
+            formData.append('PublishDate', $('#addArticlePublishDate').val());
 
             // Clear previous errors
             clearErrors();
 
-            // To log the formData contents
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
-
-
             $.ajax({
-                url: '@Url.Action("AddArticlePopUp", "Article")',
+                url: '@Url.Action("AddArticle", "Admin")',
                 type: 'POST',
                 data: formData,
                 processData: false,  // Prevent jQuery from processing the data
                 contentType: false,  // Set the content type to false for file upload
                 success: function (response) {
-                    console.log("Succcc");
                     if (response.success) {
                         $('#addArticleModal').modal('hide');  // Close the modal
                         location.reload();  // Reload the page to reflect changes
