@@ -1,4 +1,8 @@
 ﻿@using System.Security.Claims
+@using NewsHup.Repository
+
+@inject ICategoryRepository _cate
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +32,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav main-ul mx-auto">
-                <li class="nav-item">
+               <li class="nav-item">
+                     <a class="nav-link nav-area text-decoration-none active" asp-area="" asp-controller="Home" asp-action="Index">All Categories</a>
+                </li>
+               @foreach (Category cat in _cate.GetAll())
+               {
+                    <li class="nav-item">
+                         <a class="nav-link nav-area text-decoration-none active" asp-area="@cat.CategoryName" asp-controller="Home" asp-action="Index">@cat.CategoryName</a>
+                    </li>
+               }
+                @* <li class="nav-item">
                             <a class="nav-link nav-area text-decoration-none active" asp-area="" asp-controller="Home" asp-action="Index">General</a>
                 </li>
                 <li class="nav-item">
@@ -48,7 +61,7 @@
                 </li>
                 <li class="nav-item">
                             <a class="nav-link nav-area " asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
-                </li>
+                </li> *@
             </ul>
 
             <ul class="navbar-nav ms-auto my-btns">
@@ -163,14 +176,19 @@
                     <div class="col-md-6 col-lg-6 col-xl-2">
                         <div class="footer-item">
                             <h4 class="text-white mb-4">Quick Links</h4>
-                        <a asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> General </a>
-                        <a asp-area="Business" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Business </a>
+                        <a asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> All Categories </a>
+                        @foreach( Category cat in _cate.GetAll())
+                        {
+                            <a asp-area="@cat.CategoryName" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> @cat.CategoryName </a>
+                        }
+                        
+@*                         <a asp-area="Business" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Business </a>
                         <a asp-area="Entertainment" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Entertainment</a>
                         <a asp-area="Health" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Health</a>
                         <a asp-area="Science" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Science</a>
                         <a asp-area="Sports" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Sports</a>
                         <a asp-area="Technology" asp-controller="Home" asp-action="Index"><i class="fas fa-angle-right me-2"></i> Technology</a>
-                        </div>
+ *@                        </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item">
