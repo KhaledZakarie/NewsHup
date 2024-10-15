@@ -7,6 +7,8 @@ using NewsHup.Models;
 using NewsHup.Repository;
 using System.Security.Claims;
 using TestMVC.Models;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+
 
 namespace NewsHup.Controllers
 {
@@ -19,12 +21,14 @@ namespace NewsHup.Controllers
 
         private readonly NewsContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly IHostingEnvironment hosting;
 
         // Constructor to inject NewsContext via DI
-        public UserController(NewsContext context,IUserRepository userRepository)
+        public UserController(NewsContext context,IUserRepository userRepository, IHostingEnvironment _hosting)
         {
             _context = context;
             _userRepository = userRepository;
+            hosting = _hosting;
         }
 
         public IActionResult Index()
@@ -54,7 +58,7 @@ namespace NewsHup.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult Register(User user)
-        {
+            {
 
 
             if (ModelState.ErrorCount > 0)
@@ -74,6 +78,20 @@ namespace NewsHup.Controllers
                 {
                     //_context.Users.Add(user);
                     //_context.SaveChanges();
+
+                    if (user.FormFile != null)///img uploaded
+                    {
+                        string FileName = user.FormFile.FileName;
+                        string uploadFolder = Path.Combine(hosting.WebRootPath, "userImg");
+                        string FullPath = Path.Combine(uploadFolder, FileName);
+                        user.FormFile.CopyTo(new FileStream(FullPath, FileMode.Create));
+                        user.UserImage = FileName;
+                    }
+                    else //put defualt img if not upload img
+                    {
+                        user.UserImage = "profileDefualt.jpg";
+                    }
+
 
                     user.Role = Enums.Role.Writer;
 

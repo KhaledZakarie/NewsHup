@@ -11,7 +11,7 @@
 
 <div class="container1 mx-auto" id="container1">
     <div class="form-container sign-up">
-            <form method="post" asp-action="Register">
+            <form method="post" enctype="multipart/form-data" asp-action="Register">
                 <img src="/assets/img/kaiadmin/logo_dark.png" width="160px" alt="">
             <h1>Create Account</h1>
            
@@ -27,6 +27,10 @@
                 <div class="w-100">
                     <input asp-for="Password" type="password" placeholder="Password">
                     <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+                <div class="w-100">
+                    <input asp-for="FormFile" type="file" class="form-control" placeholder="Enter image" />
+                    <span class="text-danger" asp-validation-for="FormFile"></span>
                 </div>
 
             <button type="submit">Sign Up</button>

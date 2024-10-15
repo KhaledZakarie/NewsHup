@@ -1,5 +1,6 @@
 ﻿using NewsHup.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace NewsHup.Models
@@ -20,6 +21,8 @@ namespace NewsHup.Models
         public string Password { get; set; }
 
         public string? UserImage { get; set; }
+        [NotMapped]
+        public IFormFile? FormFile { get; set; }
         public Role Role { get; set; }
 
         public List<Article> Articles { get; set; } = new List<Article>();
