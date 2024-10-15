@@ -13,8 +13,8 @@
         @foreach (Article article in Model)
         {
 
-
             <div class="col-md-4 h-100 ">
+            <a asp-controller="Article" asp-action="ArticleDetils"  asp-route-id="@article.Id">
 
 
                 <div class="artical shadow-lg card position-relative overflow-hidden" asp-controller=" Article" asp-action="ArticleDetils" asp-route-id="@article.Id">
@@ -45,6 +45,7 @@
                     </div>
 
             
+                </a>
                 </div>
         }
 

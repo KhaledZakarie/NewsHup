@@ -27,7 +27,29 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          
+            <ul class="navbar-nav main-ul mx-auto">
+                <li class="nav-item">
+                            <a class="nav-link nav-area text-decoration-none active" asp-area="" asp-controller="Home" asp-action="Index">General</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area  asp-area="Business" asp-controller="Home" asp-action="Index">Business</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area" asp-area="Entertainment" asp-controller="Home" asp-action="Index">Entertainment</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area " asp-area="Health" asp-controller="Home" asp-action="Index">Health</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area " asp-area="Science" asp-controller="Home" asp-action="Index">Science</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area " asp-area="Sports" asp-controller="Home" asp-action="Index">Sports</a>
+                </li>
+                <li class="nav-item">
+                            <a class="nav-link nav-area " asp-area="Technology" asp-controller="Home" asp-action="Index">Technology</a>
+                </li>
+            </ul>
 
             <ul class="navbar-nav ms-auto my-btns">
                 @if (!User.Identity.IsAuthenticated)
@@ -232,3 +254,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
