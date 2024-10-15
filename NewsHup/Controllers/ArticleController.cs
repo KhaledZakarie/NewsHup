@@ -60,11 +60,11 @@ namespace NewsHup.Controllers
                         string uploadFolder = Path.Combine(hosting.WebRootPath, "upload");
                         string FullPath = Path.Combine(uploadFolder, FileName);
                         newArticle.FormFile.CopyTo(new FileStream(FullPath, FileMode.Create));
-                        article.ImageUrl = FileName;
+                        article.ImageUrl = "/upload/" + FileName;
                     }
                     else //put defualt img if not upload img
                     {
-                        article.ImageUrl = "DefualtNews.jpg";
+                        article.ImageUrl = "/upload/DefualtNews.jpg";
                     }
 
 
