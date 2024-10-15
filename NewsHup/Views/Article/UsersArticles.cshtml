@@ -6,6 +6,25 @@
     SelectList Categories = new SelectList(ViewBag.Categories, "CategoryId", "CategoryName");
 }
 
+<div id="colorlib-main">
+    <div class="hero-wrap js-fullheight" style="background-image: url(images/bg_1.jpg);" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="js-fullheight d-flex justify-content-center align-items-center">
+            <div class="col-md-8 text text-center">
+                @* <div class="img mb-4" style="background-image: url(/assets/img/profile2.jpg);"></div> *@
+                <img src="/assets/img/profile2.jpg" class="rounded-pill" />
+                <div class="desc">
+                    <h2 class="subheading">Hello I'm</h2>
+                    <h1 class="mb-4">@Model.UserName</h1>
+                    <h3 class="mb-4">I hope you like my articles.</h3>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 
 <div class="col-md-12">
     <div class="card">

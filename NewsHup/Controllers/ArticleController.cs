@@ -235,10 +235,13 @@ namespace NewsHup.Controllers
             return View(editedArticle);
         }
 
-        [Authorize]
+        
         public IActionResult UsersArticles(int userId)
         {
-
+            if(userId == userRepository.GetLoggerId(HttpContext))
+            {
+                return RedirectToAction("MyArticles");
+            }
 
 
             ViewData["Categories"] = categoryRepository.GetAll();

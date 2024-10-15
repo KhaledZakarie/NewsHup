@@ -1,4 +1,5 @@
-﻿@model ArticleWithCommentViewModel
+﻿@using System.Security.Claims
+@model ArticleWithCommentViewModel
 
 @{
     ViewData["Title"] = "Article Details";
@@ -9,9 +10,13 @@
     <!-- User Info -->
     <div class="border-bottom pb-3 mb-4">
         <div class="d-flex align-items-center gap-3">
-            <img src="/assets/download.jpeg" width="60" height="60" class="rounded-pill shadow" alt="User Profile" />
+            <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@Model.AuthorId">
+                <img src="/assets/download.jpeg" width="60" height="60" class="rounded-pill shadow" alt="User Profile" />
+            </a>
             <div>
-                <h2 class="h5 mb-1 text-primary">@Model.AuthorName <i class="fa-solid fa-certificate text-primary"></i></h2>
+                <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@Model.AuthorId">
+                    <h2 class="h5 mb-1 text-primary">@Model.AuthorName <i class="fa-solid fa-certificate text-primary"></i></h2>
+                </a>
                 <span class="text-muted">@Model.PublishDate.ToString("dd/MM/yyyy")</span>
             </div>
         </div>
@@ -51,23 +56,27 @@
             </h2>
             <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                    <!-- Add Comment Form -->
-                    <form asp-action="AddComment" asp-controller="Comment">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @{var userRole = User.FindFirst(ClaimTypes.Role)?.Value;}
 
-                        <input asp-for="@Model.ArticleId" hidden />
-                        <div class="d-flex justify-content-start align-items-center mb-3">
+                    @if (userRole == "Admin" || userRole == "Writer")
+                    {
+                        <!-- Add Comment Form -->
+                        <form method="post" asp-action="AddComment" asp-controller="Comment">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                            <img class="rounded-circle shadow-1-strong me-3" src="/assets/download.jpeg" alt="avatar" width="30" height="30" />
+                            <input asp-for="@Model.ArticleId" hidden />
+                            <div class="d-flex justify-content-start align-items-center mb-3">
 
-                            <textarea rows="1" class="form-control rounded-pill px-3 shadow-sm" placeholder="Enter your Comment ..."></textarea>
+                                <img class="rounded-circle shadow-1-strong me-3" src="/assets/download.jpeg" alt="avatar" width="30" height="30" />
 
-                            <button class="btn btn-primary rounded-circle shadow-sm ms-3" type="submit" value="Create">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </form>
+                                <textarea asp-for="@Model.NewComment" rows="1" class="form-control rounded-pill px-3 shadow-sm" placeholder="Enter your Comment ..."></textarea>
 
+                                <button class="btn btn-primary rounded-circle shadow-sm ms-3" type="submit" value="Create">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    }
                     <!-- Comments List -->
                     <div class="comments-section bg-white shadow-sm p-4 rounded-3 animate__animated animate__fadeInUp">
                         @if (Model.Comments.Count() > 0)
@@ -79,7 +88,9 @@
                                     <div class="card mb-3 @backgroundColor rounded-3 shadow-sm">
                                         <div class="card-body">
                                             <div class="d-flex flex-start">
-                                                <img class="rounded-circle shadow-1-strong me-3" src="/assets/download.jpeg" alt="avatar" width="40" height="40" />
+                                                <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@comment.value.UserId">
+                                                    <img class="rounded-circle shadow-1-strong me-3" src="/assets/download.jpeg" alt="avatar" width="40" height="40" />
+                                                </a>
                                                 <div class="w-100">
                                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                                         <h6 class="text-primary fw-bold mb-0">

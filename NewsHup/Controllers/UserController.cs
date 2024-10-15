@@ -75,6 +75,10 @@ namespace NewsHup.Controllers
                     //_context.Users.Add(user);
                     //_context.SaveChanges();
 
+                    user.Role = Enums.Role.Writer;
+
+                    var roleName = Enum.GetName(typeof(NewsHup.Enums.Role), user.Role);
+                    
 
                     _userRepository.Add(user);
                     _userRepository.SaveChanges();
@@ -83,7 +87,8 @@ namespace NewsHup.Controllers
                     claimsIdentity.AddClaim(new Claim("Id", user.Id.ToString()));
                     claimsIdentity.AddClaim(new Claim("Name", user.Name.ToString()));
                     claimsIdentity.AddClaim(new Claim("Email", user.Email.ToString()));
-                    claimsIdentity.AddClaim(new Claim("Role", user.Role.ToString()));
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, roleName));
+                    //claimsIdentity.AddClaim(new Claim("Role", user.Role.ToString()));
                     ClaimsPrincipal claimsPrincipal = new(claimsIdentity);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 

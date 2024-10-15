@@ -21,23 +21,23 @@ namespace NewsHup.Controllers
             return View();
         }
 
-        public IActionResult AddComment(int articleId, int userId) //userId that will add comment
-        {
-            CommentWithUserViewModel commentWithUser = new CommentWithUserViewModel();
-            commentWithUser.ArticleId = articleId;
-            commentWithUser.CommenterId = userId;
-            return View(commentWithUser);
-        }
+        //public IActionResult AddComment(int articleId, int userId) //userId that will add comment
+        //{
+        //    CommentWithUserViewModel commentWithUser = new CommentWithUserViewModel();
+        //    commentWithUser.ArticleId = articleId;
+        //    commentWithUser.CommenterId = userId;
+        //    return View(commentWithUser);
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddComment(CommentWithUserViewModel PostedComment)
+        public IActionResult AddComment(ArticleWithCommentViewModel PostedComment)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     Comment comment = new Comment();
-                    comment.CommentText = PostedComment.CommentText;
+                    comment.CommentText = PostedComment.NewComment;
                     comment.ArticleId = PostedComment.ArticleId;
                     comment.UserId = userRepository.GetLoggerId(HttpContext);
                     commentRepository.Add(comment);
