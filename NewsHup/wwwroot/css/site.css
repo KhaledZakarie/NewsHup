@@ -134,26 +134,37 @@ nav .dropdown-item {
     }
 
     .navbar-nav .nav-link {
-        position: relative;
-        cursor: pointer;
+        position: relative; 
+        padding-bottom: 10px; 
+        color: #000; 
+        transition: color 0.3s; 
     }
 
-        .navbar-nav .nav-link.active::before {
-            width: 90%;
+        .navbar-nav .nav-link.active {
+            background-color: #8F021D; 
+            color: white; 
+            border-radius: 4px; 
         }
 
-        .navbar-nav .nav-link::before {
-            content: "";
-            width: 0%;
-            height: 4px;
-            background: #8F021D;
-            position: absolute;
-            left: 5%;
-            bottom: 0px;
-            -webkit-transition: all 0.4s;
-            transition: all 0.4s;
-            z-index: -1;
+            .navbar-nav .nav-link.active::before {
+                content: ""; 
+                position: absolute;
+                bottom: -5px; 
+                left: 5%%; 
+                transform: translateX(-50%); 
+                width: 0; 
+                height: 0; 
+                border-left: 7px solid transparent; 
+                border-right: 7px solid transparent; 
+                border-top: 7px solid #8F021D;
+                transition: all 0.3s;
+            }
+
+        .navbar-nav .nav-link:hover {
+            color: #5EBBD9;
         }
+       
+
 
 .navbar {
     background-color: var(--main-nav);
