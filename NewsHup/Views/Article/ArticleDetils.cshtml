@@ -1,111 +1,163 @@
 ﻿@model ArticleWithCommentViewModel
 
 @{
-    ViewData["Title"] = "ArticleDetils";
+    ViewData["Title"] = "Article Details";
     Layout = "_MainLayout";
 }
 
-<section class="container my-5 w-75 mx-auto border rounded-2 p-2">
-    <!-- header -->
-    <div class="d-flex justify-content-between align-items-center">
-
+<section class="container my-5 w-75 mx-auto border rounded-3 shadow p-4 bg-light animate__animated animate__fadeIn">
+    <!-- User Info -->
+    <div class="border-bottom pb-3 mb-4">
         <div class="d-flex align-items-center gap-3">
-            <img src="/assets/download.jpeg" width="60px" height="60px" class="rounded-pill shadow" />
+            <img src="/assets/download.jpeg" width="60" height="60" class="rounded-pill shadow" alt="User Profile" />
             <div>
-                <h1 class="h4">@Model.Title</h1>
-
-                <h2 class="h4 m-0">@Model.AuthorName</h2>
-                <span class="small text-black-50 ">@Model.PublishDate</span>
+                <h2 class="h5 mb-1 text-primary">@Model.AuthorName <i class="fa-solid fa-certificate text-primary"></i></h2>
+                <span class="text-muted">@Model.PublishDate.ToString("dd/MM/yyyy")</span>
             </div>
         </div>
-        <div class="">
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" asp-action="Edit" asp-controller="Article" asp-route-id="@Model.ArticleId">Edit <i class="fa-regular fa-pen-to-square"></i></a></li>
-                    <li><a class="dropdown-item" asp-action="Delete" asp-controller="Article" asp-route-id="@Model.ArticleId">Delete <i class="fa-solid fa-trash"></i></a></li>
-                </ul>
-            </div>
+    </div>
+
+    <!-- Article Content Section (Image and Content) -->
+    <div class="mb-5">
+            <h1 class="h3 text-danger fw-bold">@Model.Title</h1>
+        <!-- Image -->
+        <div class="article-image mb-4">
+            <picture>
+                @if (Model.ImageUrl.Contains("http"))
+                {
+                    <img src="@Model.ImageUrl" class="img-fluid rounded-3 shadow w-100" alt="Article Image">
+                }
+                else
+                {
+                    <img src="/upload/@Model.ImageUrl" class="img-fluid rounded-3 shadow w-100" alt="Article Image">
+                }
+            </picture>
         </div>
 
+        <!-- Text (Title, Category, and Content) -->
+        <div class="article-text">
+            <span class="badge bg-danger p-2 mb-3">@Model.CategoryName</span>
+            <p class="mt-3">@Model.Content</p>
+        </div>
     </div>
 
-    <!-- body -->
-    <div class="border-top mt-2">
-        
-        <h3 class="h4">@Model.CategoryName</h3>
-        <picture>
-            @if (Model.ImageUrl.Contains("http"))
-            {
-
-                <source media="(min-width:465px)" srcset="@Model.ImageUrl">
-            }
-            else
-            {
-                <source media="(min-width:465px)" srcset="/upload/@Model.ImageUrl">
-            }
-            <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100" height="400px" alt="...">
-        
-
-        </picture>
-        <p class="">@Model.Content</p>
-    </div>
-
-    <div class="shadow rounded-3 p-2 my-3">
-        
-        <a class="btn btn-outline-primary" asp-action="AddComment" asp-controller="Comment" asp-route-userId="@Model.AuthorId" asp-route-articleId="@Model.ArticleId"> <i class="fa-regular fa-comment"></i> Add Comment</a>
+    <!-- Comments Section -->
+    <a class="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#commentModal">
+        <i class="fa-regular fa-comment"></i> Add Comment
+    </a>
+    <div class="comments-section bg-white shadow-sm p-4 rounded-3 animate__animated animate__fadeInUp">
         @if(Model.Comments.Count() > 0)
         {
-            <h3>Comments</h3>     @*remove articel id and git it from session*@        
-        }
-        <!-- loop -->
-        @foreach (Comment Comment in Model.Comments)
-        {
-            <div class="d-flex align-items-center justify-content-between border-bottom pb-1 m-2">
-                <div class="d-flex align-items-center gap-4">
-                    <a asp-action="UsersArticles" asp-route-userId="@Comment.UserId">
-                        <img src="/assets/download.jpeg" width="100px" height="100px" class="rounded-4 shadow" />
-                    </a>
-                    <div class="">
-                        <a asp-action="UsersArticles" asp-route-userId="@Comment.UserId">
-                            <h3 class="h5">@Comment.User.Name</h3>
-                        </a>
-                        <h2>@Comment.CommentText</h2>
-                        <span class="text-black-50 ">
-                            @Comment.CommentDate.ToString("dd/MM/yyyy")
-                        </span>
+            <div class="list-group">
+                @foreach (var comment in Model.Comments.Select((value, index) => new { value, index }))
+                {
+                    var backgroundColor = comment.index % 2 == 0 ? "bg-light" : "bg-white";
+                    <div class="card mb-3 @backgroundColor">
+                        <div class="card-body">
+                            <div class="d-flex flex-start">
+                                <img class="rounded-circle shadow-1-strong me-3" src="/assets/download.jpeg" alt="avatar" width="40" height="40" />
+                                <div class="w-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-primary fw-bold mb-0">
+                                            <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@comment.value.UserId">@comment.value.User.Name</a>
+                                            <span class="text-body ms-2">@comment.value.CommentText</span>
+                                        </h6>
+                                        <p class="mb-0 text-muted">@comment.value.CommentDate.ToString("dd/MMM/yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                </div>
+                }
             </div>
         }
+        else
+        {
+            <p class="text-muted">No comments yet. Be the first to comment!</p>
+        }
     </div>
-
-
 </section>
-<!-- test -->
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Modal for Adding Comments -->
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <h5 class="modal-title" id="commentModalLabel">Add a Comment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-             @*    <partial name="_CommentPartial"></partial> *@
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+                <form asp-action="AddComment" method="post">
+                    <div class="mb-3">
+                        <label for="commentText" class="form-label">Your Comment</label>
+                        <textarea class="form-control" id="commentText" rows="3" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a asp-action="AddComment" asp-controller="Comment" asp-route-userId="@Model.AuthorId" asp-route-articleId="@Model.ArticleId">
+                                      Post comment <i class="fa-solid fa-location-arrow"></i>
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Additional CSS -->
+<style>
+    .article-image img {
+        object-fit: cover;
+        height: auto;
+        width: 100%;
+        max-height: 500px;
+        border-radius: 10px;
+    }
+
+    .article-text h1 {
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .comments-section {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .comments-section:hover {
+        transform: scale(1.02);
+        background-color: #f9f9f9;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .btn-outline-primary {
+        border-color: #0056b3;
+        color: #0056b3;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #0056b3;
+        color: #fff;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa;
+    }
+
+    .bg-white {
+        background-color: #fff;
+    }
+
+    media (max-width: 768px) {
+        .article-image img {
+            max-height: 300px;
+        }
+
+        .article-text h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>

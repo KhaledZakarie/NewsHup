@@ -51,8 +51,7 @@ cursor :pointer;
     }
 
 body {
-    
-    background: linear-gradient(45deg, #fff, #908992);
+    background: linear-gradient(45deg, #fff, rgba(144, 137, 146, 0.45));
     margin-bottom: 60px;
 }
 
