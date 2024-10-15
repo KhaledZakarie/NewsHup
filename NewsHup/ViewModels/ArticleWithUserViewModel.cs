@@ -7,6 +7,7 @@ namespace NewsHup.ViewModels
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
+        public string? UserImg { get; set; }
 
         public List<Article> Articles { get; set; } = new List<Article>();
 

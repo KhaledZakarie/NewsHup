@@ -76,10 +76,11 @@
                     var userName = User.FindFirst("Name")?.Value;
                     var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
                     var userId = User.FindFirst("Id")?.Value;
+                    var ProfileImg = User.FindFirst("ProfileImg")?.Value;
 
                     <div class="dropdown">
                         <a class="d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/assets/img/profile2.jpg" class="rounded-5" width="50px" alt="Profile Picture">
+                            <img src="/userImg/@ProfileImg" class="rounded-5" width="50px" alt="Profile Picture">
                             <span class="profile-username ms-2">
                                 <span class="op-7">Hi, @userName</span><br>
                                 <span class="fw-bold">@userRole</span>

@@ -10,7 +10,7 @@
 <section class="rounded-3">
     <div class="container d-flex flex-column flex-lg-row justify-content-between w-75 mx-auto">
         <div class="user-info-container d-flex flex-md-column align-items-center gap-4 justify-content-start p-3 border-bottom rounded-3 mb-4" style="background-color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(140, 3, 30, 0.2); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 320px;">
-            <img src="/assets/download.jpeg" width="120px" class="rounded-circle shadow-sm border" alt="User Image" />
+            <img src="/userImg/@User.FindFirst("ProfileImg")?.Value" width="120px" class="rounded-circle shadow-sm border" alt="User Image" />
 
             <div class="user-details">
                 <h2 class="h5 mb-1" style="color: #8C031E;">@User.FindFirst("Name")?.Value</h2>

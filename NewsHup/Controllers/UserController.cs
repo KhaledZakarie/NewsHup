@@ -105,6 +105,7 @@ namespace NewsHup.Controllers
                     claimsIdentity.AddClaim(new Claim("Id", user.Id.ToString()));
                     claimsIdentity.AddClaim(new Claim("Name", user.Name.ToString()));
                     claimsIdentity.AddClaim(new Claim("Email", user.Email.ToString()));
+                    claimsIdentity.AddClaim(new Claim("ProfileImg", user.UserImage.ToString()));
                     claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, roleName));
                     //claimsIdentity.AddClaim(new Claim("Role", user.Role.ToString()));
                     ClaimsPrincipal claimsPrincipal = new(claimsIdentity);
@@ -173,6 +174,7 @@ namespace NewsHup.Controllers
                 claimsIdentity.AddClaim(new Claim("Id", userFromDB.Id.ToString()));
                 claimsIdentity.AddClaim(new Claim("Name", userFromDB.Name.ToString()));
                 claimsIdentity.AddClaim(new Claim("Email", userFromDB.Email.ToString()));
+                claimsIdentity.AddClaim(new Claim("ProfileImg", userFromDB.UserImage.ToString()));
 
 
 
