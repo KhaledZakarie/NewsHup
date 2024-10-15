@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsHup.Models;
+using System;
 using System.Diagnostics;
 using TestMVC.Models;
 
@@ -23,7 +24,12 @@ namespace NewsHup.Controllers
         }
 
 
-
+        public IActionResult ArticleSearch(string text)
+        {
+            List<Article> arts = _context.Articles.Where(e => e.Title.Contains(text)).ToList();
+            
+            return Json(arts);
+        }
 
         public IActionResult Index(string area="")
         {
