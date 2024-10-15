@@ -19,7 +19,7 @@ namespace NewsHup.Models
         [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$", ErrorMessage = "Minimum eight characters, at least one letter and one number")]
         public string Password { get; set; }
 
-
+        public string? UserImage { get; set; }
         public Role Role { get; set; }
 
         public List<Article> Articles { get; set; } = new List<Article>();
