@@ -27,15 +27,17 @@
         <h1 class="h3 text-danger fw-bold">@Model.Title</h1>
         <!-- Image -->
         <div class="article-image mb-4">
-            <picture>
+            <picture class="h-100">
                 @if (Model.ImageUrl.Contains("http"))
                 {
-                    <img src="@Model.ImageUrl" class="img-fluid rounded-3 shadow w-100" alt="Article Image">
+                    <source class="d-block w-100 object-fit-cover h-100" srcset="@Model.ImageUrl">
                 }
                 else
                 {
-                    <img src="/upload/@Model.ImageUrl" class="img-fluid rounded-3 shadow w-100" alt="Article Image">
+                    <source class="w-100 d-block object-fit-cover h-100"
+                            srcset="@(Model.ImageUrl.StartsWith("/upload/") ? Model.ImageUrl : "/upload/" + Model.ImageUrl)">
                 }
+                <img src="/assets/newspaper_11202485.gif" height="409px" class="card-img-top w-100" alt="...">
             </picture>
         </div>
 
