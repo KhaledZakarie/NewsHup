@@ -174,8 +174,9 @@ namespace NewsHup.Controllers
                 claimsIdentity.AddClaim(new Claim("Id", userFromDB.Id.ToString()));
                 claimsIdentity.AddClaim(new Claim("Name", userFromDB.Name.ToString()));
                 claimsIdentity.AddClaim(new Claim("Email", userFromDB.Email.ToString()));
-                claimsIdentity.AddClaim(new Claim("ProfileImg", userFromDB.UserImage.ToString()));
-
+                // Check if UserImage is null and handle it accordingly
+                string profileImage = userFromDB.UserImage != null ? userFromDB.UserImage.ToString() : "default-profile.png";
+                claimsIdentity.AddClaim(new Claim("ProfileImg", profileImage));
 
 
                 var roleName = Enum.GetName(typeof(NewsHup.Enums.Role), userFromDB.Role);
