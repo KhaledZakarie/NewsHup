@@ -55,7 +55,18 @@
                                 <td>@article.Id</td>
                                 <td>
                                     <a asp-action="ArticleDetils" asp-route-id="@article.Id">
-                                        <img src="/upload/@article.ImageUrl" width="60px" height="60px" class="rounded-4 shadow" />
+                                        <picture class="h-100">
+                                            @if (article.ImageUrl.Contains("http"))
+                                            {
+                                                <source class="d-block w-100 object-fit-cover h-100" srcset="@article.ImageUrl">
+                                            }
+                                            else
+                                            {
+                                                <source class="w-100 d-block object-fit-cover h-100"
+                                                        srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                                            }
+                                            <img src="/assets/newspaper_11202485.gif"width="60px" class="card-img-top w-100" alt="...">
+                                        </picture>
                                     </a>
                                 </td>
                                 <td>@article.Title</td>
