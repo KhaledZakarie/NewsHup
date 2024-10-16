@@ -12,7 +12,7 @@
         <div class="js-fullheight d-flex justify-content-center align-items-center">
             <div class="col-md-8 text text-center">
                 @* <div class="img mb-4" style="background-image: url(/assets/img/profile2.jpg);"></div> *@
-                <img src="/userImg/@Model.UserImg" class="rounded-pill" />
+                <img src="/userImg/@Model.UserImg" width="150px" class="rounded-pill" />
                 <div class="desc">
                     <h2 class="subheading">Hello I'm</h2>
                     <h1 class="mb-4">@Model.UserName</h1>
@@ -25,62 +25,68 @@
 
 
 </div>
+<div class="row">
+    @if (Model.Articles.Count < 1)
+    {
+        <h3>You don't have any articles yet, so hurry up and add your first article.</h3>
+    }
+    else
+    {
+        @foreach (Article article in Model.Articles)
+        {
+            <div class="col-lg-4 col-md-6 pt-4">
+                <div class="card card-article h-100 shadow-lg">
+                    <div class="btn1-blog position-absolute btn btn-danger end-0 m-2">@article.Category.CategoryName</div>
+                    <div class="overflow-hidden">
+                        <a asp-action="ArticleDetils" asp-route-id="@article.Id">
+                            <picture class="h-100">
+                                @if (article.ImageUrl.Contains("http"))
+                                {
+                                    <source class="img-article" srcset="@article.ImageUrl">
+                                }
+                                else
+                                {
+                                    <source class="img-article" srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
+                                }
+                                <img src="/assets/newspaper_11202485.gif" class="card-img-top w-100 img-article" height="200px" alt="Article Image">
+                            </picture>
+                        </a>
+                    </div>
 
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <h4 class="card-title">Articles</h4>
-                
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="a-blog card-title text-decoration-none d-block icon-link-hover h5">@article.Title</h2>
+                            @* <div class="dropdown">
+                                <a class="" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a asp-action="Delete" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
+                                            <img src="~/assets/icon/bin-file_11677485.gif" width="20px" alt="Delete Icon" /> Delete
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Edit" asp-controller="Article" asp-route-id="@article.Id" class="dropdown-item">
+                                            <img src="~/assets/icon/edit_11186846.gif" width="20px" alt="Edit Icon" /> Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div> *@
+                        </div>
+                        <p class="card-description text-muted">@article.Content</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center p-1">
+                        <div class="foot-ph d-flex align-items-center">
+                            <img src="/userImg/@article.User.UserImage" alt="User Image" class="rounded-circle" width="30px" />
+                            <span class="a-blog card-title text-decoration-none mx-2 icon-link-hover">@article.User.Name</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-clock"></i><span class="mx-2">@article.PublishDate.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="articleTable" class="display table table-striped table-hover text-center">
-                    <thead>
-                        <tr>
-                            <th>Article ID</th>
-                            <th>Imge</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Owner</th>
-                            <th>Publish Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (Article article in Model.Articles)
-                        {
-                            <tr id="article-row-@article.Id">
-                                <td>@article.Id</td>
-                                <td>
-                                    <a asp-action="ArticleDetils" asp-route-id="@article.Id">
-                                        <picture class="h-100">
-                                            @if (article.ImageUrl.Contains("http"))
-                                            {
-                                                <source class="d-block w-100 object-fit-cover h-100" srcset="@article.ImageUrl">
-                                            }
-                                            else
-                                            {
-                                                <source class="w-100 d-block object-fit-cover h-100"
-                                                        srcset="@(article.ImageUrl.StartsWith("/upload/") ? article.ImageUrl : "/upload/" + article.ImageUrl)">
-                                            }
-                                            <img src="/assets/newspaper_11202485.gif"width="60px" class="card-img-top w-100" alt="...">
-                                        </picture>
-                                    </a>
-                                </td>
-                                <td>@article.Title</td>
-                                <td>@article.Category?.CategoryName</td>
-                                <td>@article.User?.Name</td>
-                                <td>@article.PublishDate.ToString("yyyy-MM-dd")</td>
-
-                                
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+        }
+    }
 </div>
