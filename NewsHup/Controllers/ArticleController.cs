@@ -154,6 +154,7 @@ namespace NewsHup.Controllers
             articleWithComment.PublishDate = article.PublishDate;
             articleWithComment.AuthorName = author.Name;
             articleWithComment.AuthorId = author.Id;
+            articleWithComment.AuthorImg = author.UserImage;
 
             articleWithComment.Comments = comments;
 

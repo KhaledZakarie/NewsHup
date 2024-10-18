@@ -11,7 +11,7 @@
     <div class="border-bottom pb-3 mb-4">
         <div class="d-flex align-items-center gap-3">
             <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@Model.AuthorId">
-                <img src="/userImg/@User.FindFirst("ProfileImg")?.Value" width="60" height="60" class="rounded-pill shadow" alt="User Profile" />
+                <img src="/userImg/@Model.AuthorImg" width="60" height="60" class="rounded-pill shadow" alt="User Profile" />
             </a>
             <div>
                 <a class="text-decoration-none fw-bold" asp-action="UsersArticles" asp-route-userId="@Model.AuthorId">
