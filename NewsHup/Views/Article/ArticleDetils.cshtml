@@ -71,7 +71,8 @@
 
                                 <img class="rounded-circle shadow-1-strong me-3" src="/userImg/@User.FindFirst("ProfileImg")?.Value" alt="avatar" width="30" height="30" />
 
-                                <textarea asp-for="@Model.NewComment" rows="1" class="form-control rounded-pill px-3 shadow-sm" placeholder="Enter your Comment ..."></textarea>
+                                <textarea asp-for="@Model.NewComment" rows="1" class="form-control rounded-pill px-3 shadow-sm" placeholder="Enter your Comment ..." required></textarea>
+
 
                                 <button class="btn btn-primary rounded-circle shadow-sm ms-3" type="submit" value="Create">
                                     <i class="fa-solid fa-paper-plane"></i>

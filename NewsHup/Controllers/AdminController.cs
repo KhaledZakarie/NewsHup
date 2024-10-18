@@ -167,7 +167,7 @@ namespace NewsHup.Controllers
 
 
 
-//**********************************************************************************//
+        //**********************************************************************************//
 
         // Category Management View
         public async Task<IActionResult> Categories()
@@ -287,13 +287,8 @@ namespace NewsHup.Controllers
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
                 );
-                return Json(new { success = false, errors });
-            }
 
-            // Assign a default publish date if none is provided
-            if (article.PublishDate == default(DateTime))
-            {
-                article.PublishDate = DateTime.Now;
+                return Json(new { success = false, errors });
             }
 
             // Handle image upload
@@ -303,13 +298,11 @@ namespace NewsHup.Controllers
                 var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload");
                 var fileName = Path.GetFileNameWithoutExtension(Image.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(Image.FileName);
                 var fullPath = Path.Combine(imagePath, fileName);
-
                 // Save the file to the server
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await Image.CopyToAsync(stream);
                 }
-
                 // Save the image file name (or path) in the database
                 article.ImageUrl = "/upload/" + fileName;
             }
@@ -318,24 +311,31 @@ namespace NewsHup.Controllers
                 article.ImageUrl = "/upload/DefaultImage.jpg"; // Default image if no image is uploaded
             }
 
+            // Assign a default publish date if none is provided
+            if (article.PublishDate == default(DateTime))
+            {
+                article.PublishDate = DateTime.Now;
+            }
+
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();
+
             return Json(new { success = true, articleId = article.Id });
         }
 
 
-
         // POST: Edit Article
         [HttpPost]
-        [HttpPost]
-        public async Task<IActionResult> EditArticle(Article article, IFormFile Image, string existingImageUrl)
+        public async Task<IActionResult> EditArticle(Article article)
         {
             if (!ModelState.IsValid)
             {
+                // Return validation errors in JSON format
                 var errors = ModelState.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
                 );
+
                 return Json(new { success = false, errors });
             }
 
@@ -345,37 +345,25 @@ namespace NewsHup.Controllers
                 return Json(new { success = false, message = "Article not found" });
             }
 
-            // If a new image is uploaded, save it; otherwise, keep the existing image URL
-            if (Image != null && Image.Length > 0)
-            {
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload");
-                var fileName = Path.GetFileNameWithoutExtension(Image.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(Image.FileName);
-                var fullPath = Path.Combine(imagePath, fileName);
-
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await Image.CopyToAsync(stream);
-                }
-
-                existingArticle.ImageUrl = "/upload/" + fileName;  // Update with new image URL
-            }
-            else
-            {
-                // Keep the existing image if no new image is uploaded
-                existingArticle.ImageUrl = existingImageUrl;
-            }
-
-            // Update other fields
+            // Update the existing article's fields
             existingArticle.Title = article.Title;
             existingArticle.Content = article.Content;
             existingArticle.CatId = article.CatId;
+            if (!string.IsNullOrEmpty(article.ImageUrl))
+            {
+                existingArticle.ImageUrl = article.ImageUrl;
+            }
+            // Update the PublishDate if a new one is provided (avoid updating if it's the default)
+            if (article.PublishDate != default(DateTime))
+            {
+                existingArticle.PublishDate = article.PublishDate;
+            }
 
             _context.Update(existingArticle);
             await _context.SaveChangesAsync();
 
             return Json(new { success = true });
         }
-
 
 
         // GET: Get Article by ID
