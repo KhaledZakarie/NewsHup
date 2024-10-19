@@ -140,25 +140,33 @@ namespace NewsHup.Controllers
 
         public IActionResult ArticleDetils(int id)
         {
-            Article article = articleRepository.GetArticleBy(a => a.Id == id);
-            User author = userRepository.GetUserBy(u => u.Id == article.UserId);
-            Category category = categoryRepository.GetCategoryBy(c => c.CategoryId == article.CatId);
-            List<Comment> comments = commentRepository.GetCommentsBy(c => c.ArticleId == article.Id);
+            try
+            {
+                Article article = articleRepository.GetArticleBy(a => a.Id == id);
+                User author = userRepository.GetUserBy(u => u.Id == article.UserId);
+                Category category = categoryRepository.GetCategoryBy(c => c.CategoryId == article.CatId);
+                List<Comment> comments = commentRepository.GetCommentsBy(c => c.ArticleId == article.Id);
 
-            ArticleWithCommentViewModel articleWithComment = new ArticleWithCommentViewModel();
-            articleWithComment.ArticleId = article.Id;
-            articleWithComment.Title = article.Title;
-            articleWithComment.Content = article.Content;
-            articleWithComment.ImageUrl = article.ImageUrl;
-            articleWithComment.CategoryName = category.CategoryName;
-            articleWithComment.PublishDate = article.PublishDate;
-            articleWithComment.AuthorName = author.Name;
-            articleWithComment.AuthorId = author.Id;
-            articleWithComment.AuthorImg = author.UserImage;
+                ArticleWithCommentViewModel articleWithComment = new ArticleWithCommentViewModel();
+                articleWithComment.ArticleId = article.Id;
+                articleWithComment.Title = article.Title;
+                articleWithComment.Content = article.Content;
+                articleWithComment.ImageUrl = article.ImageUrl;
+                articleWithComment.CategoryName = category.CategoryName;
+                articleWithComment.PublishDate = article.PublishDate;
+                articleWithComment.AuthorName = author.Name;
+                articleWithComment.AuthorId = author.Id;
+                articleWithComment.AuthorImg = author.UserImage;
 
-            articleWithComment.Comments = comments;
+                articleWithComment.Comments = comments;
 
-            return View(articleWithComment);
+                return View(articleWithComment);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
         public IActionResult Delete(int id)
         {
